@@ -11,6 +11,7 @@ export const ModuleSchema = z.object({
 	id: z.string().max(10),
 	title: z.string().max(200),
 	subtitle: z.string().max(100),
+	subject: z.string().max(100),
 	order_index: z.number().int(),
 	locked_by_default: z.boolean(),
 });
@@ -19,6 +20,7 @@ export const ModuleResponseSchema = z.object({
 	id: z.string(),
 	title: z.string(),
 	subtitle: z.string(),
+	subject: z.string(),
 	progress: z.number().int().min(0).max(100),
 	status: ModuleStatusSchema,
 	link: z.string().nullable(),

@@ -27,6 +27,7 @@ export const createModuleSchema = {
 		id: z.string().min(1).max(10, 'ID deve ter no máximo 10 caracteres'),
 		title: z.string().min(1, 'Título é obrigatório').max(200),
 		subtitle: z.string().min(1, 'Subtítulo é obrigatório').max(100),
+		subject: z.string().min(1, 'Matéria é obrigatória').max(100),
 		order_index: z.number().int().min(0),
 		locked_by_default: z.boolean().default(false),
 	}),

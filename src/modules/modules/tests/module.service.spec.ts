@@ -16,6 +16,7 @@ describe('ModuleService', () => {
 		id: 'mod-1',
 		title: 'Module 1',
 		subtitle: 'Subtitle 1',
+		subject: 'JavaScript',
 		progress: 50,
 		status: 'active',
 		current_page: 2,
@@ -73,6 +74,7 @@ describe('ModuleService', () => {
 				id: 'mod-2',
 				title: 'New',
 				subtitle: 'New Sub',
+				subject: 'TypeScript',
 				order_index: 1,
 				locked_by_default: false,
 			};

@@ -37,6 +37,7 @@ export class ModuleService implements IModuleService {
 			id: row.id,
 			title: row.title,
 			subtitle: row.subtitle,
+			subject: row.subject,
 			progress: row.progress,
 			status: row.status as ModuleResponse['status'],
 			link: locked ? null : `/module/${row.id}/lesson/${row.current_page}`,

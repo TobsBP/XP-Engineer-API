@@ -2,6 +2,7 @@ export type ModuleRow = {
 	id: string;
 	title: string;
 	subtitle: string;
+	subject: string;
 	order_index: number;
 	locked_by_default: boolean;
 	progress: number;
@@ -13,6 +14,7 @@ export type CreateModuleData = {
 	id: string;
 	title: string;
 	subtitle: string;
+	subject: string;
 	order_index: number;
 	locked_by_default: boolean;
 };
@@ -21,6 +23,7 @@ export type CreatedModuleRow = {
 	id: string;
 	title: string;
 	subtitle: string;
+	subject: string;
 	order_index: number;
 	locked_by_default: boolean;
 };
