@@ -1,12 +1,12 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { IUserService } from '../../types/interfaces/users/user.service.interface.js';
+import { UserNotFoundError } from '@/modules/users/user.service.js';
+import type { IUserService } from '@/types/interfaces/users/user.service.interface.js';
 import type {
 	CreateUserRequest,
 	DeleteUserRequest,
 	GetUserRequest,
 	PatchUserRequest,
-} from '../../types/routes/users.js';
-import { UserNotFoundError } from './user.service.js';
+} from '@/types/routes/users.js';
 
 export class UserController {
 	constructor(private readonly service: IUserService) {}

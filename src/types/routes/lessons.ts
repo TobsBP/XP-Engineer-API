@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { ApplicationItemSchema } from '../schemas/application-item.js';
+import { ApplicationItemSchema } from '@/types/schemas/application-item.js';
 import {
 	ConceptExampleSchema,
 	ConceptItemSchema,
-} from '../schemas/concept-example.js';
-import { LessonContentSchema, LessonSchema } from '../schemas/lesson.js';
+} from '@/types/schemas/concept-example.js';
+import { LessonContentSchema, LessonSchema } from '@/types/schemas/lesson.js';
 
 export const getLessonSchema = {
 	tags: ['Lessons'],

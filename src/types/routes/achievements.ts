@@ -2,7 +2,7 @@ import { z } from 'zod';
 import {
 	AchievementResponseSchema,
 	AchievementSchema,
-} from '../schemas/achievement.js';
+} from '@/types/schemas/achievement.js';
 
 export const listUserAchievementsSchema = {
 	tags: ['Achievements'],

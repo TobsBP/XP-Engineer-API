@@ -2,12 +2,12 @@ import type {
 	AchievementRow,
 	CreateAchievementData,
 	IAchievementRepository,
-} from '../../types/interfaces/achievements/achievement.repository.interface.js';
-import type { IAchievementService } from '../../types/interfaces/achievements/achievement.service.interface.js';
+} from '@/types/interfaces/achievements/achievement.repository.interface.js';
+import type { IAchievementService } from '@/types/interfaces/achievements/achievement.service.interface.js';
 import type {
 	Achievement,
 	AchievementResponse,
-} from '../../types/schemas/achievement.js';
+} from '@/types/schemas/achievement.js';
 
 export class AchievementService implements IAchievementService {
 	constructor(private readonly repository: IAchievementRepository) {}

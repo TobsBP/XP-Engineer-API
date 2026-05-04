@@ -1,4 +1,4 @@
-import type { UpdateUserModuleData } from './user-module.repository.interface.js';
+import type { UpdateUserModuleData } from '@/types/interfaces/user-modules/user-module.repository.interface.js';
 
 export interface IUserModuleService {
 	createUserModule(userId: number, moduleId: string): Promise<void>;

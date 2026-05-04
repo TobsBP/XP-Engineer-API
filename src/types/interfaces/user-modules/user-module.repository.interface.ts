@@ -1,4 +1,4 @@
-import type { ModuleStatus } from '../../schemas/module.js';
+import type { ModuleStatus } from '@/types/schemas/module.js';
 
 export type UpdateUserModuleData = {
 	progress?: number;

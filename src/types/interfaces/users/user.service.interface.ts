@@ -1,8 +1,8 @@
-import type { UserResponse } from '../../schemas/user.js';
 import type {
 	CreateUserData,
 	UpdateUserData,
-} from './user.repository.interface.js';
+} from '@/types/interfaces/users/user.repository.interface.js';
+import type { UserResponse } from '@/types/schemas/user.js';
 
 export interface IUserService {
 	getUser(id: number): Promise<UserResponse>;

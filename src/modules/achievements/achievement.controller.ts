@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { IAchievementService } from '../../types/interfaces/achievements/achievement.service.interface.js';
+import type { IAchievementService } from '@/types/interfaces/achievements/achievement.service.interface.js';
 import type {
 	CreateAchievementRequest,
 	ListUserAchievementsRequest,
 	UnlockAchievementRequest,
-} from '../../types/routes/achievements.js';
+} from '@/types/routes/achievements.js';
 
 export class AchievementController {
 	constructor(private readonly service: IAchievementService) {}

@@ -1,11 +1,11 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { IModuleService } from '../../types/interfaces/modules/module.service.interface.js';
+import { ModuleNotFoundError } from '@/modules/modules/module.service.js';
+import type { IModuleService } from '@/types/interfaces/modules/module.service.interface.js';
 import type {
 	CreateModuleRequest,
 	GetModuleRequest,
 	ListModulesRequest,
-} from '../../types/routes/modules.js';
-import { ModuleNotFoundError } from '../modules/module.service.js';
+} from '@/types/routes/modules.js';
 
 export class ModuleController {
 	constructor(private readonly service: IModuleService) {}

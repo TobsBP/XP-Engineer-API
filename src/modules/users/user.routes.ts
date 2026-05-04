@@ -1,14 +1,14 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '../../lib/db.js';
+import { pool } from '@/lib/db.js';
+import { UserController } from '@/modules/users/user.controller.js';
+import { UserRepository } from '@/modules/users/user.repository.js';
+import { UserService } from '@/modules/users/user.service.js';
 import {
 	createUserSchema,
 	deleteUserSchema,
 	getUserSchema,
 	patchUserSchema,
-} from '../../types/routes/users.js';
-import { UserController } from './user.controller.js';
-import { UserRepository } from './user.repository.js';
-import { UserService } from './user.service.js';
+} from '@/types/routes/users.js';
 
 export const userRoutes = async (app: FastifyInstance): Promise<void> => {
 	const repository = new UserRepository(pool);

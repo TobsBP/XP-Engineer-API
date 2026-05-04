@@ -1,5 +1,5 @@
-import type { Module, ModuleResponse } from '../../schemas/module.js';
-import type { CreateModuleData } from './module.repository.interface.js';
+import type { CreateModuleData } from '@/types/interfaces/modules/module.repository.interface.js';
+import type { Module, ModuleResponse } from '@/types/schemas/module.js';
 
 export interface IModuleService {
 	listModules(userId: number): Promise<ModuleResponse[]>;

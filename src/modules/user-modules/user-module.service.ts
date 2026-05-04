@@ -1,8 +1,8 @@
 import type {
 	IUserModuleRepository,
 	UpdateUserModuleData,
-} from '../../types/interfaces/user-modules/user-module.repository.interface.js';
-import type { IUserModuleService } from '../../types/interfaces/user-modules/user-module.service.interface.js';
+} from '@/types/interfaces/user-modules/user-module.repository.interface.js';
+import type { IUserModuleService } from '@/types/interfaces/user-modules/user-module.service.interface.js';
 
 export class UserModuleNotFoundError extends Error {
 	constructor(userId: number, moduleId: string) {

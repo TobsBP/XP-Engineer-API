@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { AchievementService } from '@/modules/achievements/achievement.service.js';
 import type {
 	AchievementRow,
 	IAchievementRepository,
-} from '../../../types/interfaces/achievements/achievement.repository.interface.js';
-import { AchievementService } from '../achievement.service.js';
+} from '@/types/interfaces/achievements/achievement.repository.interface.js';
 
 describe('AchievementService', () => {
 	let achievementService: AchievementService;

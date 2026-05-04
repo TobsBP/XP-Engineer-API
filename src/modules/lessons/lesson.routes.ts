@@ -1,15 +1,15 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '../../lib/db.js';
+import { pool } from '@/lib/db.js';
+import { LessonController } from '@/modules/lessons/lesson.controller.js';
+import { LessonRepository } from '@/modules/lessons/lesson.repository.js';
+import { LessonService } from '@/modules/lessons/lesson.service.js';
 import {
 	createApplicationItemSchema,
 	createConceptExampleSchema,
 	createConceptItemSchema,
 	createLessonSchema,
 	getLessonSchema,
-} from '../../types/routes/lessons.js';
-import { LessonController } from './lesson.controller.js';
-import { LessonRepository } from './lesson.repository.js';
-import { LessonService } from './lesson.service.js';
+} from '@/types/routes/lessons.js';
 
 export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
 	const repository = new LessonRepository(pool);

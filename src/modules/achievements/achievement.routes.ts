@@ -1,13 +1,13 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '../../lib/db.js';
+import { pool } from '@/lib/db.js';
+import { AchievementController } from '@/modules/achievements/achievement.controller.js';
+import { AchievementRepository } from '@/modules/achievements/achievement.repository.js';
+import { AchievementService } from '@/modules/achievements/achievement.service.js';
 import {
 	createAchievementSchema,
 	listUserAchievementsSchema,
 	unlockAchievementSchema,
-} from '../../types/routes/achievements.js';
-import { AchievementController } from './achievement.controller.js';
-import { AchievementRepository } from './achievement.repository.js';
-import { AchievementService } from './achievement.service.js';
+} from '@/types/routes/achievements.js';
 
 export const achievementRoutes = async (
 	app: FastifyInstance,

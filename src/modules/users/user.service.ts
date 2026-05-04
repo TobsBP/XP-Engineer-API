@@ -3,9 +3,9 @@ import type {
 	IUserRepository,
 	UpdateUserData,
 	UserRow,
-} from '../../types/interfaces/users/user.repository.interface.js';
-import type { IUserService } from '../../types/interfaces/users/user.service.interface.js';
-import type { UserResponse } from '../../types/schemas/user.js';
+} from '@/types/interfaces/users/user.repository.interface.js';
+import type { IUserService } from '@/types/interfaces/users/user.service.interface.js';
+import type { UserResponse } from '@/types/schemas/user.js';
 
 export class UserNotFoundError extends Error {
 	constructor(id: number) {

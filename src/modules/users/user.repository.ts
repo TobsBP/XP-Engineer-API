@@ -4,7 +4,7 @@ import type {
 	IUserRepository,
 	UpdateUserData,
 	UserRow,
-} from '../../types/interfaces/users/user.repository.interface.js';
+} from '@/types/interfaces/users/user.repository.interface.js';
 
 export class UserRepository implements IUserRepository {
 	constructor(private readonly pool: Pool) {}

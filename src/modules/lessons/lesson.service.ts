@@ -8,14 +8,14 @@ import type {
 	CreateLessonData,
 	ILessonRepository,
 	LessonRow,
-} from '../../types/interfaces/lessons/lesson.repository.interface.js';
-import type { ILessonService } from '../../types/interfaces/lessons/lesson.service.interface.js';
-import type { ApplicationItem } from '../../types/schemas/application-item.js';
+} from '@/types/interfaces/lessons/lesson.repository.interface.js';
+import type { ILessonService } from '@/types/interfaces/lessons/lesson.service.interface.js';
+import type { ApplicationItem } from '@/types/schemas/application-item.js';
 import type {
 	ConceptExample,
 	ConceptItem,
-} from '../../types/schemas/concept-example.js';
-import type { Lesson, LessonContent } from '../../types/schemas/lesson.js';
+} from '@/types/schemas/concept-example.js';
+import type { Lesson, LessonContent } from '@/types/schemas/lesson.js';
 
 export class LessonNotFoundError extends Error {
 	constructor(moduleId: string, page: number) {

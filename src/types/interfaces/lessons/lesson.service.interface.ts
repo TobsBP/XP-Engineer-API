@@ -1,15 +1,15 @@
-import type { ApplicationItem } from '../../schemas/application-item.js';
-import type {
-	ConceptExample,
-	ConceptItem,
-} from '../../schemas/concept-example.js';
-import type { Lesson, LessonContent } from '../../schemas/lesson.js';
 import type {
 	CreateApplicationItemData,
 	CreateConceptExampleData,
 	CreateConceptItemData,
 	CreateLessonData,
-} from './lesson.repository.interface.js';
+} from '@/types/interfaces/lessons/lesson.repository.interface.js';
+import type { ApplicationItem } from '@/types/schemas/application-item.js';
+import type {
+	ConceptExample,
+	ConceptItem,
+} from '@/types/schemas/concept-example.js';
+import type { Lesson, LessonContent } from '@/types/schemas/lesson.js';
 
 export interface ILessonService {
 	getLesson(moduleId: string, page: number): Promise<LessonContent>;

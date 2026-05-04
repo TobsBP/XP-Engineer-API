@@ -1,8 +1,8 @@
+import type { CreateAchievementData } from '@/types/interfaces/achievements/achievement.repository.interface.js';
 import type {
 	Achievement,
 	AchievementResponse,
-} from '../../schemas/achievement.js';
-import type { CreateAchievementData } from './achievement.repository.interface.js';
+} from '@/types/schemas/achievement.js';
 
 export interface IAchievementService {
 	listByUser(userId: number): Promise<AchievementResponse[]>;

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ModuleResponseSchema, ModuleSchema } from '../schemas/module.js';
+import { ModuleResponseSchema, ModuleSchema } from '@/types/schemas/module.js';
 
 export const listModulesSchema = {
 	tags: ['Modules'],

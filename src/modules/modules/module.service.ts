@@ -2,9 +2,9 @@ import type {
 	CreateModuleData,
 	IModuleRepository,
 	ModuleRow,
-} from '../../types/interfaces/modules/module.repository.interface.js';
-import type { IModuleService } from '../../types/interfaces/modules/module.service.interface.js';
-import type { Module, ModuleResponse } from '../../types/schemas/module.js';
+} from '@/types/interfaces/modules/module.repository.interface.js';
+import type { IModuleService } from '@/types/interfaces/modules/module.service.interface.js';
+import type { Module, ModuleResponse } from '@/types/schemas/module.js';
 
 export class ModuleNotFoundError extends Error {
 	constructor(moduleId: string) {

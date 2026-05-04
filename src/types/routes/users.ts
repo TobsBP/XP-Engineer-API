@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { UserResponseSchema } from '../schemas/user.js';
+import { UserResponseSchema } from '@/types/schemas/user.js';
 
 export const getUserSchema = {
 	tags: ['Users'],

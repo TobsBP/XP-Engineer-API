@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ModuleStatusSchema } from './module.js';
+import { ModuleStatusSchema } from '@/types/schemas/module.js';
 
 export const UserModuleSchema = z.object({
 	user_id: z.number().int(),

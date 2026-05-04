@@ -2,7 +2,7 @@ import type { Pool } from 'pg';
 import type {
 	IUserModuleRepository,
 	UpdateUserModuleData,
-} from '../../types/interfaces/user-modules/user-module.repository.interface.js';
+} from '@/types/interfaces/user-modules/user-module.repository.interface.js';
 
 export class UserModuleRepository implements IUserModuleRepository {
 	constructor(private readonly pool: Pool) {}

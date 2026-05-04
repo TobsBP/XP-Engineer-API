@@ -1,13 +1,13 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '../../lib/db.js';
+import { pool } from '@/lib/db.js';
+import { ModuleController } from '@/modules/modules/module.controller.js';
+import { ModuleRepository } from '@/modules/modules/module.repository.js';
+import { ModuleService } from '@/modules/modules/module.service.js';
 import {
 	createModuleSchema,
 	getModuleSchema,
 	listModulesSchema,
-} from '../../types/routes/modules.js';
-import { ModuleController } from '../modules/module.controller.js';
-import { ModuleService } from '../modules/module.service.js';
-import { ModuleRepository } from './module.repository.js';
+} from '@/types/routes/modules.js';
 
 export const moduleRoutes = async (app: FastifyInstance): Promise<void> => {
 	const repository = new ModuleRepository(pool);

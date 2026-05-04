@@ -1,13 +1,13 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { ILessonService } from '../../types/interfaces/lessons/lesson.service.interface.js';
+import { LessonNotFoundError } from '@/modules/lessons/lesson.service.js';
+import type { ILessonService } from '@/types/interfaces/lessons/lesson.service.interface.js';
 import type {
 	CreateApplicationItemRequest,
 	CreateConceptExampleRequest,
 	CreateConceptItemRequest,
 	CreateLessonRequest,
 	GetLessonRequest,
-} from '../../types/routes/lessons.js';
-import { LessonNotFoundError } from './lesson.service.js';
+} from '@/types/routes/lessons.js';
 
 export class LessonController {
 	constructor(private readonly service: ILessonService) {}

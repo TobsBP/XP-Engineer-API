@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ModuleStatusSchema } from '../schemas/module.js';
+import { ModuleStatusSchema } from '@/types/schemas/module.js';
 
 export const createUserModuleSchema = {
 	tags: ['Modules'],

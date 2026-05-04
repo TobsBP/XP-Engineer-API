@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { IUserModuleService } from '../../types/interfaces/user-modules/user-module.service.interface.js';
+import { UserModuleNotFoundError } from '@/modules/user-modules/user-module.service.js';
+import type { IUserModuleService } from '@/types/interfaces/user-modules/user-module.service.interface.js';
 import type {
 	CreateUserModuleRequest,
 	UpdateUserModuleRequest,
-} from '../../types/routes/user-modules.js';
-import { UserModuleNotFoundError } from './user-module.service.js';
+} from '@/types/routes/user-modules.js';
 
 export class UserModuleController {
 	constructor(private readonly service: IUserModuleService) {}
