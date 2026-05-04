@@ -11,19 +11,34 @@ export class UserRepository implements IUserRepository {
 
 	async findById(id: number): Promise<UserRow | null> {
 		const { rows } = await this.pool.query<UserRow>(
-			`SELECT id, name, avatar_url, xp_total, streak_days, rank, level, specialization, created_at
+			`SELECT id, name, email, password_hash, avatar_url, xp_total, streak_days, rank, level, specialization, created_at
 			FROM users WHERE id = $1`,
 			[id],
 		);
 		return rows[0] ?? null;
 	}
 
+	async findByEmail(email: string): Promise<UserRow | null> {
+		const { rows } = await this.pool.query<UserRow>(
+			`SELECT id, name, email, password_hash, avatar_url, xp_total, streak_days, rank, level, specialization, created_at
+			FROM users WHERE email = $1`,
+			[email],
+		);
+		return rows[0] ?? null;
+	}
+
 	async create(data: CreateUserData): Promise<UserRow> {
 		const { rows } = await this.pool.query<UserRow>(
-			`INSERT INTO users (name, avatar_url, specialization)
-			VALUES ($1, $2, $3)
-			RETURNING id, name, avatar_url, xp_total, streak_days, rank, level, specialization, created_at`,
-			[data.name, data.avatar_url ?? null, data.specialization ?? null],
+			`INSERT INTO users (name, email, password_hash, avatar_url, specialization)
+			VALUES ($1, $2, $3, $4, $5)
+			RETURNING id, name, email, password_hash, avatar_url, xp_total, streak_days, rank, level, specialization, created_at`,
+			[
+				data.name,
+				data.email,
+				data.password_hash,
+				data.avatar_url ?? null,
+				data.specialization ?? null,
+			],
 		);
 		return rows[0];
 	}
@@ -36,7 +51,7 @@ export class UserRepository implements IUserRepository {
 		const { rows } = await this.pool.query<UserRow>(
 			`UPDATE users SET ${set}
 			WHERE id = $1
-			RETURNING id, name, avatar_url, xp_total, streak_days, rank, level, specialization, created_at`,
+			RETURNING id, name, email, password_hash, avatar_url, xp_total, streak_days, rank, level, specialization, created_at`,
 			[id, ...entries.map(([, v]) => v)],
 		);
 		return rows[0] ?? null;

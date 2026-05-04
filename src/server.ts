@@ -1,4 +1,5 @@
 import { fastifyCors } from '@fastify/cors';
+import fastifyJwt from '@fastify/jwt';
 import { fastifySwagger } from '@fastify/swagger';
 import ScalarApiReference from '@scalar/fastify-api-reference';
 import { fastify } from 'fastify';
@@ -18,6 +19,22 @@ app.setSerializerCompiler(serializerCompiler);
 app.register(fastifyCors, {
 	origin: true,
 	methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+});
+
+if (!process.env.JWT_SECRET) {
+	throw new Error('JWT_SECRET is not defined in .env');
+}
+
+app.register(fastifyJwt, {
+	secret: process.env.JWT_SECRET,
+});
+
+app.decorate('authenticate', async (request: any, reply: any) => {
+	try {
+		await request.jwtVerify();
+	} catch (err) {
+		reply.send(err);
+	}
 });
 
 app.register(fastifySwagger, {

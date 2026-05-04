@@ -43,6 +43,7 @@ export class UserService implements IUserService {
 		return {
 			id: row.id,
 			name: row.name,
+			email: row.email,
 			avatar_url: row.avatar_url,
 			xp_total: row.xp_total,
 			streak_days: row.streak_days,

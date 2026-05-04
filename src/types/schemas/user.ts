@@ -3,6 +3,8 @@ import { z } from 'zod';
 export const UserSchema = z.object({
 	id: z.number().int(),
 	name: z.string().max(100),
+	email: z.string().email().max(255),
+	password_hash: z.string(),
 	avatar_url: z.string().nullable(),
 	xp_total: z.number().int(),
 	streak_days: z.number().int(),
@@ -15,6 +17,7 @@ export const UserSchema = z.object({
 export const UserResponseSchema = z.object({
 	id: z.number().int(),
 	name: z.string(),
+	email: z.string(),
 	avatar_url: z.string().nullable(),
 	xp_total: z.number().int(),
 	streak_days: z.number().int(),
