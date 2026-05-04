@@ -4,7 +4,9 @@ import { UserModuleController } from '@/modules/user-modules/user-module.control
 import { UserModuleRepository } from '@/modules/user-modules/user-module.repository.js';
 import { UserModuleService } from '@/modules/user-modules/user-module.service.js';
 import {
+	type CreateUserModuleRequest,
 	createUserModuleSchema,
+	type UpdateUserModuleRequest,
 	updateUserModuleSchema,
 } from '@/types/routes/user-modules.js';
 
@@ -13,14 +15,14 @@ export const userModuleRoutes = async (app: FastifyInstance): Promise<void> => {
 	const service = new UserModuleService(repository);
 	const controller = new UserModuleController(service);
 
-	app.post(
+	app.post<CreateUserModuleRequest>(
 		'/user/:userId/module/:moduleId',
-		{ schema: createUserModuleSchema },
+		{ preHandler: app.authenticate, schema: createUserModuleSchema },
 		controller.create,
 	);
-	app.patch(
+	app.patch<UpdateUserModuleRequest>(
 		'/user/:userId/module/:moduleId',
-		{ schema: updateUserModuleSchema },
+		{ preHandler: app.authenticate, schema: updateUserModuleSchema },
 		controller.update,
 	);
 };

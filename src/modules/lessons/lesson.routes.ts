@@ -4,10 +4,15 @@ import { LessonController } from '@/modules/lessons/lesson.controller.js';
 import { LessonRepository } from '@/modules/lessons/lesson.repository.js';
 import { LessonService } from '@/modules/lessons/lesson.service.js';
 import {
+	type CreateApplicationItemRequest,
+	type CreateConceptExampleRequest,
+	type CreateConceptItemRequest,
+	type CreateLessonRequest,
 	createApplicationItemSchema,
 	createConceptExampleSchema,
 	createConceptItemSchema,
 	createLessonSchema,
+	type GetLessonRequest,
 	getLessonSchema,
 } from '@/types/routes/lessons.js';
 
@@ -16,33 +21,33 @@ export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
 	const service = new LessonService(repository);
 	const controller = new LessonController(service);
 
-	app.get(
+	app.get<GetLessonRequest>(
 		'/lesson/:moduleId/:page',
-		{ schema: getLessonSchema },
+		{ preHandler: app.authenticate, schema: getLessonSchema },
 		controller.get,
 	);
 
-	app.post(
+	app.post<CreateLessonRequest>(
 		'/lesson/:moduleId',
-		{ schema: createLessonSchema },
+		{ preHandler: app.authenticate, schema: createLessonSchema },
 		controller.create,
 	);
 
-	app.post(
+	app.post<CreateConceptItemRequest>(
 		'/lesson/:lessonId/concept-item',
-		{ schema: createConceptItemSchema },
+		{ preHandler: app.authenticate, schema: createConceptItemSchema },
 		controller.createConceptItem,
 	);
 
-	app.post(
+	app.post<CreateConceptExampleRequest>(
 		'/lesson/:lessonId/concept-example',
-		{ schema: createConceptExampleSchema },
+		{ preHandler: app.authenticate, schema: createConceptExampleSchema },
 		controller.createConceptExample,
 	);
 
-	app.post(
+	app.post<CreateApplicationItemRequest>(
 		'/lesson/:lessonId/application-item',
-		{ schema: createApplicationItemSchema },
+		{ preHandler: app.authenticate, schema: createApplicationItemSchema },
 		controller.createApplicationItem,
 	);
 };

@@ -33,7 +33,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 	fastify.get(
 		'/me',
 		{
-			onRequest: [fastify.authenticate],
+			preHandler: fastify.authenticate,
 			schema: getMeSchema,
 		},
 		authController.getMe,

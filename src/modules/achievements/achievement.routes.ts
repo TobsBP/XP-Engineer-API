@@ -4,8 +4,11 @@ import { AchievementController } from '@/modules/achievements/achievement.contro
 import { AchievementRepository } from '@/modules/achievements/achievement.repository.js';
 import { AchievementService } from '@/modules/achievements/achievement.service.js';
 import {
+	type CreateAchievementRequest,
 	createAchievementSchema,
+	type ListUserAchievementsRequest,
 	listUserAchievementsSchema,
+	type UnlockAchievementRequest,
 	unlockAchievementSchema,
 } from '@/types/routes/achievements.js';
 
@@ -16,19 +19,19 @@ export const achievementRoutes = async (
 	const service = new AchievementService(repository);
 	const controller = new AchievementController(service);
 
-	app.get(
+	app.get<ListUserAchievementsRequest>(
 		'/achievements/:userId',
-		{ schema: listUserAchievementsSchema },
+		{ preHandler: app.authenticate, schema: listUserAchievementsSchema },
 		controller.listByUser,
 	);
-	app.patch(
+	app.patch<UnlockAchievementRequest>(
 		'/achievement/:userId/:achievementId',
-		{ schema: unlockAchievementSchema },
+		{ preHandler: app.authenticate, schema: unlockAchievementSchema },
 		controller.unlock,
 	);
-	app.post(
+	app.post<CreateAchievementRequest>(
 		'/achievement',
-		{ schema: createAchievementSchema },
+		{ preHandler: app.authenticate, schema: createAchievementSchema },
 		controller.create,
 	);
 };

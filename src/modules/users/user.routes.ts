@@ -4,9 +4,13 @@ import { UserController } from '@/modules/users/user.controller.js';
 import { UserRepository } from '@/modules/users/user.repository.js';
 import { UserService } from '@/modules/users/user.service.js';
 import {
+	type CreateUserRequest,
 	createUserSchema,
+	type DeleteUserRequest,
 	deleteUserSchema,
+	type GetUserRequest,
 	getUserSchema,
+	type PatchUserRequest,
 	patchUserSchema,
 } from '@/types/routes/users.js';
 
@@ -15,8 +19,24 @@ export const userRoutes = async (app: FastifyInstance): Promise<void> => {
 	const service = new UserService(repository);
 	const controller = new UserController(service);
 
-	app.get('/user/:id', { schema: getUserSchema }, controller.get);
-	app.post('/user', { schema: createUserSchema }, controller.create);
-	app.patch('/user/:id', { schema: patchUserSchema }, controller.patch);
-	app.delete('/user/:id', { schema: deleteUserSchema }, controller.delete);
+	app.get<GetUserRequest>(
+		'/user/:id',
+		{ preHandler: app.authenticate, schema: getUserSchema },
+		controller.get,
+	);
+	app.post<CreateUserRequest>(
+		'/user',
+		{ preHandler: app.authenticate, schema: createUserSchema },
+		controller.create,
+	);
+	app.patch<PatchUserRequest>(
+		'/user/:id',
+		{ preHandler: app.authenticate, schema: patchUserSchema },
+		controller.patch,
+	);
+	app.delete<DeleteUserRequest>(
+		'/user/:id',
+		{ preHandler: app.authenticate, schema: deleteUserSchema },
+		controller.delete,
+	);
 };
