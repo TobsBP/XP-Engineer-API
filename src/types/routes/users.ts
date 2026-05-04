@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { email } from 'zod/v4';
 import { UserResponseSchema } from '@/types/schemas/user.js';
 
 export const getUserSchema = {

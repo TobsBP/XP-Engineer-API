@@ -22,7 +22,7 @@ export const achievementRoutes = async (
 		controller.listByUser,
 	);
 	app.patch(
-		'/achievement/:userId/achievement/:achievementId',
+		'/achievement/:userId/:achievementId',
 		{ schema: unlockAchievementSchema },
 		controller.unlock,
 	);
