@@ -13,7 +13,7 @@ import {
 describe('AuthService', () => {
 	let authService: AuthService;
 	let userRepositoryMock: IUserRepository;
-	let jwtMock: { sign: (payload: any) => string };
+	let jwtMock: { sign: (payload: object) => string };
 
 	const mockUser: UserRow = {
 		id: 1,
@@ -40,7 +40,7 @@ describe('AuthService', () => {
 		jwtMock = {
 			sign: vi.fn().mockReturnValue('mock-token'),
 		};
-		authService = new AuthService(userRepositoryMock, jwtMock as any);
+		authService = new AuthService(userRepositoryMock, jwtMock);
 	});
 
 	describe('register', () => {

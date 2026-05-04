@@ -2,7 +2,7 @@ import { fastifyCors } from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
 import { fastifySwagger } from '@fastify/swagger';
 import ScalarApiReference from '@scalar/fastify-api-reference';
-import { fastify } from 'fastify';
+import { type FastifyReply, type FastifyRequest, fastify } from 'fastify';
 import {
 	jsonSchemaTransform,
 	serializerCompiler,
@@ -32,13 +32,16 @@ app.register(fastifyJwt, {
 	},
 });
 
-app.decorate('authenticate', async (request: any, reply: any) => {
-	try {
-		await request.jwtVerify();
-	} catch (err) {
-		reply.send(err);
-	}
-});
+app.decorate(
+	'authenticate',
+	async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			await request.jwtVerify();
+		} catch (err) {
+			reply.send(err);
+		}
+	},
+);
 
 app.register(fastifySwagger, {
 	openapi: {
