@@ -4,6 +4,8 @@ export * from '@/types/interfaces/lessons/lesson.repository.interface.js';
 export * from '@/types/interfaces/lessons/lesson.service.interface.js';
 export * from '@/types/interfaces/modules/module.repository.interface.js';
 export * from '@/types/interfaces/modules/module.service.interface.js';
+export * from '@/types/interfaces/quizzes/quiz.repository.interface.js';
+export * from '@/types/interfaces/quizzes/quiz.service.interface.js';
 export * from '@/types/interfaces/user-modules/user-module.repository.interface.js';
 export * from '@/types/interfaces/user-modules/user-module.service.interface.js';
 export * from '@/types/interfaces/users/user.repository.interface.js';
