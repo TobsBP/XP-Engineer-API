@@ -17,13 +17,13 @@ export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = new LessonController(service);
 
 	app.get(
-		'/module/:moduleId/lesson/:page',
+		'/lesson/:moduleId/:page',
 		{ schema: getLessonSchema },
 		controller.get,
 	);
 
 	app.post(
-		'/module/:moduleId/lesson',
+		'/lesson/:moduleId',
 		{ schema: createLessonSchema },
 		controller.create,
 	);

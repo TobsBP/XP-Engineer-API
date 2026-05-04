@@ -3,10 +3,7 @@ import { ModuleResponseSchema, ModuleSchema } from '@/types/schemas/module.js';
 
 export const listModulesSchema = {
 	tags: ['Modules'],
-	description: 'Retorna todos os módulos com o progresso do usuário.',
-	querystring: z.object({
-		userId: z.coerce.number().int().positive('ID do usuário é obrigatório'),
-	}),
+	description: 'Retorna todos os módulos com o progresso do usuário logado.',
 	response: {
 		200: z.array(ModuleResponseSchema),
 	},
@@ -14,12 +11,9 @@ export const listModulesSchema = {
 
 export const getModuleSchema = {
 	tags: ['Modules'],
-	description: 'Retorna um módulo pelo ID com o progresso do usuário.',
+	description: 'Retorna um módulo pelo ID com o progresso do usuário logado.',
 	params: z.object({
 		moduleId: z.string().min(1, 'ID do módulo é obrigatório'),
-	}),
-	querystring: z.object({
-		userId: z.coerce.number().int().positive('ID do usuário é obrigatório'),
 	}),
 	response: {
 		200: ModuleResponseSchema,
@@ -41,13 +35,8 @@ export const createModuleSchema = {
 	},
 };
 
-export type ListModulesRequest = {
-	Querystring: z.infer<typeof listModulesSchema.querystring>;
-};
-
 export type GetModuleRequest = {
 	Params: z.infer<typeof getModuleSchema.params>;
-	Querystring: z.infer<typeof getModuleSchema.querystring>;
 };
 
 export type CreateModuleRequest = {

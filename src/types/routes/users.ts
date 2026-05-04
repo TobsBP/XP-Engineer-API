@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { email } from 'zod/v4';
 import { UserResponseSchema } from '@/types/schemas/user.js';
 
 export const getUserSchema = {
@@ -18,6 +19,8 @@ export const createUserSchema = {
 	body: z.object({
 		name: z.string().min(1, 'Nome é obrigatório').max(100),
 		avatar_url: z.url().optional(),
+		email: z.email(),
+		password_hash: z.string(),
 		specialization: z.string().max(100).optional(),
 	}),
 	response: {

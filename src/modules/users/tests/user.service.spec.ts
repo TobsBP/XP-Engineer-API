@@ -20,6 +20,8 @@ describe('UserService', () => {
 		streak_days: 5,
 		rank: 'Bronze',
 		level: 2,
+		email: 'tobias@gmail.com',
+		password_hash: 'admin123',
 		specialization: 'Backend',
 		created_at: new Date(),
 	};
@@ -45,6 +47,7 @@ describe('UserService', () => {
 			expect(result).toEqual({
 				id: mockUserRow.id,
 				name: mockUserRow.name,
+				email: mockUserRow.email,
 				avatar_url: mockUserRow.avatar_url,
 				xp_total: mockUserRow.xp_total,
 				streak_days: mockUserRow.streak_days,
@@ -64,7 +67,12 @@ describe('UserService', () => {
 
 	describe('createUser', () => {
 		it('should create and return a new user (happy path)', async () => {
-			const createData = { name: 'New User', specialization: 'Frontend' };
+			const createData = {
+				name: 'New User',
+				email: 'new@example.com',
+				password_hash: 'hashed_pw',
+				specialization: 'Frontend',
+			};
 			vi.mocked(userRepositoryMock.create).mockResolvedValue({
 				...mockUserRow,
 				...createData,
@@ -74,6 +82,7 @@ describe('UserService', () => {
 
 			expect(userRepositoryMock.create).toHaveBeenCalledWith(createData);
 			expect(result.name).toBe(createData.name);
+			expect(result.email).toBe(createData.email);
 		});
 	});
 

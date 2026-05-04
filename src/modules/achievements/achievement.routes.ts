@@ -17,12 +17,12 @@ export const achievementRoutes = async (
 	const controller = new AchievementController(service);
 
 	app.get(
-		'/user/:userId/achievements',
+		'/achievements/:userId',
 		{ schema: listUserAchievementsSchema },
 		controller.listByUser,
 	);
 	app.patch(
-		'/user/:userId/achievement/:achievementId',
+		'/achievement/:userId/achievement/:achievementId',
 		{ schema: unlockAchievementSchema },
 		controller.unlock,
 	);

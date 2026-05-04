@@ -4,17 +4,14 @@ import type { IModuleService } from '@/types/interfaces/modules/module.service.i
 import type {
 	CreateModuleRequest,
 	GetModuleRequest,
-	ListModulesRequest,
 } from '@/types/routes/modules.js';
 
 export class ModuleController {
 	constructor(private readonly service: IModuleService) {}
 
-	list = async (
-		req: FastifyRequest<ListModulesRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
-		const modules = await this.service.listModules(req.query.userId);
+	list = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
+		const userId = req.user.sub as number;
+		const modules = await this.service.listModules(userId);
 		reply.status(200).send(modules);
 	};
 
@@ -23,10 +20,8 @@ export class ModuleController {
 		reply: FastifyReply,
 	): Promise<void> => {
 		try {
-			const module = await this.service.getModule(
-				req.params.moduleId,
-				req.query.userId,
-			);
+			const userId = req.user.sub as number;
+			const module = await this.service.getModule(req.params.moduleId, userId);
 			reply.status(200).send(module);
 		} catch (err) {
 			if (err instanceof ModuleNotFoundError) {

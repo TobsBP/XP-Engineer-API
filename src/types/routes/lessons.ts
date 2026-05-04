@@ -13,9 +13,6 @@ export const getLessonSchema = {
 		moduleId: z.string().min(1, 'ID do módulo é obrigatório'),
 		page: z.coerce.number().int().positive('Número da página é obrigatório'),
 	}),
-	querystring: z.object({
-		userId: z.coerce.number().int().positive('ID do usuário é obrigatório'),
-	}),
 	response: {
 		200: LessonContentSchema,
 	},
@@ -96,7 +93,6 @@ export const createApplicationItemSchema = {
 
 export type GetLessonRequest = {
 	Params: z.infer<typeof getLessonSchema.params>;
-	Querystring: z.infer<typeof getLessonSchema.querystring>;
 };
 
 export type CreateLessonRequest = {

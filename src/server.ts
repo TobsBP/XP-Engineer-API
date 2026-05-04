@@ -27,6 +27,9 @@ if (!process.env.JWT_SECRET) {
 
 app.register(fastifyJwt, {
 	secret: process.env.JWT_SECRET,
+	sign: {
+		expiresIn: '12hrs',
+	},
 });
 
 app.decorate('authenticate', async (request: any, reply: any) => {

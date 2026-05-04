@@ -1,11 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { UserNotFoundError } from '@/modules/users/user.service.js';
 import type { IUserRepository } from '@/types/interfaces/users/user.repository.interface.js';
-import type {
-	GetMeRequest,
-	LoginRequest,
-	RegisterRequest,
-} from '@/types/routes/auth.js';
+import type { LoginRequest, RegisterRequest } from '@/types/routes/auth.js';
 import type { AuthService } from './auth.service.js';
 import {
 	InvalidCredentialsError,
@@ -45,7 +41,7 @@ export class AuthController {
 		}
 	};
 
-	getMe = async (req: FastifyRequest<GetMeRequest>, reply: FastifyReply) => {
+	getMe = async (req: FastifyRequest, reply: FastifyReply) => {
 		const userId = req.user.sub as number;
 		const user = await this.userRepository.findById(userId);
 

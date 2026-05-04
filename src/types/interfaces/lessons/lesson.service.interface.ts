@@ -12,7 +12,11 @@ import type {
 import type { Lesson, LessonContent } from '@/types/schemas/lesson.js';
 
 export interface ILessonService {
-	getLesson(moduleId: string, page: number): Promise<LessonContent>;
+	getLesson(
+		moduleId: string,
+		page: number,
+		userId: number,
+	): Promise<LessonContent>;
 	createLesson(data: CreateLessonData): Promise<Lesson>;
 	createConceptItem(data: CreateConceptItemData): Promise<ConceptItem>;
 	createConceptExample(data: CreateConceptExampleData): Promise<ConceptExample>;

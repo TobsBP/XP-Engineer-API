@@ -17,9 +17,11 @@ export class LessonController {
 		reply: FastifyReply,
 	): Promise<void> => {
 		try {
+			const userId = req.user.sub as number;
 			const lesson = await this.service.getLesson(
 				req.params.moduleId,
 				req.params.page,
+				userId,
 			);
 			reply.status(200).send(lesson);
 		} catch (err) {

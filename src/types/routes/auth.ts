@@ -50,5 +50,3 @@ export type RegisterRequest = {
 export type LoginRequest = {
 	Body: z.infer<typeof loginSchema.body>;
 };
-
-export type GetMeRequest = {};

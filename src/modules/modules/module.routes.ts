@@ -14,7 +14,11 @@ export const moduleRoutes = async (app: FastifyInstance): Promise<void> => {
 	const service = new ModuleService(repository);
 	const controller = new ModuleController(service);
 
-	app.get('/modules', { schema: listModulesSchema }, controller.list);
+	app.get(
+		'/modules',
+		{ preHandler: app.authenticate, schema: listModulesSchema },
+		controller.list,
+	);
 	app.get('/module/:moduleId', { schema: getModuleSchema }, controller.get);
-	app.post('/modules', { schema: createModuleSchema }, controller.create);
+	app.post('/module', { schema: createModuleSchema }, controller.create);
 };
