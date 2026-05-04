@@ -13,7 +13,8 @@ export class UserModuleController {
 		req: FastifyRequest<CreateUserModuleRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		await this.service.createUserModule(req.params.userId, req.params.moduleId);
+		const userId = req.user.sub as number;
+		await this.service.createUserModule(userId, req.params.moduleId);
 		reply.status(201).send();
 	};
 
@@ -22,8 +23,9 @@ export class UserModuleController {
 		reply: FastifyReply,
 	): Promise<void> => {
 		try {
+			const userId = req.user.sub as number;
 			await this.service.updateUserModule(
-				req.params.userId,
+				userId,
 				req.params.moduleId,
 				req.body,
 			);
