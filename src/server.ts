@@ -1,30 +1,17 @@
 import { fastifyCors } from '@fastify/cors';
 import { fastifySwagger } from '@fastify/swagger';
+import { fastifySwagger } from '@fastify/swagger';
 import ScalarApiReference from '@scalar/fastify-api-reference';
-import { fastify } from 'fastify';
-import {
-	jsonSchemaTransform,
-	serializerCompiler,
-	validatorCompiler,
-	type ZodTypeProvider,
-} from 'fastify-type-provider-zod';
+import { jsonSchemaTransform } from 'fastify-type-provider-zod';
+import { buildApp } from './app.js';
 
-import { routes } from './router.js';
-
-const app = fastify().withTypeProvider<ZodTypeProvider>();
-app.setValidatorCompiler(validatorCompiler);
-app.setSerializerCompiler(serializerCompiler);
-
-app.register(fastifyCors, {
-	origin: true,
-	methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-});
+const app = buildApp();
 
 app.register(fastifySwagger, {
 	openapi: {
 		info: {
-			title: '',
-			description: '',
+			title: 'XP Engineer API',
+			description: 'API for learning platform',
 			version: '1.0.0',
 		},
 		security: [{ bearerAuth: [] }],
@@ -45,8 +32,7 @@ app.register(ScalarApiReference, {
 	routePrefix: '/docs',
 });
 
-app.register(routes);
-
 app.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
-	console.log('Docs availablee at http://localhost:3333/docs');
+	console.log('Docs available at http://localhost:3333/docs');
 });
+
