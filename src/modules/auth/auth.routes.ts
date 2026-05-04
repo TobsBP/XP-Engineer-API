@@ -1,10 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import { pool } from '@/lib/db.js';
 import { UserRepository } from '@/modules/users/user.repository.js';
+import type { UpdateMeRequest } from '@/types/routes/auth.js';
 import {
 	getMeSchema,
 	loginSchema,
 	registerSchema,
+	updateMeSchema,
 } from '@/types/routes/auth.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
@@ -28,6 +30,15 @@ export async function authRoutes(fastify: FastifyInstance) {
 			schema: loginSchema,
 		},
 		authController.login,
+	);
+
+	fastify.patch<UpdateMeRequest>(
+		'/me',
+		{
+			preHandler: fastify.authenticate,
+			schema: updateMeSchema,
+		},
+		authController.updateMe,
 	);
 
 	fastify.get(

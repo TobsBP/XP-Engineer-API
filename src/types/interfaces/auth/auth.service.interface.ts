@@ -13,6 +13,13 @@ export interface LoginRequest {
 	password: string;
 }
 
+export interface UpdateMeRequest {
+	name?: string;
+	email?: string;
+	current_password?: string;
+	new_password?: string;
+}
+
 export interface AuthResponse {
 	user: UserResponse;
 	token: string;

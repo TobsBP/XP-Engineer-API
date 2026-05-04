@@ -3,6 +3,7 @@ import type {
 	AuthResponse,
 	LoginRequest,
 	RegisterRequest,
+	UpdateMeRequest,
 } from '@/types/interfaces/auth/auth.service.interface.js';
 import type {
 	IUserRepository,
@@ -54,6 +55,47 @@ export class AuthService {
 		const token = this.jwt.sign({ sub: user.id });
 
 		return { user, token };
+	}
+
+	async updateMe(userId: number, data: UpdateMeRequest): Promise<UserResponse> {
+		const userRow = await this.userRepository.findById(userId);
+		if (!userRow) {
+			throw new InvalidCredentialsError();
+		}
+
+		if (data.new_password) {
+			if (!data.current_password) {
+				throw new InvalidCredentialsError();
+			}
+			const isValid = await bcrypt.compare(
+				data.current_password,
+				userRow.password_hash,
+			);
+			if (!isValid) {
+				throw new InvalidCredentialsError();
+			}
+		}
+
+		if (data.email && data.email !== userRow.email) {
+			const existing = await this.userRepository.findByEmail(data.email);
+			if (existing) {
+				throw new UserAlreadyExistsError(data.email);
+			}
+		}
+
+		const updateData: Record<string, string> = {};
+		if (data.name) updateData.name = data.name;
+		if (data.email) updateData.email = data.email;
+		if (data.new_password) {
+			updateData.password_hash = await bcrypt.hash(data.new_password, 10);
+		}
+
+		const updated = await this.userRepository.update(userId, updateData);
+		if (!updated) {
+			throw new InvalidCredentialsError();
+		}
+
+		return this.toResponse(updated);
 	}
 
 	async login(data: LoginRequest): Promise<AuthResponse> {

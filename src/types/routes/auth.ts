@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { LoginSchema, RegisterSchema } from '@/types/schemas/auth.js';
+import {
+	LoginSchema,
+	RegisterSchema,
+	UpdateMeSchema,
+} from '@/types/schemas/auth.js';
 import { UserResponseSchema } from '@/types/schemas/user.js';
 
 export const registerSchema = {
@@ -43,10 +47,32 @@ export const getMeSchema = {
 	},
 };
 
+export const updateMeSchema = {
+	tags: ['Auth'],
+	description: 'Atualiza os dados do usuário logado (nome, email, senha).',
+	body: UpdateMeSchema,
+	response: {
+		200: UserResponseSchema,
+		400: z.object({
+			message: z.string(),
+		}),
+		401: z.object({
+			message: z.string(),
+		}),
+		409: z.object({
+			message: z.string(),
+		}),
+	},
+};
+
 export type RegisterRequest = {
 	Body: z.infer<typeof registerSchema.body>;
 };
 
 export type LoginRequest = {
 	Body: z.infer<typeof loginSchema.body>;
+};
+
+export type UpdateMeRequest = {
+	Body: z.infer<typeof updateMeSchema.body>;
 };

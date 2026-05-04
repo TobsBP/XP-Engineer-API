@@ -13,5 +13,24 @@ export const LoginSchema = z.object({
 	password: z.string().min(6),
 });
 
+export const UpdateMeSchema = z
+	.object({
+		name: z.string().min(2).max(100).optional(),
+		email: z.email().max(255).optional(),
+		current_password: z.string().min(6).optional(),
+		new_password: z.string().min(6).optional(),
+	})
+	.refine(
+		(data) => {
+			if (data.new_password && !data.current_password) return false;
+			return true;
+		},
+		{
+			message: 'current_password é obrigatório para alterar a senha',
+			path: ['current_password'],
+		},
+	);
+
 export type RegisterData = z.infer<typeof RegisterSchema>;
 export type LoginData = z.infer<typeof LoginSchema>;
+export type UpdateMeData = z.infer<typeof UpdateMeSchema>;

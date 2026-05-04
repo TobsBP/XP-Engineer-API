@@ -1,7 +1,11 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { UserNotFoundError } from '@/modules/users/user.service.js';
 import type { IUserRepository } from '@/types/interfaces/users/user.repository.interface.js';
-import type { LoginRequest, RegisterRequest } from '@/types/routes/auth.js';
+import type {
+	LoginRequest,
+	RegisterRequest,
+	UpdateMeRequest,
+} from '@/types/routes/auth.js';
 import type { AuthService } from './auth.service.js';
 import {
 	InvalidCredentialsError,
@@ -36,6 +40,25 @@ export class AuthController {
 		} catch (error) {
 			if (error instanceof InvalidCredentialsError) {
 				return reply.status(401).send({ message: error.message });
+			}
+			throw error;
+		}
+	};
+
+	updateMe = async (
+		req: FastifyRequest<UpdateMeRequest>,
+		reply: FastifyReply,
+	) => {
+		try {
+			const userId = req.user.sub as number;
+			const result = await this.authService.updateMe(userId, req.body);
+			return reply.status(200).send(result);
+		} catch (error) {
+			if (error instanceof InvalidCredentialsError) {
+				return reply.status(401).send({ message: error.message });
+			}
+			if (error instanceof UserAlreadyExistsError) {
+				return reply.status(409).send({ message: error.message });
 			}
 			throw error;
 		}
