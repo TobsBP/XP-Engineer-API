@@ -1,0 +1,32 @@
+export type ModuleRow = {
+	id: string;
+	title: string;
+	subtitle: string;
+	order_index: number;
+	locked_by_default: boolean;
+	progress: number;
+	status: string;
+	current_page: number;
+};
+
+export type CreateModuleData = {
+	id: string;
+	title: string;
+	subtitle: string;
+	order_index: number;
+	locked_by_default: boolean;
+};
+
+export type CreatedModuleRow = {
+	id: string;
+	title: string;
+	subtitle: string;
+	order_index: number;
+	locked_by_default: boolean;
+};
+
+export interface IModuleRepository {
+	findAll(userId: number): Promise<ModuleRow[]>;
+	findById(moduleId: string, userId: number): Promise<ModuleRow | null>;
+	create(data: CreateModuleData): Promise<CreatedModuleRow>;
+}
