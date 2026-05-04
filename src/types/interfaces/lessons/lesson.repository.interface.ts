@@ -60,7 +60,7 @@ export type CreateConceptItemData = {
 	lesson_id: number;
 	title: string;
 	description: string;
-	latex?: string;
+	latex: string | null;
 	order_index: number;
 };
 
@@ -77,7 +77,7 @@ export type CreateApplicationItemData = {
 	lesson_id: number;
 	title: string;
 	description: string;
-	latex?: string;
+	latex: string | null;
 	order_index: number;
 };
 

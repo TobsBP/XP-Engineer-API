@@ -1,6 +1,9 @@
 import type { FastifyInstance } from 'fastify';
 import { pool } from '../../lib/db.js';
 import {
+	createApplicationItemSchema,
+	createConceptExampleSchema,
+	createConceptItemSchema,
 	createLessonSchema,
 	getLessonSchema,
 } from '../../types/routes/lessons.js';
@@ -18,9 +21,28 @@ export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
 		{ schema: getLessonSchema },
 		controller.get,
 	);
+
 	app.post(
 		'/module/:moduleId/lesson',
 		{ schema: createLessonSchema },
 		controller.create,
+	);
+
+	app.post(
+		'/lesson/:lessonId/concept-item',
+		{ schema: createConceptItemSchema },
+		controller.createConceptItem,
+	);
+
+	app.post(
+		'/lesson/:lessonId/concept-example',
+		{ schema: createConceptExampleSchema },
+		controller.createConceptExample,
+	);
+
+	app.post(
+		'/lesson/:lessonId/application-item',
+		{ schema: createApplicationItemSchema },
+		controller.createApplicationItem,
 	);
 };

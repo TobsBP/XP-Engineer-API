@@ -2,11 +2,19 @@ import type {
 	ApplicationItemRow,
 	ConceptExampleRow,
 	ConceptItemRow,
+	CreateApplicationItemData,
+	CreateConceptExampleData,
+	CreateConceptItemData,
 	CreateLessonData,
 	ILessonRepository,
 	LessonRow,
 } from '../../types/interfaces/lessons/lesson.repository.interface.js';
 import type { ILessonService } from '../../types/interfaces/lessons/lesson.service.interface.js';
+import type { ApplicationItem } from '../../types/schemas/application-item.js';
+import type {
+	ConceptExample,
+	ConceptItem,
+} from '../../types/schemas/concept-example.js';
 import type { Lesson, LessonContent } from '../../types/schemas/lesson.js';
 
 export class LessonNotFoundError extends Error {
@@ -41,6 +49,22 @@ export class LessonService implements ILessonService {
 
 	async createLesson(data: CreateLessonData): Promise<Lesson> {
 		return this.repository.create(data);
+	}
+
+	async createConceptItem(data: CreateConceptItemData): Promise<ConceptItem> {
+		return this.repository.createConceptItem(data);
+	}
+
+	async createConceptExample(
+		data: CreateConceptExampleData,
+	): Promise<ConceptExample> {
+		return this.repository.createConceptExample(data);
+	}
+
+	async createApplicationItem(
+		data: CreateApplicationItemData,
+	): Promise<ApplicationItem> {
+		return this.repository.createApplicationItem(data);
 	}
 
 	private toContent(

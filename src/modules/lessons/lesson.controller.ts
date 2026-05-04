@@ -1,6 +1,9 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { ILessonService } from '../../types/interfaces/lessons/lesson.service.interface.js';
 import type {
+	CreateApplicationItemRequest,
+	CreateConceptExampleRequest,
+	CreateConceptItemRequest,
 	CreateLessonRequest,
 	GetLessonRequest,
 } from '../../types/routes/lessons.js';
@@ -37,5 +40,40 @@ export class LessonController {
 			module_id: req.params.moduleId,
 		});
 		reply.status(201).send(lesson);
+	};
+
+	createConceptItem = async (
+		req: FastifyRequest<CreateConceptItemRequest>,
+		reply: FastifyReply,
+	): Promise<void> => {
+		const item = await this.service.createConceptItem({
+			...req.body,
+			latex: req.body.latex ?? null,
+			lesson_id: req.params.lessonId,
+		});
+		reply.status(201).send(item);
+	};
+
+	createConceptExample = async (
+		req: FastifyRequest<CreateConceptExampleRequest>,
+		reply: FastifyReply,
+	): Promise<void> => {
+		const example = await this.service.createConceptExample({
+			...req.body,
+			lesson_id: req.params.lessonId,
+		});
+		reply.status(201).send(example);
+	};
+
+	createApplicationItem = async (
+		req: FastifyRequest<CreateApplicationItemRequest>,
+		reply: FastifyReply,
+	): Promise<void> => {
+		const item = await this.service.createApplicationItem({
+			...req.body,
+			latex: req.body.latex ?? null,
+			lesson_id: req.params.lessonId,
+		});
+		reply.status(201).send(item);
 	};
 }

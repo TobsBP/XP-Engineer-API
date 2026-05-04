@@ -3,6 +3,9 @@ import type {
 	ApplicationItemRow,
 	ConceptExampleRow,
 	ConceptItemRow,
+	CreateApplicationItemData,
+	CreateConceptExampleData,
+	CreateConceptItemData,
 	CreatedLessonRow,
 	CreateLessonData,
 	ILessonRepository,
@@ -74,6 +77,56 @@ export class LessonRepository implements ILessonRepository {
 				data.concepts_title,
 				data.applications_title,
 				data.footer_cta,
+			],
+		);
+		return rows[0];
+	}
+
+	async createConceptItem(
+		data: CreateConceptItemData,
+	): Promise<CreateConceptItemData> {
+		const { rows } = await this.pool.query<CreateConceptItemData>(
+			`INSERT INTO concept_items (id, lesson_id, title, description, latex, order_index)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			RETURNING id, lesson_id, title, description, latex, order_index`,
+			[
+				data.id,
+				data.lesson_id,
+				data.title,
+				data.description,
+				data.latex ?? null,
+				data.order_index,
+			],
+		);
+		return rows[0];
+	}
+
+	async createConceptExample(
+		data: CreateConceptExampleData,
+	): Promise<CreateConceptExampleData> {
+		const { rows } = await this.pool.query<CreateConceptExampleData>(
+			`INSERT INTO concept_examples (id, lesson_id, label, latex, order_index)
+			VALUES ($1, $2, $3, $4, $5)
+			RETURNING id, lesson_id, label, latex, order_index`,
+			[data.id, data.lesson_id, data.label, data.latex, data.order_index],
+		);
+		return rows[0];
+	}
+
+	async createApplicationItem(
+		data: CreateApplicationItemData,
+	): Promise<CreateApplicationItemData> {
+		const { rows } = await this.pool.query<CreateApplicationItemData>(
+			`INSERT INTO application_items (id, lesson_id, title, description, latex, order_index)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			RETURNING id, lesson_id, title, description, latex, order_index`,
+			[
+				data.id,
+				data.lesson_id,
+				data.title,
+				data.description,
+				data.latex ?? null,
+				data.order_index,
 			],
 		);
 		return rows[0];
