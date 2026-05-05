@@ -1,9 +1,12 @@
-import type { IQuizRepository } from '@/types/interfaces/quizzes/quiz.repository.interface.js';
+import type { IQuizRepository } from '@/models/quizzes/quiz.repository.interface.js';
+import type {
+	QuizQuestionResponse,
+	QuizResult,
+} from '@/models/quizzes/quiz.schema.js';
 import type {
 	AnswerInput,
 	IQuizService,
-} from '@/types/interfaces/quizzes/quiz.service.interface.js';
-import type { QuizQuestionResponse, QuizResult } from '@/types/schemas/quiz.js';
+} from '@/models/quizzes/quiz.service.interface.js';
 
 export class QuizNotFoundError extends Error {
 	constructor(moduleId: string) {
@@ -13,14 +16,15 @@ export class QuizNotFoundError extends Error {
 }
 
 export class QuizService implements IQuizService {
-	constructor(private readonly repository: IQuizRepository) {}
+	constructor(private readonly quizRepository: IQuizRepository) {}
 
 	async getQuestions(moduleId: string): Promise<QuizQuestionResponse[]> {
-		const questions = await this.repository.findQuestionsByModule(moduleId);
+		const questions = await this.quizRepository.findQuestionsByModule(moduleId);
 		if (questions.length === 0) throw new QuizNotFoundError(moduleId);
 
 		const questionIds = questions.map((q) => q.id);
-		const options = await this.repository.findOptionsByQuestionIds(questionIds);
+		const options =
+			await this.quizRepository.findOptionsByQuestionIds(questionIds);
 
 		return questions.map((q) => ({
 			id: q.id,
@@ -36,11 +40,12 @@ export class QuizService implements IQuizService {
 		moduleId: string,
 		answers: AnswerInput[],
 	): Promise<QuizResult> {
-		const questions = await this.repository.findQuestionsByModule(moduleId);
+		const questions = await this.quizRepository.findQuestionsByModule(moduleId);
 		if (questions.length === 0) throw new QuizNotFoundError(moduleId);
 
 		const questionIds = questions.map((q) => q.id);
-		const options = await this.repository.findOptionsByQuestionIds(questionIds);
+		const options =
+			await this.quizRepository.findOptionsByQuestionIds(questionIds);
 
 		const correctOptionMap = new Map<number, number>();
 		for (const opt of options) {

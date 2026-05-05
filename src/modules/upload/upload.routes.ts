@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import {
 	type UploadImageRequest,
 	uploadImageSchema,
-} from '@/types/routes/upload.js';
+} from '@/models/upload/upload.routes.js';
 import { uploadImage } from '@/utils/upload.js';
 
 export const uploadRoutes = async (app: FastifyInstance): Promise<void> => {

@@ -3,7 +3,7 @@ import type {
 	AchievementRow,
 	CreateAchievementData,
 	IAchievementRepository,
-} from '@/types/interfaces/achievements/achievement.repository.interface.js';
+} from '@/models/achievements/achievement.repository.interface.js';
 
 export class AchievementRepository implements IAchievementRepository {
 	constructor(private readonly pool: Pool) {}

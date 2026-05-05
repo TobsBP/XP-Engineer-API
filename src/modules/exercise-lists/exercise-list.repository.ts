@@ -2,7 +2,7 @@ import type { Pool } from 'pg';
 import type {
 	ExerciseListRow,
 	IExerciseListRepository,
-} from '@/types/interfaces/exercise-lists/exercise-list.repository.interface.js';
+} from '@/models/exercise-lists/exercise-list.repository.interface.js';
 
 export class ExerciseListRepository implements IExerciseListRepository {
 	constructor(private readonly pool: Pool) {}

@@ -2,9 +2,9 @@ import type {
 	CreateModuleData,
 	IModuleRepository,
 	ModuleRow,
-} from '@/types/interfaces/modules/module.repository.interface.js';
-import type { IModuleService } from '@/types/interfaces/modules/module.service.interface.js';
-import type { Module, ModuleResponse } from '@/types/schemas/module.js';
+} from '@/models/modules/module.repository.interface.js';
+import type { Module, ModuleResponse } from '@/models/modules/module.schema.js';
+import type { IModuleService } from '@/models/modules/module.service.interface.js';
 
 export class ModuleNotFoundError extends Error {
 	constructor(moduleId: string) {
@@ -14,21 +14,21 @@ export class ModuleNotFoundError extends Error {
 }
 
 export class ModuleService implements IModuleService {
-	constructor(private readonly repository: IModuleRepository) {}
+	constructor(private readonly moduleRepository: IModuleRepository) {}
 
 	async listModules(userId: number): Promise<ModuleResponse[]> {
-		const rows = await this.repository.findAll(userId);
+		const rows = await this.moduleRepository.findAll(userId);
 		return rows.map((row) => this.toResponse(row));
 	}
 
 	async getModule(moduleId: string, userId: number): Promise<ModuleResponse> {
-		const row = await this.repository.findById(moduleId, userId);
+		const row = await this.moduleRepository.findById(moduleId, userId);
 		if (!row) throw new ModuleNotFoundError(moduleId);
 		return this.toResponse(row);
 	}
 
 	async createModule(data: CreateModuleData): Promise<Module> {
-		return this.repository.create(data);
+		return this.moduleRepository.create(data);
 	}
 
 	private toResponse(row: ModuleRow): ModuleResponse {

@@ -1,19 +1,21 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { IAchievementService } from '@/types/interfaces/achievements/achievement.service.interface.js';
 import type {
 	CreateAchievementRequest,
 	ListUserAchievementsRequest,
 	UnlockAchievementRequest,
-} from '@/types/routes/achievements.js';
+} from '@/models/achievements/achievement.routes.js';
+import type { IAchievementService } from '@/models/achievements/achievement.service.interface.js';
 
 export class AchievementController {
-	constructor(private readonly service: IAchievementService) {}
+	constructor(private readonly achievementService: IAchievementService) {}
 
 	create = async (
 		req: FastifyRequest<CreateAchievementRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		const achievement = await this.service.createAchievement(req.body);
+		const achievement = await this.achievementService.createAchievement(
+			req.body,
+		);
 		reply.status(201).send(achievement);
 	};
 
@@ -21,7 +23,9 @@ export class AchievementController {
 		req: FastifyRequest<ListUserAchievementsRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		const achievements = await this.service.listByUser(req.params.userId);
+		const achievements = await this.achievementService.listByUser(
+			req.params.userId,
+		);
 		reply.status(200).send(achievements);
 	};
 
@@ -29,7 +33,10 @@ export class AchievementController {
 		req: FastifyRequest<UnlockAchievementRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		await this.service.unlock(req.params.userId, req.params.achievementId);
+		await this.achievementService.unlock(
+			req.params.userId,
+			req.params.achievementId,
+		);
 		reply.status(204).send();
 	};
 }

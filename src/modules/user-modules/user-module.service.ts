@@ -1,8 +1,8 @@
 import type {
 	IUserModuleRepository,
 	UpdateUserModuleData,
-} from '@/types/interfaces/user-modules/user-module.repository.interface.js';
-import type { IUserModuleService } from '@/types/interfaces/user-modules/user-module.service.interface.js';
+} from '@/models/user-modules/user-module.repository.interface.js';
+import type { IUserModuleService } from '@/models/user-modules/user-module.service.interface.js';
 
 export class UserModuleNotFoundError extends Error {
 	constructor(userId: number, moduleId: string) {
@@ -28,19 +28,19 @@ export class ModuleLockedError extends Error {
 }
 
 export class UserModuleService implements IUserModuleService {
-	constructor(private readonly repository: IUserModuleRepository) {}
+	constructor(private readonly userModuleRepository: IUserModuleRepository) {}
 
 	async createUserModule(userId: number, moduleId: string): Promise<void> {
-		const minXp = await this.repository.getModuleMinXp(moduleId);
+		const minXp = await this.userModuleRepository.getModuleMinXp(moduleId);
 
 		if (minXp > 0) {
-			const userXp = await this.repository.getUserXpTotal(userId);
+			const userXp = await this.userModuleRepository.getUserXpTotal(userId);
 			if (userXp < minXp) {
 				throw new ModuleLockedError(moduleId, minXp, userXp);
 			}
 		}
 
-		await this.repository.create(userId, moduleId);
+		await this.userModuleRepository.create(userId, moduleId);
 	}
 
 	async updateUserModule(
@@ -48,7 +48,11 @@ export class UserModuleService implements IUserModuleService {
 		moduleId: string,
 		data: UpdateUserModuleData,
 	): Promise<void> {
-		const updated = await this.repository.update(userId, moduleId, data);
+		const updated = await this.userModuleRepository.update(
+			userId,
+			moduleId,
+			data,
+		);
 		if (!updated) throw new UserModuleNotFoundError(userId, moduleId);
 	}
 }

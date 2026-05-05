@@ -2,27 +2,27 @@ import type {
 	AchievementRow,
 	CreateAchievementData,
 	IAchievementRepository,
-} from '@/types/interfaces/achievements/achievement.repository.interface.js';
-import type { IAchievementService } from '@/types/interfaces/achievements/achievement.service.interface.js';
+} from '@/models/achievements/achievement.repository.interface.js';
 import type {
 	Achievement,
 	AchievementResponse,
-} from '@/types/schemas/achievement.js';
+} from '@/models/achievements/achievement.schema.js';
+import type { IAchievementService } from '@/models/achievements/achievement.service.interface.js';
 
 export class AchievementService implements IAchievementService {
-	constructor(private readonly repository: IAchievementRepository) {}
+	constructor(private readonly achievementRepository: IAchievementRepository) {}
 
 	async createAchievement(data: CreateAchievementData): Promise<Achievement> {
-		return await this.repository.create(data);
+		return await this.achievementRepository.create(data);
 	}
 
 	async listByUser(userId: number): Promise<AchievementResponse[]> {
-		const rows = await this.repository.findAllByUser(userId);
+		const rows = await this.achievementRepository.findAllByUser(userId);
 		return rows.map((row) => this.toResponse(row));
 	}
 
 	async unlock(userId: number, achievementId: string): Promise<void> {
-		await this.repository.unlock(userId, achievementId);
+		await this.achievementRepository.unlock(userId, achievementId);
 	}
 
 	private toResponse(row: AchievementRow): AchievementResponse {

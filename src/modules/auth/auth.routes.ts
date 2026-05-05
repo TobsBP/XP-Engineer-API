@@ -1,35 +1,21 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '@/lib/db.js';
-import { StreakRepository } from '@/modules/streak/streak.repository.js';
-import { StreakService } from '@/modules/streak/streak.service.js';
-import { UserRepository } from '@/modules/users/user.repository.js';
-import type { UpdateMeRequest } from '@/types/routes/auth.js';
+import type { UpdateMeRequest } from '@/models/auth/auth.routes.js';
 import {
 	getMeSchema,
 	loginSchema,
 	registerSchema,
 	updateMeSchema,
-} from '@/types/routes/auth.js';
-import { AuthController } from './auth.controller.js';
-import { AuthService } from './auth.service.js';
+} from '@/models/auth/auth.routes.js';
 
 export async function authRoutes(fastify: FastifyInstance) {
-	const userRepository = new UserRepository(pool);
-	const streakRepository = new StreakRepository(pool);
-	const streakService = new StreakService(streakRepository);
-	const authService = new AuthService(userRepository, fastify.jwt);
-	const authController = new AuthController(
-		authService,
-		userRepository,
-		streakService,
-	);
+	const controller = fastify.container.resolve('authController');
 
 	fastify.post(
 		'/register',
 		{
 			schema: registerSchema,
 		},
-		authController.register,
+		controller.register,
 	);
 
 	fastify.post(
@@ -37,7 +23,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 		{
 			schema: loginSchema,
 		},
-		authController.login,
+		controller.login,
 	);
 
 	fastify.patch<UpdateMeRequest>(
@@ -46,7 +32,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 			preHandler: fastify.authenticate,
 			schema: updateMeSchema,
 		},
-		authController.updateMe,
+		controller.updateMe,
 	);
 
 	fastify.get(
@@ -55,6 +41,6 @@ export async function authRoutes(fastify: FastifyInstance) {
 			preHandler: fastify.authenticate,
 			schema: getMeSchema,
 		},
-		authController.getMe,
+		controller.getMe,
 	);
 }

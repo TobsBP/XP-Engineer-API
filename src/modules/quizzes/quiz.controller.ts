@@ -1,20 +1,22 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { QuizNotFoundError } from '@/modules/quizzes/quiz.service.js';
-import type { IQuizService } from '@/types/interfaces/quizzes/quiz.service.interface.js';
 import type {
 	GetQuizRequest,
 	SubmitQuizRequest,
-} from '@/types/routes/quizzes.js';
+} from '@/models/quizzes/quiz.routes.js';
+import type { IQuizService } from '@/models/quizzes/quiz.service.interface.js';
+import { QuizNotFoundError } from '@/modules/quizzes/quiz.service.js';
 
 export class QuizController {
-	constructor(private readonly service: IQuizService) {}
+	constructor(private readonly quizService: IQuizService) {}
 
 	getQuestions = async (
 		req: FastifyRequest<GetQuizRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
 		try {
-			const questions = await this.service.getQuestions(req.params.moduleId);
+			const questions = await this.quizService.getQuestions(
+				req.params.moduleId,
+			);
 			reply.status(200).send(questions);
 		} catch (err) {
 			if (err instanceof QuizNotFoundError) {
@@ -30,7 +32,7 @@ export class QuizController {
 		reply: FastifyReply,
 	): Promise<void> => {
 		try {
-			const result = await this.service.submitAnswers(
+			const result = await this.quizService.submitAnswers(
 				req.params.moduleId,
 				req.body.answers,
 			);

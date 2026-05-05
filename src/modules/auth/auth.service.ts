@@ -4,12 +4,12 @@ import type {
 	LoginRequest,
 	RegisterRequest,
 	UpdateMeRequest,
-} from '@/types/interfaces/auth/auth.service.interface.js';
+} from '@/models/auth/auth.service.interface.js';
 import type {
 	IUserRepository,
 	UserRow,
-} from '@/types/interfaces/users/user.repository.interface.js';
-import type { UserResponse } from '@/types/schemas/user.js';
+} from '@/models/users/user.repository.interface.js';
+import type { UserResponse } from '@/models/users/user.schema.js';
 
 export class UserAlreadyExistsError extends Error {
 	constructor(email: string) {

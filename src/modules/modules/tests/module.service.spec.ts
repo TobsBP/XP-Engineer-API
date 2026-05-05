@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type {
+	IModuleRepository,
+	ModuleRow,
+} from '@/models/modules/module.repository.interface.js';
 import {
 	ModuleNotFoundError,
 	ModuleService,
 } from '@/modules/modules/module.service.js';
-import type {
-	IModuleRepository,
-	ModuleRow,
-} from '@/types/interfaces/modules/module.repository.interface.js';
 
 describe('ModuleService', () => {
 	let moduleService: ModuleService;

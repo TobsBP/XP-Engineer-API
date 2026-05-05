@@ -1,16 +1,16 @@
-import type { IProgressRepository } from '@/types/interfaces/progress/progress.repository.interface.js';
-import type { IProgressService } from '@/types/interfaces/progress/progress.service.interface.js';
-import type {
-	AnswerInput,
-	IQuizService,
-} from '@/types/interfaces/quizzes/quiz.service.interface.js';
-import type { IStreakService } from '@/types/interfaces/streak/streak.service.interface.js';
+import type { IProgressRepository } from '@/models/progress/progress.repository.interface.js';
 import type {
 	LessonCompleteResponse,
 	ModuleCompleteResponse,
 	UserProgress,
 	UserProgressSummary,
-} from '@/types/schemas/progress.js';
+} from '@/models/progress/progress.schema.js';
+import type { IProgressService } from '@/models/progress/progress.service.interface.js';
+import type {
+	AnswerInput,
+	IQuizService,
+} from '@/models/quizzes/quiz.service.interface.js';
+import type { IStreakService } from '@/models/streak/streak.service.interface.js';
 import { calculateLevel } from '@/utils/calc-level.js';
 
 const XP_PER_MODULE = 100;
@@ -45,14 +45,14 @@ export class ModuleAlreadyCompletedError extends Error {
 
 export class ProgressService implements IProgressService {
 	constructor(
-		private readonly repository: IProgressRepository,
+		private readonly progressRepository: IProgressRepository,
 		private readonly quizService: IQuizService,
 		private readonly streakService: IStreakService,
 	) {}
 
 	async getProgress(userId: number): Promise<UserProgressSummary> {
-		const modules = await this.repository.findAllByUser(userId);
-		const xpTotal = await this.repository.getXpTotal(userId);
+		const modules = await this.progressRepository.findAllByUser(userId);
+		const xpTotal = await this.progressRepository.getXpTotal(userId);
 
 		const modulesCompleted = modules.filter(
 			(m) => m.status === 'completed',
@@ -81,7 +81,10 @@ export class ProgressService implements IProgressService {
 		userId: number,
 		moduleId: string,
 	): Promise<UserProgress> {
-		const detail = await this.repository.findModuleDetail(userId, moduleId);
+		const detail = await this.progressRepository.findModuleDetail(
+			userId,
+			moduleId,
+		);
 		if (!detail) throw new ProgressNotFoundError(moduleId);
 
 		return {
@@ -100,7 +103,10 @@ export class ProgressService implements IProgressService {
 		moduleId: string,
 		page: number,
 	): Promise<LessonCompleteResponse> {
-		const userModule = await this.repository.findUserModule(userId, moduleId);
+		const userModule = await this.progressRepository.findUserModule(
+			userId,
+			moduleId,
+		);
 		if (!userModule) throw new ProgressNotFoundError(moduleId);
 
 		if (userModule.status === 'completed') {
@@ -112,15 +118,19 @@ export class ProgressService implements IProgressService {
 			};
 		}
 
-		const totalPages = await this.repository.getTotalPages(moduleId);
+		const totalPages = await this.progressRepository.getTotalPages(moduleId);
 		const newPage = Math.max(userModule.current_page, page + 1);
 		const progress = Math.min(Math.round((page / totalPages) * 100), 99);
 
-		const updated = await this.repository.updateProgress(userId, moduleId, {
-			progress,
-			status: 'in_progress',
-			current_page: newPage,
-		});
+		const updated = await this.progressRepository.updateProgress(
+			userId,
+			moduleId,
+			{
+				progress,
+				status: 'in_progress',
+				current_page: newPage,
+			},
+		);
 
 		if (!updated) throw new ProgressNotFoundError(moduleId);
 
@@ -139,7 +149,10 @@ export class ProgressService implements IProgressService {
 		moduleId: string,
 		answers: AnswerInput[],
 	): Promise<ModuleCompleteResponse> {
-		const userModule = await this.repository.findUserModule(userId, moduleId);
+		const userModule = await this.progressRepository.findUserModule(
+			userId,
+			moduleId,
+		);
 		if (!userModule) throw new ProgressNotFoundError(moduleId);
 		if (userModule.status === 'completed') {
 			throw new ModuleAlreadyCompletedError(moduleId);
@@ -151,11 +164,11 @@ export class ProgressService implements IProgressService {
 			throw new QuizScoreInsufficientError(quizResult.score);
 		}
 
-		await this.repository.completeModule(userId, moduleId);
-		const xpTotal = await this.repository.addXp(userId, XP_PER_MODULE);
+		await this.progressRepository.completeModule(userId, moduleId);
+		const xpTotal = await this.progressRepository.addXp(userId, XP_PER_MODULE);
 
 		const newLevel = calculateLevel(xpTotal);
-		await this.repository.updateLevel(userId, newLevel);
+		await this.progressRepository.updateLevel(userId, newLevel);
 
 		await this.streakService.registerActivity(userId);
 

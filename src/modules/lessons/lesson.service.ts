@@ -1,3 +1,8 @@
+import type { ApplicationItem } from '@/models/lessons/application-item.schema.js';
+import type {
+	ConceptExample,
+	ConceptItem,
+} from '@/models/lessons/concept-example.schema.js';
 import type {
 	ApplicationItemRow,
 	ConceptExampleRow,
@@ -8,14 +13,9 @@ import type {
 	CreateLessonData,
 	ILessonRepository,
 	LessonRow,
-} from '@/types/interfaces/lessons/lesson.repository.interface.js';
-import type { ILessonService } from '@/types/interfaces/lessons/lesson.service.interface.js';
-import type { ApplicationItem } from '@/types/schemas/application-item.js';
-import type {
-	ConceptExample,
-	ConceptItem,
-} from '@/types/schemas/concept-example.js';
-import type { Lesson, LessonContent } from '@/types/schemas/lesson.js';
+} from '@/models/lessons/lesson.repository.interface.js';
+import type { Lesson, LessonContent } from '@/models/lessons/lesson.schema.js';
+import type { ILessonService } from '@/models/lessons/lesson.service.interface.js';
 
 export class LessonNotFoundError extends Error {
 	constructor(moduleId: string, page: number) {
@@ -25,17 +25,17 @@ export class LessonNotFoundError extends Error {
 }
 
 export class LessonService implements ILessonService {
-	constructor(private readonly repository: ILessonRepository) {}
+	constructor(private readonly lessonRepository: ILessonRepository) {}
 
 	async getLesson(moduleId: string, page: number): Promise<LessonContent> {
-		const lessonRow = await this.repository.findByPage(moduleId, page);
+		const lessonRow = await this.lessonRepository.findByPage(moduleId, page);
 		if (!lessonRow) throw new LessonNotFoundError(moduleId, page);
 
 		const [conceptItems, conceptExamples, applicationItems] = await Promise.all(
 			[
-				this.repository.findConceptItems(lessonRow.id),
-				this.repository.findConceptExamples(lessonRow.id),
-				this.repository.findApplicationItems(lessonRow.id),
+				this.lessonRepository.findConceptItems(lessonRow.id),
+				this.lessonRepository.findConceptExamples(lessonRow.id),
+				this.lessonRepository.findApplicationItems(lessonRow.id),
 			],
 		);
 
@@ -48,23 +48,23 @@ export class LessonService implements ILessonService {
 	}
 
 	async createLesson(data: CreateLessonData): Promise<Lesson> {
-		return this.repository.create(data);
+		return this.lessonRepository.create(data);
 	}
 
 	async createConceptItem(data: CreateConceptItemData): Promise<ConceptItem> {
-		return this.repository.createConceptItem(data);
+		return this.lessonRepository.createConceptItem(data);
 	}
 
 	async createConceptExample(
 		data: CreateConceptExampleData,
 	): Promise<ConceptExample> {
-		return this.repository.createConceptExample(data);
+		return this.lessonRepository.createConceptExample(data);
 	}
 
 	async createApplicationItem(
 		data: CreateApplicationItemData,
 	): Promise<ApplicationItem> {
-		return this.repository.createApplicationItem(data);
+		return this.lessonRepository.createApplicationItem(data);
 	}
 
 	private toContent(

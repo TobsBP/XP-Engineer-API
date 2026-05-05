@@ -1,8 +1,4 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '@/lib/db.js';
-import { LessonController } from '@/modules/lessons/lesson.controller.js';
-import { LessonRepository } from '@/modules/lessons/lesson.repository.js';
-import { LessonService } from '@/modules/lessons/lesson.service.js';
 import {
 	type CreateApplicationItemRequest,
 	type CreateConceptExampleRequest,
@@ -14,12 +10,10 @@ import {
 	createLessonSchema,
 	type GetLessonRequest,
 	getLessonSchema,
-} from '@/types/routes/lessons.js';
+} from '@/models/lessons/lesson.routes.js';
 
 export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
-	const repository = new LessonRepository(pool);
-	const service = new LessonService(repository);
-	const controller = new LessonController(service);
+	const controller = app.container.resolve('lessonController');
 
 	app.get<GetLessonRequest>(
 		'/lesson/:moduleId/:page',

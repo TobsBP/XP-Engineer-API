@@ -10,7 +10,7 @@ import type {
 	CreateLessonData,
 	ILessonRepository,
 	LessonRow,
-} from '@/types/interfaces/lessons/lesson.repository.interface.js';
+} from '@/models/lessons/lesson.repository.interface.js';
 
 export class LessonRepository implements ILessonRepository {
 	constructor(private readonly pool: Pool) {}

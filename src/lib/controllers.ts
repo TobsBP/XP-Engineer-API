@@ -1,0 +1,10 @@
+export { AchievementController } from '@/modules/achievements/achievement.controller.js';
+export { AuthController } from '@/modules/auth/auth.controller.js';
+export { ExerciseListController } from '@/modules/exercise-lists/exercise-list.controller.js';
+export { LeaderboardController } from '@/modules/leaderboard/leaderboard.controller.js';
+export { LessonController } from '@/modules/lessons/lesson.controller.js';
+export { ModuleController } from '@/modules/modules/module.controller.js';
+export { ProgressController } from '@/modules/progress/progress.controller.js';
+export { QuizController } from '@/modules/quizzes/quiz.controller.js';
+export { UserModuleController } from '@/modules/user-modules/user-module.controller.js';
+export { UserController } from '@/modules/users/user.controller.js';

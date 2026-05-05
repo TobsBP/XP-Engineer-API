@@ -1,8 +1,4 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '@/lib/db.js';
-import { UserController } from '@/modules/users/user.controller.js';
-import { UserRepository } from '@/modules/users/user.repository.js';
-import { UserService } from '@/modules/users/user.service.js';
 import {
 	type CreateUserRequest,
 	createUserSchema,
@@ -12,12 +8,10 @@ import {
 	getUserSchema,
 	type PatchUserRequest,
 	patchUserSchema,
-} from '@/types/routes/users.js';
+} from '@/models/users/user.routes.js';
 
 export const userRoutes = async (app: FastifyInstance): Promise<void> => {
-	const repository = new UserRepository(pool);
-	const service = new UserService(repository);
-	const controller = new UserController(service);
+	const controller = app.container.resolve('userController');
 
 	app.get<GetUserRequest>(
 		'/user/:id',

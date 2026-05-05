@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-	QuizNotFoundError,
-	QuizService,
-} from '@/modules/quizzes/quiz.service.js';
 import type {
 	IQuizRepository,
 	QuizOptionRow,
 	QuizQuestionRow,
-} from '@/types/interfaces/quizzes/quiz.repository.interface.js';
+} from '@/models/quizzes/quiz.repository.interface.js';
+import {
+	QuizNotFoundError,
+	QuizService,
+} from '@/modules/quizzes/quiz.service.js';
 
 describe('QuizService', () => {
 	let quizService: QuizService;
