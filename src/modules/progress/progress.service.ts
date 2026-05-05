@@ -100,16 +100,22 @@ export class ProgressService implements IProgressService {
 		const userModule = await this.repository.findUserModule(userId, moduleId);
 		if (!userModule) throw new ProgressNotFoundError(moduleId);
 
+		if (userModule.status === 'completed') {
+			return {
+				module_id: moduleId,
+				current_page: userModule.current_page,
+				progress: userModule.progress,
+				status: userModule.status,
+			};
+		}
+
 		const totalPages = await this.repository.getTotalPages(moduleId);
 		const newPage = Math.max(userModule.current_page, page + 1);
 		const progress = Math.min(Math.round((page / totalPages) * 100), 99);
 
-		const status =
-			userModule.status === 'completed' ? 'completed' : 'in_progress';
-
 		const updated = await this.repository.updateProgress(userId, moduleId, {
 			progress,
-			status,
+			status: 'in_progress',
 			current_page: newPage,
 		});
 
