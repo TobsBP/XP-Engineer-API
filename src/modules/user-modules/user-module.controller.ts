@@ -1,5 +1,8 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { UserModuleNotFoundError } from '@/modules/user-modules/user-module.service.js';
+import {
+	ModuleLockedError,
+	UserModuleNotFoundError,
+} from '@/modules/user-modules/user-module.service.js';
 import type { IUserModuleService } from '@/types/interfaces/user-modules/user-module.service.interface.js';
 import type {
 	CreateUserModuleRequest,
@@ -13,9 +16,21 @@ export class UserModuleController {
 		req: FastifyRequest<CreateUserModuleRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		const userId = req.user.sub as number;
-		await this.service.createUserModule(userId, req.params.moduleId);
-		reply.status(201).send();
+		try {
+			const userId = req.user.sub as number;
+			await this.service.createUserModule(userId, req.params.moduleId);
+			reply.status(201).send();
+		} catch (err) {
+			if (err instanceof ModuleLockedError) {
+				reply.status(403).send({
+					message: err.message,
+					required_xp: err.requiredXp,
+					current_xp: err.currentXp,
+				});
+				return;
+			}
+			throw err;
+		}
 	};
 
 	update = async (

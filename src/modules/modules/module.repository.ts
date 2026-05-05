@@ -13,6 +13,7 @@ export class ModuleRepository implements IModuleRepository {
 		const { rows } = await this.pool.query<ModuleRow>(
 			`SELECT
 				m.id, m.title, m.subtitle, m.subject, m.order_index, m.locked_by_default,
+				COALESCE(m.min_xp, 0)::int AS min_xp,
 				COALESCE(um.progress, 0)::int AS progress,
 				COALESCE(um.status::text, CASE WHEN m.locked_by_default THEN 'locked' ELSE 'available' END) AS status,
 				COALESCE(um.current_page, 1) AS current_page
@@ -28,6 +29,7 @@ export class ModuleRepository implements IModuleRepository {
 		const { rows } = await this.pool.query<ModuleRow>(
 			`SELECT
 				m.id, m.title, m.subtitle, m.subject, m.order_index, m.locked_by_default,
+				COALESCE(m.min_xp, 0)::int AS min_xp,
 				COALESCE(um.progress, 0)::int AS progress,
 				COALESCE(um.status::text, CASE WHEN m.locked_by_default THEN 'locked' ELSE 'available' END) AS status,
 				COALESCE(um.current_page, 1) AS current_page
@@ -41,9 +43,9 @@ export class ModuleRepository implements IModuleRepository {
 
 	async create(data: CreateModuleData): Promise<CreatedModuleRow> {
 		const { rows } = await this.pool.query<CreatedModuleRow>(
-			`INSERT INTO modules (id, title, subtitle, subject, order_index, locked_by_default)
-			VALUES ($1, $2, $3, $4, $5, $6)
-			RETURNING id, title, subtitle, subject, order_index, locked_by_default`,
+			`INSERT INTO modules (id, title, subtitle, subject, order_index, locked_by_default, min_xp)
+			VALUES ($1, $2, $3, $4, $5, $6, $7)
+			RETURNING id, title, subtitle, subject, order_index, locked_by_default, min_xp`,
 			[
 				data.id,
 				data.title,
@@ -51,6 +53,7 @@ export class ModuleRepository implements IModuleRepository {
 				data.subject,
 				data.order_index,
 				data.locked_by_default,
+				data.min_xp ?? 0,
 			],
 		);
 		return rows[0];

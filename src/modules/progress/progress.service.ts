@@ -10,6 +10,7 @@ import type {
 	UserProgress,
 	UserProgressSummary,
 } from '@/types/schemas/progress.js';
+import { calculateLevel } from '@/utils/calc-level.js';
 
 const XP_PER_MODULE = 100;
 const MIN_SCORE_TO_PASS = 80;
@@ -148,6 +149,9 @@ export class ProgressService implements IProgressService {
 
 		await this.repository.completeModule(userId, moduleId);
 		const xpTotal = await this.repository.addXp(userId, XP_PER_MODULE);
+
+		const newLevel = calculateLevel(xpTotal);
+		await this.repository.updateLevel(userId, newLevel);
 
 		return {
 			module_id: moduleId,

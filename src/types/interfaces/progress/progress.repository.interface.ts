@@ -37,5 +37,6 @@ export interface IProgressRepository {
 		moduleId: string,
 	): Promise<UserModuleRow | null>;
 	addXp(userId: number, xp: number): Promise<number>;
+	updateLevel(userId: number, level: number): Promise<void>;
 	getTotalPages(moduleId: string): Promise<number>;
 }

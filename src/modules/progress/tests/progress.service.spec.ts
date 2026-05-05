@@ -19,6 +19,7 @@ describe('ProgressService', () => {
 			updateProgress: vi.fn(),
 			completeModule: vi.fn(),
 			addXp: vi.fn(),
+			updateLevel: vi.fn(),
 			getTotalPages: vi.fn(),
 		} as unknown as IProgressRepository;
 

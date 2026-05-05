@@ -109,6 +109,13 @@ export class ProgressRepository implements IProgressRepository {
 		return rows[0].xp_total;
 	}
 
+	async updateLevel(userId: number, level: number): Promise<void> {
+		await this.pool.query(`UPDATE users SET level = $2 WHERE id = $1`, [
+			userId,
+			level,
+		]);
+	}
+
 	async getTotalPages(moduleId: string): Promise<number> {
 		const { rows } = await this.pool.query<{ count: string }>(
 			`SELECT COUNT(*)::text AS count FROM lessons WHERE module_id = $1`,

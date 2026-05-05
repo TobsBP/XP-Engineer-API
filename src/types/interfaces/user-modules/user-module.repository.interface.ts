@@ -13,4 +13,6 @@ export interface IUserModuleRepository {
 		moduleId: string,
 		data: UpdateUserModuleData,
 	): Promise<boolean>;
+	getModuleMinXp(moduleId: string): Promise<number>;
+	getUserXpTotal(userId: number): Promise<number>;
 }

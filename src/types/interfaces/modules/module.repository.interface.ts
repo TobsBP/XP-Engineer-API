@@ -5,6 +5,7 @@ export type ModuleRow = {
 	subject: string;
 	order_index: number;
 	locked_by_default: boolean;
+	min_xp: number;
 	progress: number;
 	status: string;
 	current_page: number;
@@ -17,6 +18,7 @@ export type CreateModuleData = {
 	subject: string;
 	order_index: number;
 	locked_by_default: boolean;
+	min_xp?: number;
 };
 
 export type CreatedModuleRow = {
@@ -26,6 +28,7 @@ export type CreatedModuleRow = {
 	subject: string;
 	order_index: number;
 	locked_by_default: boolean;
+	min_xp: number;
 };
 
 export interface IModuleRepository {

@@ -32,4 +32,20 @@ export class UserModuleRepository implements IUserModuleRepository {
 		);
 		return (rowCount ?? 0) > 0;
 	}
+
+	async getModuleMinXp(moduleId: string): Promise<number> {
+		const { rows } = await this.pool.query<{ min_xp: number }>(
+			`SELECT COALESCE(min_xp, 0)::int AS min_xp FROM modules WHERE id = $1`,
+			[moduleId],
+		);
+		return rows[0]?.min_xp ?? 0;
+	}
+
+	async getUserXpTotal(userId: number): Promise<number> {
+		const { rows } = await this.pool.query<{ xp_total: number }>(
+			`SELECT COALESCE(xp_total, 0)::int AS xp_total FROM users WHERE id = $1`,
+			[userId],
+		);
+		return rows[0]?.xp_total ?? 0;
+	}
 }

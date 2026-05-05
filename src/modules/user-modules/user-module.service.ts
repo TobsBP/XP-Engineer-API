@@ -13,10 +13,33 @@ export class UserModuleNotFoundError extends Error {
 	}
 }
 
+export class ModuleLockedError extends Error {
+	readonly requiredXp: number;
+	readonly currentXp: number;
+
+	constructor(moduleId: string, requiredXp: number, currentXp: number) {
+		super(
+			`Módulo '${moduleId}' está bloqueado. XP necessário: ${requiredXp}, XP atual: ${currentXp}.`,
+		);
+		this.name = 'ModuleLockedError';
+		this.requiredXp = requiredXp;
+		this.currentXp = currentXp;
+	}
+}
+
 export class UserModuleService implements IUserModuleService {
 	constructor(private readonly repository: IUserModuleRepository) {}
 
 	async createUserModule(userId: number, moduleId: string): Promise<void> {
+		const minXp = await this.repository.getModuleMinXp(moduleId);
+
+		if (minXp > 0) {
+			const userXp = await this.repository.getUserXpTotal(userId);
+			if (userXp < minXp) {
+				throw new ModuleLockedError(moduleId, minXp, userXp);
+			}
+		}
+
 		await this.repository.create(userId, moduleId);
 	}
 

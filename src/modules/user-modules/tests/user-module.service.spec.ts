@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+	ModuleLockedError,
 	UserModuleNotFoundError,
 	UserModuleService,
 } from '@/modules/user-modules/user-module.service.js';
@@ -13,6 +14,8 @@ describe('UserModuleService', () => {
 		userModuleRepositoryMock = {
 			create: vi.fn(),
 			update: vi.fn(),
+			getModuleMinXp: vi.fn(),
+			getUserXpTotal: vi.fn(),
 		} as unknown as IUserModuleRepository;
 
 		userModuleService = new UserModuleService(userModuleRepositoryMock);
@@ -20,12 +23,34 @@ describe('UserModuleService', () => {
 
 	describe('createUserModule', () => {
 		it('should create a user module progress entry (happy path)', async () => {
+			vi.mocked(userModuleRepositoryMock.getModuleMinXp).mockResolvedValue(0);
 			vi.mocked(userModuleRepositoryMock.create).mockResolvedValue();
 
 			await expect(
 				userModuleService.createUserModule(1, 'mod-1'),
 			).resolves.not.toThrow();
 			expect(userModuleRepositoryMock.create).toHaveBeenCalledWith(1, 'mod-1');
+		});
+
+		it('should create module when user has enough XP', async () => {
+			vi.mocked(userModuleRepositoryMock.getModuleMinXp).mockResolvedValue(200);
+			vi.mocked(userModuleRepositoryMock.getUserXpTotal).mockResolvedValue(300);
+			vi.mocked(userModuleRepositoryMock.create).mockResolvedValue();
+
+			await expect(
+				userModuleService.createUserModule(1, 'mod-2'),
+			).resolves.not.toThrow();
+			expect(userModuleRepositoryMock.create).toHaveBeenCalledWith(1, 'mod-2');
+		});
+
+		it('should throw ModuleLockedError when user XP is insufficient', async () => {
+			vi.mocked(userModuleRepositoryMock.getModuleMinXp).mockResolvedValue(500);
+			vi.mocked(userModuleRepositoryMock.getUserXpTotal).mockResolvedValue(100);
+
+			await expect(
+				userModuleService.createUserModule(1, 'mod-3'),
+			).rejects.toThrow(ModuleLockedError);
+			expect(userModuleRepositoryMock.create).not.toHaveBeenCalled();
 		});
 	});
 

@@ -22,6 +22,7 @@ describe('ModuleService', () => {
 		current_page: 2,
 		order_index: 0,
 		locked_by_default: true,
+		min_xp: 0,
 	};
 
 	beforeEach(() => {
@@ -78,7 +79,10 @@ describe('ModuleService', () => {
 				order_index: 1,
 				locked_by_default: false,
 			};
-			vi.mocked(moduleRepositoryMock.create).mockResolvedValue(data);
+			vi.mocked(moduleRepositoryMock.create).mockResolvedValue({
+				...data,
+				min_xp: 0,
+			});
 
 			const result = await moduleService.createModule(data);
 
