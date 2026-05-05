@@ -1,5 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { UserNotFoundError } from '@/modules/users/user.service.js';
+import type { IStreakService } from '@/types/interfaces/streak/streak.service.interface.js';
 import type { IUserRepository } from '@/types/interfaces/users/user.repository.interface.js';
 import type {
 	LoginRequest,
@@ -16,6 +17,7 @@ export class AuthController {
 	constructor(
 		private readonly authService: AuthService,
 		private readonly userRepository: IUserRepository,
+		private readonly streakService: IStreakService,
 	) {}
 
 	register = async (
@@ -73,6 +75,11 @@ export class AuthController {
 		}
 
 		const { password_hash, ...userResponse } = user;
-		return reply.send(userResponse);
+		const streak = await this.streakService.getStreak(userId);
+
+		return reply.send({
+			...userResponse,
+			streak,
+		});
 	};
 }

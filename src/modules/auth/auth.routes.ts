@@ -1,5 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { pool } from '@/lib/db.js';
+import { StreakRepository } from '@/modules/streak/streak.repository.js';
+import { StreakService } from '@/modules/streak/streak.service.js';
 import { UserRepository } from '@/modules/users/user.repository.js';
 import type { UpdateMeRequest } from '@/types/routes/auth.js';
 import {
@@ -13,8 +15,14 @@ import { AuthService } from './auth.service.js';
 
 export async function authRoutes(fastify: FastifyInstance) {
 	const userRepository = new UserRepository(pool);
+	const streakRepository = new StreakRepository(pool);
+	const streakService = new StreakService(streakRepository);
 	const authService = new AuthService(userRepository, fastify.jwt);
-	const authController = new AuthController(authService, userRepository);
+	const authController = new AuthController(
+		authService,
+		userRepository,
+		streakService,
+	);
 
 	fastify.post(
 		'/register',

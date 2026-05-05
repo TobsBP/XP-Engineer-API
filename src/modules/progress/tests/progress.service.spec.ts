@@ -7,11 +7,13 @@ import {
 } from '@/modules/progress/progress.service.js';
 import type { IProgressRepository } from '@/types/interfaces/progress/progress.repository.interface.js';
 import type { IQuizService } from '@/types/interfaces/quizzes/quiz.service.interface.js';
+import type { IStreakService } from '@/types/interfaces/streak/streak.service.interface.js';
 
 describe('ProgressService', () => {
 	let progressService: ProgressService;
 	let progressRepoMock: IProgressRepository;
 	let quizServiceMock: IQuizService;
+	let streakServiceMock: IStreakService;
 
 	beforeEach(() => {
 		progressRepoMock = {
@@ -28,7 +30,16 @@ describe('ProgressService', () => {
 			submitAnswers: vi.fn(),
 		} as unknown as IQuizService;
 
-		progressService = new ProgressService(progressRepoMock, quizServiceMock);
+		streakServiceMock = {
+			registerActivity: vi.fn(),
+			getStreak: vi.fn(),
+		} as unknown as IStreakService;
+
+		progressService = new ProgressService(
+			progressRepoMock,
+			quizServiceMock,
+			streakServiceMock,
+		);
 	});
 
 	describe('completeLesson', () => {

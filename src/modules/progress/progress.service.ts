@@ -4,6 +4,7 @@ import type {
 	AnswerInput,
 	IQuizService,
 } from '@/types/interfaces/quizzes/quiz.service.interface.js';
+import type { IStreakService } from '@/types/interfaces/streak/streak.service.interface.js';
 import type {
 	LessonCompleteResponse,
 	ModuleCompleteResponse,
@@ -46,6 +47,7 @@ export class ProgressService implements IProgressService {
 	constructor(
 		private readonly repository: IProgressRepository,
 		private readonly quizService: IQuizService,
+		private readonly streakService: IStreakService,
 	) {}
 
 	async getProgress(userId: number): Promise<UserProgressSummary> {
@@ -122,6 +124,8 @@ export class ProgressService implements IProgressService {
 
 		if (!updated) throw new ProgressNotFoundError(moduleId);
 
+		await this.streakService.registerActivity(userId);
+
 		return {
 			module_id: moduleId,
 			current_page: updated.current_page,
@@ -152,6 +156,8 @@ export class ProgressService implements IProgressService {
 
 		const newLevel = calculateLevel(xpTotal);
 		await this.repository.updateLevel(userId, newLevel);
+
+		await this.streakService.registerActivity(userId);
 
 		return {
 			module_id: moduleId,
