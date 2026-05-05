@@ -4,7 +4,7 @@ import {
 	RegisterSchema,
 	UpdateMeSchema,
 } from '@/types/schemas/auth.js';
-import { UserResponseSchema } from '@/types/schemas/user.js';
+import { MeResponseSchema, UserResponseSchema } from '@/types/schemas/user.js';
 
 export const registerSchema = {
 	tags: ['Auth'],
@@ -40,7 +40,7 @@ export const getMeSchema = {
 	tags: ['Auth'],
 	description: 'Retorna os dados do usuário logado.',
 	response: {
-		200: UserResponseSchema,
+		200: MeResponseSchema,
 		401: z.object({
 			message: z.string(),
 		}),

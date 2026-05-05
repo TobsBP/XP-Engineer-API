@@ -26,5 +26,22 @@ export const UserResponseSchema = z.object({
 	specialization: z.string().nullable(),
 });
 
+export const StreakHistoryItemSchema = z.object({
+	start_date: z.string(),
+	end_date: z.string(),
+	duration: z.number().int(),
+});
+
+export const StreakSchema = z.object({
+	current_streak: z.number().int(),
+	longest_streak: z.number().int(),
+	history: z.array(StreakHistoryItemSchema),
+});
+
+export const MeResponseSchema = UserResponseSchema.extend({
+	streak: StreakSchema,
+});
+
 export type User = z.infer<typeof UserSchema>;
 export type UserResponse = z.infer<typeof UserResponseSchema>;
+export type MeResponse = z.infer<typeof MeResponseSchema>;
