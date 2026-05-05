@@ -5,6 +5,7 @@ import { lessonRoutes } from '@/modules/lessons/lesson.routes.js';
 import { moduleRoutes } from '@/modules/modules/module.routes.js';
 import { progressRoutes } from '@/modules/progress/progress.routes.js';
 import { quizRoutes } from '@/modules/quizzes/quiz.routes.js';
+import { uploadRoutes } from '@/modules/upload/upload.routes.js';
 import { userModuleRoutes } from '@/modules/user-modules/user-module.routes.js';
 import { userRoutes } from '@/modules/users/user.routes.js';
 
@@ -17,4 +18,5 @@ export const routes = async (app: FastifyInstance): Promise<void> => {
 	app.register(userModuleRoutes);
 	app.register(quizRoutes);
 	app.register(progressRoutes);
+	app.register(uploadRoutes);
 };

@@ -1,5 +1,6 @@
 import { fastifyCors } from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
+import multipart from '@fastify/multipart';
 import { fastifySwagger } from '@fastify/swagger';
 import ScalarApiReference from '@scalar/fastify-api-reference';
 import { type FastifyReply, type FastifyRequest, fastify } from 'fastify';
@@ -24,6 +25,13 @@ app.register(fastifyCors, {
 if (!process.env.JWT_SECRET) {
 	throw new Error('JWT_SECRET is not defined in .env');
 }
+
+app.register(multipart, {
+	limits: {
+		fileSize: 10 * 1024 * 1024, // 10 MB
+		files: 1,
+	},
+});
 
 app.register(fastifyJwt, {
 	secret: process.env.JWT_SECRET,
