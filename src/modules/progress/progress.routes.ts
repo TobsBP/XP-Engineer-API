@@ -13,25 +13,25 @@ export const progressRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('progressController');
 
 	app.get(
-		'/progress',
+		'',
 		{ preHandler: app.authenticate, schema: getProgressSchema },
 		controller.getProgress,
 	);
 
 	app.get<GetModuleProgressRequest>(
-		'/progress/:moduleId',
+		'/:moduleId',
 		{ preHandler: app.authenticate, schema: getModuleProgressSchema },
 		controller.getModuleProgress,
 	);
 
 	app.post<CompleteLessonRequest>(
-		'/progress/:moduleId/lesson/:page/complete',
+		'/:moduleId/lesson/:page/complete',
 		{ preHandler: app.authenticate, schema: completeLessonSchema },
 		controller.completeLesson,
 	);
 
 	app.post<CompleteModuleRequest>(
-		'/progress/:moduleId/complete',
+		'/:moduleId/complete',
 		{ preHandler: app.authenticate, schema: completeModuleSchema },
 		controller.completeModule,
 	);

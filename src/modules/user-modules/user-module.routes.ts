@@ -10,12 +10,12 @@ export const userModuleRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('userModuleController');
 
 	app.post<CreateUserModuleRequest>(
-		'/module/:moduleId/start',
+		'/:moduleId/start',
 		{ preHandler: app.authenticate, schema: createUserModuleSchema },
 		controller.create,
 	);
 	app.patch<UpdateUserModuleRequest>(
-		'/module/:moduleId/progress',
+		'/:moduleId/progress',
 		{ preHandler: app.authenticate, schema: updateUserModuleSchema },
 		controller.update,
 	);

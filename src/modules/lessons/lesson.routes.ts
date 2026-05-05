@@ -16,31 +16,31 @@ export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('lessonController');
 
 	app.get<GetLessonRequest>(
-		'/lesson/:moduleId/:page',
+		'/:moduleId/:page',
 		{ preHandler: app.authenticate, schema: getLessonSchema },
 		controller.get,
 	);
 
 	app.post<CreateLessonRequest>(
-		'/lesson/:moduleId',
+		'/:moduleId',
 		{ preHandler: app.authenticate, schema: createLessonSchema },
 		controller.create,
 	);
 
 	app.post<CreateConceptItemRequest>(
-		'/lesson/:lessonId/concept-item',
+		'/:lessonId/concept-item',
 		{ preHandler: app.authenticate, schema: createConceptItemSchema },
 		controller.createConceptItem,
 	);
 
 	app.post<CreateConceptExampleRequest>(
-		'/lesson/:lessonId/concept-example',
+		'/:lessonId/concept-example',
 		{ preHandler: app.authenticate, schema: createConceptExampleSchema },
 		controller.createConceptExample,
 	);
 
 	app.post<CreateApplicationItemRequest>(
-		'/lesson/:lessonId/application-item',
+		'/:lessonId/application-item',
 		{ preHandler: app.authenticate, schema: createApplicationItemSchema },
 		controller.createApplicationItem,
 	);

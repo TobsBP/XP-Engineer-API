@@ -10,13 +10,13 @@ export const quizRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('quizController');
 
 	app.get<GetQuizRequest>(
-		'/quiz/:moduleId',
+		'/:moduleId',
 		{ preHandler: app.authenticate, schema: getQuizSchema },
 		controller.getQuestions,
 	);
 
 	app.post<SubmitQuizRequest>(
-		'/quiz/:moduleId/answer',
+		'/:moduleId/answer',
 		{ preHandler: app.authenticate, schema: submitQuizSchema },
 		controller.submit,
 	);

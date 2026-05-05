@@ -15,11 +15,11 @@ export const routes = async (app: FastifyInstance): Promise<void> => {
 	app.register(authRoutes, { prefix: '/auth' });
 	app.register(userRoutes);
 	app.register(moduleRoutes);
-	app.register(lessonRoutes);
+	app.register(lessonRoutes, { prefix: '/lesson' });
 	app.register(achievementRoutes);
-	app.register(userModuleRoutes);
-	app.register(quizRoutes);
-	app.register(progressRoutes);
+	app.register(userModuleRoutes, { prefix: '/module' });
+	app.register(quizRoutes, { prefix: '/quiz' });
+	app.register(progressRoutes, { prefix: '/progress' });
 	app.register(exerciseListRoutes);
 	app.register(uploadRoutes);
 	app.register(leaderboardRoutes);
