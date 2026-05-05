@@ -1,7 +1,9 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type {
 	CreateModuleRequest,
+	DeleteModuleRequest,
 	GetModuleRequest,
+	UpdateModuleRequest,
 } from '@/models/modules/module.routes.js';
 import type { IModuleService } from '@/models/modules/module.service.interface.js';
 import { ModuleNotFoundError } from '@/modules/modules/module.service.js';
@@ -41,5 +43,40 @@ export class ModuleController {
 	): Promise<void> => {
 		const module = await this.moduleService.createModule(req.body);
 		reply.status(201).send(module);
+	};
+
+	update = async (
+		req: FastifyRequest<UpdateModuleRequest>,
+		reply: FastifyReply,
+	): Promise<void> => {
+		try {
+			const module = await this.moduleService.updateModule(
+				req.params.moduleId,
+				req.body,
+			);
+			reply.status(200).send(module);
+		} catch (err) {
+			if (err instanceof ModuleNotFoundError) {
+				reply.status(404).send({ message: err.message });
+				return;
+			}
+			throw err;
+		}
+	};
+
+	remove = async (
+		req: FastifyRequest<DeleteModuleRequest>,
+		reply: FastifyReply,
+	): Promise<void> => {
+		try {
+			await this.moduleService.deleteModule(req.params.moduleId);
+			reply.status(204).send();
+		} catch (err) {
+			if (err instanceof ModuleNotFoundError) {
+				reply.status(404).send({ message: err.message });
+				return;
+			}
+			throw err;
+		}
 	};
 }

@@ -10,6 +10,10 @@ import type {
 	CreateLessonData,
 	ILessonRepository,
 	LessonRow,
+	UpdateApplicationItemData,
+	UpdateConceptExampleData,
+	UpdateConceptItemData,
+	UpdateLessonData,
 } from '@/models/lessons/lesson.repository.interface.js';
 
 export class LessonRepository implements ILessonRepository {
@@ -130,5 +134,129 @@ export class LessonRepository implements ILessonRepository {
 			],
 		);
 		return rows[0];
+	}
+
+	async updateLesson(
+		lessonId: number,
+		data: UpdateLessonData,
+	): Promise<CreatedLessonRow | null> {
+		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
+		if (entries.length === 0) {
+			const { rows } = await this.pool.query<CreatedLessonRow>(
+				`SELECT id, module_id, page_number, title, intro, hero_caption, concepts_title, applications_title, footer_cta
+				FROM lessons WHERE id = $1`,
+				[lessonId],
+			);
+			return rows[0] ?? null;
+		}
+		const set = entries.map(([col], i) => `${col} = $${i + 2}`).join(', ');
+		const { rows } = await this.pool.query<CreatedLessonRow>(
+			`UPDATE lessons SET ${set}
+			WHERE id = $1
+			RETURNING id, module_id, page_number, title, intro, hero_caption, concepts_title, applications_title, footer_cta`,
+			[lessonId, ...entries.map(([, v]) => v)],
+		);
+		return rows[0] ?? null;
+	}
+
+	async deleteLesson(lessonId: number): Promise<boolean> {
+		const { rowCount } = await this.pool.query(
+			'DELETE FROM lessons WHERE id = $1',
+			[lessonId],
+		);
+		return (rowCount ?? 0) > 0;
+	}
+
+	async updateConceptItem(
+		itemId: string,
+		data: UpdateConceptItemData,
+	): Promise<CreateConceptItemData | null> {
+		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
+		if (entries.length === 0) {
+			const { rows } = await this.pool.query<CreateConceptItemData>(
+				`SELECT id, lesson_id, title, description, latex, order_index
+				FROM concept_items WHERE id = $1`,
+				[itemId],
+			);
+			return rows[0] ?? null;
+		}
+		const set = entries.map(([col], i) => `${col} = $${i + 2}`).join(', ');
+		const { rows } = await this.pool.query<CreateConceptItemData>(
+			`UPDATE concept_items SET ${set}
+			WHERE id = $1
+			RETURNING id, lesson_id, title, description, latex, order_index`,
+			[itemId, ...entries.map(([, v]) => v)],
+		);
+		return rows[0] ?? null;
+	}
+
+	async deleteConceptItem(itemId: string): Promise<boolean> {
+		const { rowCount } = await this.pool.query(
+			'DELETE FROM concept_items WHERE id = $1',
+			[itemId],
+		);
+		return (rowCount ?? 0) > 0;
+	}
+
+	async updateConceptExample(
+		itemId: string,
+		data: UpdateConceptExampleData,
+	): Promise<CreateConceptExampleData | null> {
+		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
+		if (entries.length === 0) {
+			const { rows } = await this.pool.query<CreateConceptExampleData>(
+				`SELECT id, lesson_id, label, latex, order_index
+				FROM concept_examples WHERE id = $1`,
+				[itemId],
+			);
+			return rows[0] ?? null;
+		}
+		const set = entries.map(([col], i) => `${col} = $${i + 2}`).join(', ');
+		const { rows } = await this.pool.query<CreateConceptExampleData>(
+			`UPDATE concept_examples SET ${set}
+			WHERE id = $1
+			RETURNING id, lesson_id, label, latex, order_index`,
+			[itemId, ...entries.map(([, v]) => v)],
+		);
+		return rows[0] ?? null;
+	}
+
+	async deleteConceptExample(itemId: string): Promise<boolean> {
+		const { rowCount } = await this.pool.query(
+			'DELETE FROM concept_examples WHERE id = $1',
+			[itemId],
+		);
+		return (rowCount ?? 0) > 0;
+	}
+
+	async updateApplicationItem(
+		itemId: string,
+		data: UpdateApplicationItemData,
+	): Promise<CreateApplicationItemData | null> {
+		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
+		if (entries.length === 0) {
+			const { rows } = await this.pool.query<CreateApplicationItemData>(
+				`SELECT id, lesson_id, title, description, latex, order_index
+				FROM application_items WHERE id = $1`,
+				[itemId],
+			);
+			return rows[0] ?? null;
+		}
+		const set = entries.map(([col], i) => `${col} = $${i + 2}`).join(', ');
+		const { rows } = await this.pool.query<CreateApplicationItemData>(
+			`UPDATE application_items SET ${set}
+			WHERE id = $1
+			RETURNING id, lesson_id, title, description, latex, order_index`,
+			[itemId, ...entries.map(([, v]) => v)],
+		);
+		return rows[0] ?? null;
+	}
+
+	async deleteApplicationItem(itemId: string): Promise<boolean> {
+		const { rowCount } = await this.pool.query(
+			'DELETE FROM application_items WHERE id = $1',
+			[itemId],
+		);
+		return (rowCount ?? 0) > 0;
 	}
 }

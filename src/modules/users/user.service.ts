@@ -50,6 +50,7 @@ export class UserService implements IUserService {
 			rank: row.rank,
 			level: row.level,
 			specialization: row.specialization,
+			role: row.role,
 		};
 	}
 }

@@ -1,3 +1,5 @@
+export type UserRole = 'user' | 'admin';
+
 export type UserRow = {
 	id: number;
 	name: string;
@@ -9,6 +11,7 @@ export type UserRow = {
 	rank: string;
 	level: number;
 	specialization: string | null;
+	role: UserRole;
 	created_at: Date;
 };
 
@@ -30,6 +33,7 @@ export type UpdateUserData = {
 	rank?: string;
 	level?: number;
 	specialization?: string | null;
+	role?: UserRole;
 };
 
 export interface IUserRepository {

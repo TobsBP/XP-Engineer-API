@@ -55,6 +55,22 @@ app.decorate(
 	},
 );
 
+app.decorate(
+	'requireAdmin',
+	async (request: FastifyRequest, reply: FastifyReply) => {
+		try {
+			await request.jwtVerify();
+		} catch (err) {
+			return reply.send(err);
+		}
+		if (request.user.role !== 'admin') {
+			return reply
+				.code(403)
+				.send({ message: 'Acesso restrito a administradores' });
+		}
+	},
+);
+
 app.register(fastifySwagger, {
 	openapi: {
 		info: {

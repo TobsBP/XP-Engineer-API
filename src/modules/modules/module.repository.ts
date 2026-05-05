@@ -4,6 +4,7 @@ import type {
 	CreateModuleData,
 	IModuleRepository,
 	ModuleRow,
+	UpdateModuleData,
 } from '@/models/modules/module.repository.interface.js';
 
 export class ModuleRepository implements IModuleRepository {
@@ -57,5 +58,37 @@ export class ModuleRepository implements IModuleRepository {
 			],
 		);
 		return rows[0];
+	}
+
+	async update(
+		moduleId: string,
+		data: UpdateModuleData,
+	): Promise<CreatedModuleRow | null> {
+		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
+		if (entries.length === 0) {
+			const { rows } = await this.pool.query<CreatedModuleRow>(
+				`SELECT id, title, subtitle, subject, order_index, locked_by_default, min_xp
+				FROM modules WHERE id = $1`,
+				[moduleId],
+			);
+			return rows[0] ?? null;
+		}
+
+		const set = entries.map(([col], i) => `${col} = $${i + 2}`).join(', ');
+		const { rows } = await this.pool.query<CreatedModuleRow>(
+			`UPDATE modules SET ${set}
+			WHERE id = $1
+			RETURNING id, title, subtitle, subject, order_index, locked_by_default, min_xp`,
+			[moduleId, ...entries.map(([, v]) => v)],
+		);
+		return rows[0] ?? null;
+	}
+
+	async delete(moduleId: string): Promise<boolean> {
+		const { rowCount } = await this.pool.query(
+			'DELETE FROM modules WHERE id = $1',
+			[moduleId],
+		);
+		return (rowCount ?? 0) > 0;
 	}
 }

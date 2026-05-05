@@ -31,6 +31,10 @@ describe('QuizService', () => {
 		quizRepositoryMock = {
 			findQuestionsByModule: vi.fn(),
 			findOptionsByQuestionIds: vi.fn(),
+			findQuestionById: vi.fn(),
+			createQuestionWithOptions: vi.fn(),
+			updateQuestion: vi.fn(),
+			deleteQuestion: vi.fn(),
 		} as unknown as IQuizRepository;
 
 		quizService = new QuizService(quizRepositoryMock);

@@ -14,6 +14,7 @@ export const ModuleSchema = z.object({
 	subject: z.string().max(100),
 	order_index: z.number().int(),
 	locked_by_default: z.boolean(),
+	min_xp: z.number().int().min(0),
 });
 
 export const ModuleResponseSchema = z.object({

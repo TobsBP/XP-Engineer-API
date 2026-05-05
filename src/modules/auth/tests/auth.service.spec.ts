@@ -26,6 +26,7 @@ describe('AuthService', () => {
 		rank: 'Bronze',
 		level: 1,
 		specialization: null,
+		role: 'user',
 		created_at: new Date(),
 	};
 

@@ -23,6 +23,7 @@ describe('UserService', () => {
 		email: 'tobias@gmail.com',
 		password_hash: 'admin123',
 		specialization: 'Backend',
+		role: 'user',
 		created_at: new Date(),
 	};
 
@@ -54,6 +55,7 @@ describe('UserService', () => {
 				rank: mockUserRow.rank,
 				level: mockUserRow.level,
 				specialization: mockUserRow.specialization,
+				role: mockUserRow.role,
 			});
 		});
 

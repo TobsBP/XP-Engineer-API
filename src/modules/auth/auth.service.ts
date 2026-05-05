@@ -52,7 +52,7 @@ export class AuthService {
 		});
 
 		const user = this.toResponse(userRow);
-		const token = this.jwt.sign({ sub: user.id });
+		const token = this.jwt.sign({ sub: user.id, role: userRow.role });
 
 		return { user, token };
 	}
@@ -113,7 +113,7 @@ export class AuthService {
 		}
 
 		const user = this.toResponse(userRow);
-		const token = this.jwt.sign({ sub: user.id });
+		const token = this.jwt.sign({ sub: user.id, role: userRow.role });
 
 		return { user, token };
 	}
@@ -129,6 +129,7 @@ export class AuthService {
 			rank: row.rank,
 			level: row.level,
 			specialization: row.specialization,
+			role: row.role,
 		};
 	}
 }

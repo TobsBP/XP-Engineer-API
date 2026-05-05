@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const UserRoleSchema = z.enum(['user', 'admin']);
+
 export const UserSchema = z.object({
 	id: z.number().int(),
 	name: z.string().max(100),
@@ -11,6 +13,7 @@ export const UserSchema = z.object({
 	rank: z.string().max(100),
 	level: z.number().int(),
 	specialization: z.string().max(100).nullable(),
+	role: UserRoleSchema,
 	created_at: z.date(),
 });
 
@@ -24,6 +27,7 @@ export const UserResponseSchema = z.object({
 	rank: z.string(),
 	level: z.number().int(),
 	specialization: z.string().nullable(),
+	role: UserRoleSchema,
 });
 
 export const StreakHistoryItemSchema = z.object({

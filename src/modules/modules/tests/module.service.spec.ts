@@ -30,6 +30,8 @@ describe('ModuleService', () => {
 			findAll: vi.fn(),
 			findById: vi.fn(),
 			create: vi.fn(),
+			update: vi.fn(),
+			delete: vi.fn(),
 		} as unknown as IModuleRepository;
 
 		moduleService = new ModuleService(moduleRepositoryMock);

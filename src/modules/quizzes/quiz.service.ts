@@ -1,5 +1,11 @@
-import type { IQuizRepository } from '@/models/quizzes/quiz.repository.interface.js';
 import type {
+	CreateQuizQuestionData,
+	IQuizRepository,
+	QuizQuestionWithOptions,
+	UpdateQuizQuestionData,
+} from '@/models/quizzes/quiz.repository.interface.js';
+import type {
+	QuizAdminQuestion,
 	QuizQuestionResponse,
 	QuizResult,
 } from '@/models/quizzes/quiz.schema.js';
@@ -12,6 +18,13 @@ export class QuizNotFoundError extends Error {
 	constructor(moduleId: string) {
 		super(`Nenhuma pergunta encontrada para o módulo '${moduleId}'`);
 		this.name = 'QuizNotFoundError';
+	}
+}
+
+export class QuizQuestionNotFoundError extends Error {
+	constructor(id: number) {
+		super(`Pergunta '${id}' não encontrada`);
+		this.name = 'QuizQuestionNotFoundError';
 	}
 }
 
@@ -72,6 +85,41 @@ export class QuizService implements IQuizService {
 			correct: correctCount,
 			score,
 			results,
+		};
+	}
+
+	async createQuestion(
+		data: CreateQuizQuestionData,
+	): Promise<QuizAdminQuestion> {
+		const result = await this.quizRepository.createQuestionWithOptions(data);
+		return this.toAdminResponse(result);
+	}
+
+	async updateQuestion(
+		id: number,
+		data: UpdateQuizQuestionData,
+	): Promise<QuizAdminQuestion> {
+		const result = await this.quizRepository.updateQuestion(id, data);
+		if (!result) throw new QuizQuestionNotFoundError(id);
+		return this.toAdminResponse(result);
+	}
+
+	async deleteQuestion(id: number): Promise<void> {
+		const deleted = await this.quizRepository.deleteQuestion(id);
+		if (!deleted) throw new QuizQuestionNotFoundError(id);
+	}
+
+	private toAdminResponse(data: QuizQuestionWithOptions): QuizAdminQuestion {
+		return {
+			id: data.question.id,
+			module_id: data.question.module_id,
+			type: data.question.type,
+			text: data.question.text,
+			options: data.options.map((o) => ({
+				id: o.id,
+				text: o.text,
+				is_correct: o.is_correct,
+			})),
 		};
 	}
 }

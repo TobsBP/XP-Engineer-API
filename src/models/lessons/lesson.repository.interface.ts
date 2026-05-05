@@ -81,6 +81,36 @@ export type CreateApplicationItemData = {
 	order_index: number;
 };
 
+export type UpdateLessonData = {
+	page_number?: number;
+	title?: string;
+	intro?: string;
+	hero_caption?: string | null;
+	concepts_title?: string;
+	applications_title?: string;
+	footer_cta?: string;
+};
+
+export type UpdateConceptItemData = {
+	title?: string;
+	description?: string;
+	latex?: string | null;
+	order_index?: number;
+};
+
+export type UpdateConceptExampleData = {
+	label?: string;
+	latex?: string;
+	order_index?: number;
+};
+
+export type UpdateApplicationItemData = {
+	title?: string;
+	description?: string;
+	latex?: string | null;
+	order_index?: number;
+};
+
 export interface ILessonRepository {
 	findByPage(moduleId: string, page: number): Promise<LessonRow | null>;
 	findConceptItems(lessonId: number): Promise<ConceptItemRow[]>;
@@ -96,4 +126,24 @@ export interface ILessonRepository {
 	createApplicationItem(
 		data: CreateApplicationItemData,
 	): Promise<CreateApplicationItemData>;
+	updateLesson(
+		lessonId: number,
+		data: UpdateLessonData,
+	): Promise<CreatedLessonRow | null>;
+	deleteLesson(lessonId: number): Promise<boolean>;
+	updateConceptItem(
+		itemId: string,
+		data: UpdateConceptItemData,
+	): Promise<CreateConceptItemData | null>;
+	deleteConceptItem(itemId: string): Promise<boolean>;
+	updateConceptExample(
+		itemId: string,
+		data: UpdateConceptExampleData,
+	): Promise<CreateConceptExampleData | null>;
+	deleteConceptExample(itemId: string): Promise<boolean>;
+	updateApplicationItem(
+		itemId: string,
+		data: UpdateApplicationItemData,
+	): Promise<CreateApplicationItemData | null>;
+	deleteApplicationItem(itemId: string): Promise<boolean>;
 }

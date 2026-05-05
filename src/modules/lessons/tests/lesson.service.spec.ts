@@ -36,6 +36,14 @@ describe('LessonService', () => {
 			createConceptItem: vi.fn(),
 			createConceptExample: vi.fn(),
 			createApplicationItem: vi.fn(),
+			updateLesson: vi.fn(),
+			deleteLesson: vi.fn(),
+			updateConceptItem: vi.fn(),
+			deleteConceptItem: vi.fn(),
+			updateConceptExample: vi.fn(),
+			deleteConceptExample: vi.fn(),
+			updateApplicationItem: vi.fn(),
+			deleteApplicationItem: vi.fn(),
 		} as unknown as ILessonRepository;
 
 		lessonService = new LessonService(lessonRepositoryMock);
