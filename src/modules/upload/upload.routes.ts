@@ -1,24 +1,14 @@
 import type { FastifyInstance } from 'fastify';
-import z from 'zod';
+import {
+	type UploadImageRequest,
+	uploadImageSchema,
+} from '@/types/routes/upload.js';
 import { uploadImage } from '@/utils/upload.js';
 
 export const uploadRoutes = async (app: FastifyInstance): Promise<void> => {
-	app.post(
+	app.post<UploadImageRequest>(
 		'/upload/image',
-		{
-			preHandler: app.authenticate,
-			schema: {
-				tags: ['Upload'],
-				summary: 'Upload an image',
-				description:
-					'Send a `multipart/form-data` request with the image in the `file` field.',
-				consumes: ['multipart/form-data'],
-				response: {
-					200: z.object({ url: z.string() }),
-					400: z.object({ message: z.string() }),
-				},
-			},
-		},
+		{ preHandler: app.authenticate, schema: uploadImageSchema },
 		async (request, reply) => {
 			const file = await request.file();
 
