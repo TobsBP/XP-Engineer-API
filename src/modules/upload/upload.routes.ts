@@ -10,6 +10,8 @@ export const uploadRoutes = async (app: FastifyInstance): Promise<void> => {
 			schema: {
 				tags: ['Upload'],
 				summary: 'Upload an image',
+				description:
+					'Send a `multipart/form-data` request with the image in the `file` field.',
 				consumes: ['multipart/form-data'],
 				response: {
 					200: z.object({ url: z.string() }),
