@@ -1,23 +1,23 @@
 import type { S3Client } from '@aws-sdk/client-s3';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import type { IExerciseListRepository } from '@/types/interfaces/exercise-lists/exercise-list.repository.interface.js';
+import type { IExerciseListRepository } from '@/models/exercise-lists/exercise-list.repository.interface.js';
 import type {
 	ExerciseListResponse,
 	IExerciseListService,
-} from '@/types/interfaces/exercise-lists/exercise-list.service.interface.js';
+} from '@/models/exercise-lists/exercise-list.service.interface.js';
 
 const SIGNED_URL_EXPIRES_IN = 3600; // 1 hora
 
 export class ExerciseListService implements IExerciseListService {
 	constructor(
-		private readonly repository: IExerciseListRepository,
+		private readonly exerciseListRepository: IExerciseListRepository,
 		private readonly s3Client: S3Client,
 		private readonly bucketName: string,
 	) {}
 
 	async listExerciseLists(subject?: string): Promise<ExerciseListResponse[]> {
-		const rows = await this.repository.findAll(subject);
+		const rows = await this.exerciseListRepository.findAll(subject);
 
 		const results = await Promise.all(
 			rows.map(async (row) => {

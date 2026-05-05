@@ -1,16 +1,16 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { LessonNotFoundError } from '@/modules/lessons/lesson.service.js';
-import type { ILessonService } from '@/types/interfaces/lessons/lesson.service.interface.js';
 import type {
 	CreateApplicationItemRequest,
 	CreateConceptExampleRequest,
 	CreateConceptItemRequest,
 	CreateLessonRequest,
 	GetLessonRequest,
-} from '@/types/routes/lessons.js';
+} from '@/models/lessons/lesson.routes.js';
+import type { ILessonService } from '@/models/lessons/lesson.service.interface.js';
+import { LessonNotFoundError } from '@/modules/lessons/lesson.service.js';
 
 export class LessonController {
-	constructor(private readonly service: ILessonService) {}
+	constructor(private readonly lessonService: ILessonService) {}
 
 	get = async (
 		req: FastifyRequest<GetLessonRequest>,
@@ -18,7 +18,7 @@ export class LessonController {
 	): Promise<void> => {
 		try {
 			const userId = req.user.sub as number;
-			const lesson = await this.service.getLesson(
+			const lesson = await this.lessonService.getLesson(
 				req.params.moduleId,
 				req.params.page,
 				userId,
@@ -37,7 +37,7 @@ export class LessonController {
 		req: FastifyRequest<CreateLessonRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		const lesson = await this.service.createLesson({
+		const lesson = await this.lessonService.createLesson({
 			...req.body,
 			module_id: req.params.moduleId,
 		});
@@ -48,7 +48,7 @@ export class LessonController {
 		req: FastifyRequest<CreateConceptItemRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		const item = await this.service.createConceptItem({
+		const item = await this.lessonService.createConceptItem({
 			...req.body,
 			latex: req.body.latex ?? null,
 			lesson_id: req.params.lessonId,
@@ -60,7 +60,7 @@ export class LessonController {
 		req: FastifyRequest<CreateConceptExampleRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		const example = await this.service.createConceptExample({
+		const example = await this.lessonService.createConceptExample({
 			...req.body,
 			lesson_id: req.params.lessonId,
 		});
@@ -71,7 +71,7 @@ export class LessonController {
 		req: FastifyRequest<CreateApplicationItemRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
-		const item = await this.service.createApplicationItem({
+		const item = await this.lessonService.createApplicationItem({
 			...req.body,
 			latex: req.body.latex ?? null,
 			lesson_id: req.params.lessonId,

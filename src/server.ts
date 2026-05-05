@@ -11,9 +11,13 @@ import {
 	type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
 
+import { buildContainer, registerAwilixContainer } from '@/lib/container.js';
 import { routes } from '@/router.js';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
+
+const container = buildContainer(app);
+registerAwilixContainer(app, container);
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 

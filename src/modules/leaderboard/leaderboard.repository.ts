@@ -2,7 +2,7 @@ import type { Pool } from 'pg';
 import type {
 	ILeaderboardRepository,
 	LeaderboardRow,
-} from '@/types/interfaces/leaderboard/leaderboard.repository.interface.js';
+} from '@/models/leaderboard/leaderboard.repository.interface.js';
 
 export class LeaderboardRepository implements ILeaderboardRepository {
 	constructor(private readonly pool: Pool) {}

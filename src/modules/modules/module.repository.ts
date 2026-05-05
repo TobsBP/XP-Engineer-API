@@ -4,7 +4,7 @@ import type {
 	CreateModuleData,
 	IModuleRepository,
 	ModuleRow,
-} from '@/types/interfaces/modules/module.repository.interface.js';
+} from '@/models/modules/module.repository.interface.js';
 
 export class ModuleRepository implements IModuleRepository {
 	constructor(private readonly pool: Pool) {}

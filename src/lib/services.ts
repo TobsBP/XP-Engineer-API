@@ -1,0 +1,11 @@
+export { AchievementService } from '@/modules/achievements/achievement.service.js';
+export { AuthService } from '@/modules/auth/auth.service.js';
+export { ExerciseListService } from '@/modules/exercise-lists/exercise-list.service.js';
+export { LeaderboardService } from '@/modules/leaderboard/leaderboard.service.js';
+export { LessonService } from '@/modules/lessons/lesson.service.js';
+export { ModuleService } from '@/modules/modules/module.service.js';
+export { ProgressService } from '@/modules/progress/progress.service.js';
+export { QuizService } from '@/modules/quizzes/quiz.service.js';
+export { StreakService } from '@/modules/streak/streak.service.js';
+export { UserModuleService } from '@/modules/user-modules/user-module.service.js';
+export { UserService } from '@/modules/users/user.service.js';

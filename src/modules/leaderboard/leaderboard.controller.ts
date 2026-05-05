@@ -1,11 +1,11 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { ILeaderboardService } from '@/types/interfaces/leaderboard/leaderboard.service.interface.js';
+import type { ILeaderboardService } from '@/models/leaderboard/leaderboard.service.interface.js';
 
 export class LeaderboardController {
-	constructor(private readonly service: ILeaderboardService) {}
+	constructor(private readonly leaderboardService: ILeaderboardService) {}
 
 	list = async (_req: FastifyRequest, reply: FastifyReply): Promise<void> => {
-		const entries = await this.service.listLeaderboard();
+		const entries = await this.leaderboardService.listLeaderboard();
 		reply.status(200).send(entries);
 	};
 }

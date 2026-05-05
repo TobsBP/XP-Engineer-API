@@ -1,19 +1,13 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '@/lib/db.js';
-import { UserModuleController } from '@/modules/user-modules/user-module.controller.js';
-import { UserModuleRepository } from '@/modules/user-modules/user-module.repository.js';
-import { UserModuleService } from '@/modules/user-modules/user-module.service.js';
 import {
 	type CreateUserModuleRequest,
 	createUserModuleSchema,
 	type UpdateUserModuleRequest,
 	updateUserModuleSchema,
-} from '@/types/routes/user-modules.js';
+} from '@/models/user-modules/user-module.routes.js';
 
 export const userModuleRoutes = async (app: FastifyInstance): Promise<void> => {
-	const repository = new UserModuleRepository(pool);
-	const service = new UserModuleService(repository);
-	const controller = new UserModuleController(service);
+	const controller = app.container.resolve('userModuleController');
 
 	app.post<CreateUserModuleRequest>(
 		'/module/:moduleId/start',

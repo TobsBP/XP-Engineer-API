@@ -3,7 +3,7 @@ import type {
 	IProgressRepository,
 	UserModuleDetailRow,
 	UserModuleRow,
-} from '@/types/interfaces/progress/progress.repository.interface.js';
+} from '@/models/progress/progress.repository.interface.js';
 
 export class ProgressRepository implements IProgressRepository {
 	constructor(private readonly pool: Pool) {}

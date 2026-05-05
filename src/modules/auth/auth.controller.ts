@@ -1,12 +1,12 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { UserNotFoundError } from '@/modules/users/user.service.js';
-import type { IStreakService } from '@/types/interfaces/streak/streak.service.interface.js';
-import type { IUserRepository } from '@/types/interfaces/users/user.repository.interface.js';
 import type {
 	LoginRequest,
 	RegisterRequest,
 	UpdateMeRequest,
-} from '@/types/routes/auth.js';
+} from '@/models/auth/auth.routes.js';
+import type { IStreakService } from '@/models/streak/streak.service.interface.js';
+import type { IUserRepository } from '@/models/users/user.repository.interface.js';
+import { UserNotFoundError } from '@/modules/users/user.service.js';
 import type { AuthService } from './auth.service.js';
 import {
 	InvalidCredentialsError,

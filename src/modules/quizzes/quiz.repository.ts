@@ -3,7 +3,7 @@ import type {
 	IQuizRepository,
 	QuizOptionRow,
 	QuizQuestionRow,
-} from '@/types/interfaces/quizzes/quiz.repository.interface.js';
+} from '@/models/quizzes/quiz.repository.interface.js';
 
 export class QuizRepository implements IQuizRepository {
 	constructor(private readonly pool: Pool) {}

@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type {
 	IUserRepository,
 	UserRow,
-} from '@/types/interfaces/users/user.repository.interface.js';
+} from '@/models/users/user.repository.interface.js';
 import {
 	AuthService,
 	InvalidCredentialsError,

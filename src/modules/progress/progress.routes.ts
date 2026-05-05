@@ -1,12 +1,4 @@
 import type { FastifyInstance } from 'fastify';
-import { pool } from '@/lib/db.js';
-import { ProgressController } from '@/modules/progress/progress.controller.js';
-import { ProgressRepository } from '@/modules/progress/progress.repository.js';
-import { ProgressService } from '@/modules/progress/progress.service.js';
-import { QuizRepository } from '@/modules/quizzes/quiz.repository.js';
-import { QuizService } from '@/modules/quizzes/quiz.service.js';
-import { StreakRepository } from '@/modules/streak/streak.repository.js';
-import { StreakService } from '@/modules/streak/streak.service.js';
 import {
 	type CompleteLessonRequest,
 	type CompleteModuleRequest,
@@ -15,20 +7,10 @@ import {
 	type GetModuleProgressRequest,
 	getModuleProgressSchema,
 	getProgressSchema,
-} from '@/types/routes/progress.js';
+} from '@/models/progress/progress.routes.js';
 
 export const progressRoutes = async (app: FastifyInstance): Promise<void> => {
-	const progressRepository = new ProgressRepository(pool);
-	const quizRepository = new QuizRepository(pool);
-	const quizService = new QuizService(quizRepository);
-	const streakRepository = new StreakRepository(pool);
-	const streakService = new StreakService(streakRepository);
-	const service = new ProgressService(
-		progressRepository,
-		quizService,
-		streakService,
-	);
-	const controller = new ProgressController(service);
+	const controller = app.container.resolve('progressController');
 
 	app.get(
 		'/progress',

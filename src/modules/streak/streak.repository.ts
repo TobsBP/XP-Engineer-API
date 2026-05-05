@@ -2,7 +2,7 @@ import type { Pool } from 'pg';
 import type {
 	IStreakRepository,
 	StreakHistoryRow,
-} from '@/types/interfaces/streak/streak.repository.interface.js';
+} from '@/models/streak/streak.repository.interface.js';
 
 export class StreakRepository implements IStreakRepository {
 	constructor(private readonly pool: Pool) {}

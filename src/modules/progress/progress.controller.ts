@@ -1,25 +1,25 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import type {
+	CompleteLessonRequest,
+	CompleteModuleRequest,
+	GetModuleProgressRequest,
+} from '@/models/progress/progress.routes.js';
+import type { IProgressService } from '@/models/progress/progress.service.interface.js';
 import {
 	ModuleAlreadyCompletedError,
 	ProgressNotFoundError,
 	QuizScoreInsufficientError,
 } from '@/modules/progress/progress.service.js';
-import type { IProgressService } from '@/types/interfaces/progress/progress.service.interface.js';
-import type {
-	CompleteLessonRequest,
-	CompleteModuleRequest,
-	GetModuleProgressRequest,
-} from '@/types/routes/progress.js';
 
 export class ProgressController {
-	constructor(private readonly service: IProgressService) {}
+	constructor(private readonly progressService: IProgressService) {}
 
 	getProgress = async (
 		req: FastifyRequest,
 		reply: FastifyReply,
 	): Promise<void> => {
 		const userId = req.user.sub as number;
-		const result = await this.service.getProgress(userId);
+		const result = await this.progressService.getProgress(userId);
 		reply.status(200).send(result);
 	};
 
@@ -29,7 +29,7 @@ export class ProgressController {
 	): Promise<void> => {
 		try {
 			const userId = req.user.sub as number;
-			const result = await this.service.getModuleProgress(
+			const result = await this.progressService.getModuleProgress(
 				userId,
 				req.params.moduleId,
 			);
@@ -49,7 +49,7 @@ export class ProgressController {
 	): Promise<void> => {
 		try {
 			const userId = req.user.sub as number;
-			const result = await this.service.completeLesson(
+			const result = await this.progressService.completeLesson(
 				userId,
 				req.params.moduleId,
 				req.params.page,
@@ -70,7 +70,7 @@ export class ProgressController {
 	): Promise<void> => {
 		try {
 			const userId = req.user.sub as number;
-			const result = await this.service.completeModule(
+			const result = await this.progressService.completeModule(
 				userId,
 				req.params.moduleId,
 				req.body.answers,
