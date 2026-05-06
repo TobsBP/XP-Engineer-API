@@ -8,6 +8,7 @@ import type {
 	DeleteConceptExampleRequest,
 	DeleteConceptItemRequest,
 	DeleteLessonRequest,
+	GetAllLessonsRequest,
 	GetLessonRequest,
 	UpdateApplicationItemRequest,
 	UpdateConceptExampleRequest,
@@ -27,15 +28,21 @@ export class LessonController {
 	constructor(private readonly lessonService: ILessonService) {}
 
 	get = async (
+		req: FastifyRequest<GetAllLessonsRequest>,
+		reply: FastifyReply,
+	): Promise<void> => {
+		const lessons = await this.lessonService.getAllLessons(req.params.moduleId);
+		reply.status(200).send(lessons);
+	};
+
+	getSingle = async (
 		req: FastifyRequest<GetLessonRequest>,
 		reply: FastifyReply,
 	): Promise<void> => {
 		try {
-			const userId = req.user.sub as number;
 			const lesson = await this.lessonService.getLesson(
 				req.params.moduleId,
 				req.params.page,
-				userId,
 			);
 			reply.status(200).send(lesson);
 		} catch (err) {
@@ -64,8 +71,8 @@ export class LessonController {
 	): Promise<void> => {
 		const item = await this.lessonService.createConceptItem({
 			...req.body,
-			latex: req.body.latex ?? null,
 			lesson_id: req.params.lessonId,
+			latex: req.body.latex || null,
 		});
 		reply.status(201).send(item);
 	};
@@ -87,8 +94,8 @@ export class LessonController {
 	): Promise<void> => {
 		const item = await this.lessonService.createApplicationItem({
 			...req.body,
-			latex: req.body.latex ?? null,
 			lesson_id: req.params.lessonId,
+			latex: req.body.latex || null,
 		});
 		reply.status(201).send(item);
 	};

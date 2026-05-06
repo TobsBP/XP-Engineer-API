@@ -1,8 +1,3 @@
-import type { ApplicationItem } from '@/models/lessons/application-item.schema.js';
-import type {
-	ConceptExample,
-	ConceptItem,
-} from '@/models/lessons/concept-example.schema.js';
 import type {
 	ApplicationItemRow,
 	ConceptExampleRow,
@@ -10,6 +5,9 @@ import type {
 	CreateApplicationItemData,
 	CreateConceptExampleData,
 	CreateConceptItemData,
+	CreatedApplicationItemRow,
+	CreatedConceptExampleRow,
+	CreatedConceptItemRow,
 	CreateLessonData,
 	ILessonRepository,
 	LessonRow,
@@ -59,6 +57,26 @@ export class ApplicationItemNotFoundError extends Error {
 export class LessonService implements ILessonService {
 	constructor(private readonly lessonRepository: ILessonRepository) {}
 
+	async getAllLessons(moduleId: string): Promise<LessonContent[]> {
+		const lessons = await this.lessonRepository.findAllByModule(moduleId);
+		return Promise.all(
+			lessons.map(async (lessonRow) => {
+				const [conceptItems, conceptExamples, applicationItems] =
+					await Promise.all([
+						this.lessonRepository.findConceptItems(lessonRow.id),
+						this.lessonRepository.findConceptExamples(lessonRow.id),
+						this.lessonRepository.findApplicationItems(lessonRow.id),
+					]);
+				return this.toContent(
+					lessonRow,
+					conceptItems,
+					conceptExamples,
+					applicationItems,
+				);
+			}),
+		);
+	}
+
 	async getLesson(moduleId: string, page: number): Promise<LessonContent> {
 		const lessonRow = await this.lessonRepository.findByPage(moduleId, page);
 		if (!lessonRow) throw new LessonNotFoundError(moduleId, page);
@@ -83,19 +101,21 @@ export class LessonService implements ILessonService {
 		return this.lessonRepository.create(data);
 	}
 
-	async createConceptItem(data: CreateConceptItemData): Promise<ConceptItem> {
+	async createConceptItem(
+		data: CreateConceptItemData,
+	): Promise<CreatedConceptItemRow> {
 		return this.lessonRepository.createConceptItem(data);
 	}
 
 	async createConceptExample(
 		data: CreateConceptExampleData,
-	): Promise<ConceptExample> {
+	): Promise<CreatedConceptExampleRow> {
 		return this.lessonRepository.createConceptExample(data);
 	}
 
 	async createApplicationItem(
 		data: CreateApplicationItemData,
-	): Promise<ApplicationItem> {
+	): Promise<CreatedApplicationItemRow> {
 		return this.lessonRepository.createApplicationItem(data);
 	}
 
@@ -116,7 +136,7 @@ export class LessonService implements ILessonService {
 	async updateConceptItem(
 		itemId: string,
 		data: UpdateConceptItemData,
-	): Promise<ConceptItem> {
+	): Promise<CreatedConceptItemRow> {
 		const updated = await this.lessonRepository.updateConceptItem(itemId, data);
 		if (!updated) throw new ConceptItemNotFoundError(itemId);
 		return updated;
@@ -130,7 +150,7 @@ export class LessonService implements ILessonService {
 	async updateConceptExample(
 		itemId: string,
 		data: UpdateConceptExampleData,
-	): Promise<ConceptExample> {
+	): Promise<CreatedConceptExampleRow> {
 		const updated = await this.lessonRepository.updateConceptExample(
 			itemId,
 			data,
@@ -147,7 +167,7 @@ export class LessonService implements ILessonService {
 	async updateApplicationItem(
 		itemId: string,
 		data: UpdateApplicationItemData,
-	): Promise<ApplicationItem> {
+	): Promise<CreatedApplicationItemRow> {
 		const updated = await this.lessonRepository.updateApplicationItem(
 			itemId,
 			data,
@@ -174,6 +194,7 @@ export class LessonService implements ILessonService {
 		} = lesson;
 
 		return {
+			id: lesson.id,
 			header: {
 				module: lesson.module_subtitle,
 				title: lesson.title,

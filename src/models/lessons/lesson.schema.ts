@@ -7,7 +7,7 @@ import {
 
 export const LessonSchema = z.object({
 	id: z.number().int(),
-	module_id: z.string().max(10),
+	module_id: z.string().max(20),
 	page_number: z.number().int(),
 	title: z.string().max(200),
 	intro: z.string(),
@@ -18,6 +18,7 @@ export const LessonSchema = z.object({
 });
 
 export const LessonContentSchema = z.object({
+	id: z.number().int(),
 	header: z.object({
 		module: z.string(),
 		title: z.string(),

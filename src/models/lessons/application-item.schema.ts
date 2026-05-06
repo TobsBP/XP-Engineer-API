@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const ApplicationItemSchema = z.object({
-	id: z.string().max(100),
+	id: z.string().uuid(),
 	lesson_id: z.number().int(),
 	title: z.string().max(200),
 	description: z.string(),

@@ -1,12 +1,10 @@
-import type { ApplicationItem } from '@/models/lessons/application-item.schema.js';
-import type {
-	ConceptExample,
-	ConceptItem,
-} from '@/models/lessons/concept-example.schema.js';
 import type {
 	CreateApplicationItemData,
 	CreateConceptExampleData,
 	CreateConceptItemData,
+	CreatedApplicationItemRow,
+	CreatedConceptExampleRow,
+	CreatedConceptItemRow,
 	CreateLessonData,
 	UpdateApplicationItemData,
 	UpdateConceptExampleData,
@@ -16,32 +14,33 @@ import type {
 import type { Lesson, LessonContent } from '@/models/lessons/lesson.schema.js';
 
 export interface ILessonService {
-	getLesson(
-		moduleId: string,
-		page: number,
-		userId: number,
-	): Promise<LessonContent>;
+	getAllLessons(moduleId: string): Promise<LessonContent[]>;
+	getLesson(moduleId: string, page: number): Promise<LessonContent>;
 	createLesson(data: CreateLessonData): Promise<Lesson>;
-	createConceptItem(data: CreateConceptItemData): Promise<ConceptItem>;
-	createConceptExample(data: CreateConceptExampleData): Promise<ConceptExample>;
+	createConceptItem(
+		data: CreateConceptItemData,
+	): Promise<CreatedConceptItemRow>;
+	createConceptExample(
+		data: CreateConceptExampleData,
+	): Promise<CreatedConceptExampleRow>;
 	createApplicationItem(
 		data: CreateApplicationItemData,
-	): Promise<ApplicationItem>;
+	): Promise<CreatedApplicationItemRow>;
 	updateLesson(lessonId: number, data: UpdateLessonData): Promise<Lesson>;
 	deleteLesson(lessonId: number): Promise<void>;
 	updateConceptItem(
 		itemId: string,
 		data: UpdateConceptItemData,
-	): Promise<ConceptItem>;
+	): Promise<CreatedConceptItemRow>;
 	deleteConceptItem(itemId: string): Promise<void>;
 	updateConceptExample(
 		itemId: string,
 		data: UpdateConceptExampleData,
-	): Promise<ConceptExample>;
+	): Promise<CreatedConceptExampleRow>;
 	deleteConceptExample(itemId: string): Promise<void>;
 	updateApplicationItem(
 		itemId: string,
 		data: UpdateApplicationItemData,
-	): Promise<ApplicationItem>;
+	): Promise<CreatedApplicationItemRow>;
 	deleteApplicationItem(itemId: string): Promise<void>;
 }

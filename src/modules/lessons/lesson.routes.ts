@@ -16,8 +16,10 @@ import {
 	deleteConceptExampleSchema,
 	deleteConceptItemSchema,
 	deleteLessonSchema,
+	type GetAllLessonsRequest,
 	type GetLessonRequest,
 	getLessonSchema,
+	getSingleLessonSchema,
 	type UpdateApplicationItemRequest,
 	type UpdateConceptExampleRequest,
 	type UpdateConceptItemRequest,
@@ -31,10 +33,16 @@ import {
 export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('lessonController');
 
-	app.get<GetLessonRequest>(
-		'/:moduleId/:page',
+	app.get<GetAllLessonsRequest>(
+		'/:moduleId',
 		{ preHandler: app.authenticate, schema: getLessonSchema },
 		controller.get,
+	);
+
+	app.get<GetLessonRequest>(
+		'/:moduleId/:page',
+		{ preHandler: app.authenticate, schema: getSingleLessonSchema },
+		controller.getSingle,
 	);
 
 	app.post<CreateLessonRequest>(

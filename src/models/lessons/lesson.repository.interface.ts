@@ -34,7 +34,6 @@ export type ApplicationItemRow = {
 
 export type CreateLessonData = {
 	module_id: string;
-	page_number: number;
 	title: string;
 	intro: string;
 	hero_caption?: string;
@@ -56,6 +55,13 @@ export type CreatedLessonRow = {
 };
 
 export type CreateConceptItemData = {
+	lesson_id: number;
+	title: string;
+	description: string;
+	latex: string | null;
+};
+
+export type CreatedConceptItemRow = {
 	id: string;
 	lesson_id: number;
 	title: string;
@@ -65,6 +71,12 @@ export type CreateConceptItemData = {
 };
 
 export type CreateConceptExampleData = {
+	lesson_id: number;
+	label: string;
+	latex: string;
+};
+
+export type CreatedConceptExampleRow = {
 	id: string;
 	lesson_id: number;
 	label: string;
@@ -73,6 +85,13 @@ export type CreateConceptExampleData = {
 };
 
 export type CreateApplicationItemData = {
+	lesson_id: number;
+	title: string;
+	description: string;
+	latex: string | null;
+};
+
+export type CreatedApplicationItemRow = {
 	id: string;
 	lesson_id: number;
 	title: string;
@@ -112,6 +131,7 @@ export type UpdateApplicationItemData = {
 };
 
 export interface ILessonRepository {
+	findAllByModule(moduleId: string): Promise<LessonRow[]>;
 	findByPage(moduleId: string, page: number): Promise<LessonRow | null>;
 	findConceptItems(lessonId: number): Promise<ConceptItemRow[]>;
 	findConceptExamples(lessonId: number): Promise<ConceptExampleRow[]>;
@@ -119,13 +139,13 @@ export interface ILessonRepository {
 	create(data: CreateLessonData): Promise<CreatedLessonRow>;
 	createConceptItem(
 		data: CreateConceptItemData,
-	): Promise<CreateConceptItemData>;
+	): Promise<CreatedConceptItemRow>;
 	createConceptExample(
 		data: CreateConceptExampleData,
-	): Promise<CreateConceptExampleData>;
+	): Promise<CreatedConceptExampleRow>;
 	createApplicationItem(
 		data: CreateApplicationItemData,
-	): Promise<CreateApplicationItemData>;
+	): Promise<CreatedApplicationItemRow>;
 	updateLesson(
 		lessonId: number,
 		data: UpdateLessonData,
@@ -134,16 +154,16 @@ export interface ILessonRepository {
 	updateConceptItem(
 		itemId: string,
 		data: UpdateConceptItemData,
-	): Promise<CreateConceptItemData | null>;
+	): Promise<CreatedConceptItemRow | null>;
 	deleteConceptItem(itemId: string): Promise<boolean>;
 	updateConceptExample(
 		itemId: string,
 		data: UpdateConceptExampleData,
-	): Promise<CreateConceptExampleData | null>;
+	): Promise<CreatedConceptExampleRow | null>;
 	deleteConceptExample(itemId: string): Promise<boolean>;
 	updateApplicationItem(
 		itemId: string,
 		data: UpdateApplicationItemData,
-	): Promise<CreateApplicationItemData | null>;
+	): Promise<CreatedApplicationItemRow | null>;
 	deleteApplicationItem(itemId: string): Promise<boolean>;
 }

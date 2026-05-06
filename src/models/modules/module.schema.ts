@@ -8,7 +8,7 @@ export const ModuleStatusSchema = z.enum([
 ]);
 
 export const ModuleSchema = z.object({
-	id: z.string().max(10),
+	id: z.string().max(20),
 	title: z.string().max(200),
 	subtitle: z.string().max(100),
 	subject: z.string().max(100),

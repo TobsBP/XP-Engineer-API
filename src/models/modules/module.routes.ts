@@ -27,7 +27,7 @@ export const createModuleSchema = {
 	tags: ['Modules'],
 	description: 'Cria um novo módulo. Restrito a administradores.',
 	body: z.object({
-		id: z.string().min(1).max(10, 'ID deve ter no máximo 10 caracteres'),
+		id: z.string().min(1).max(20, 'ID deve ter no máximo 20 caracteres'),
 		title: z.string().min(1, 'Título é obrigatório').max(200),
 		subtitle: z.string().min(1, 'Subtítulo é obrigatório').max(100),
 		subject: z.string().min(1, 'Matéria é obrigatória').max(100),
