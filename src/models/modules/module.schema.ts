@@ -1,11 +1,6 @@
 import { z } from 'zod';
 
-export const ModuleStatusSchema = z.enum([
-	'available',
-	'in_progress',
-	'completed',
-	'locked',
-]);
+export const ModuleStatusSchema = z.enum(['available', 'in_progress', 'completed', 'locked']);
 
 export const ModuleSchema = z.object({
 	id: z.string().max(20),

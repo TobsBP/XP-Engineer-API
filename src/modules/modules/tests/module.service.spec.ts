@@ -1,12 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type {
-	IModuleRepository,
-	ModuleRow,
-} from '@/models/modules/module.repository.interface.js';
-import {
-	ModuleNotFoundError,
-	ModuleService,
-} from '@/modules/modules/module.service.js';
+import type { IModuleRepository, ModuleRow } from '@/models/modules/module.repository.interface.js';
+import { ModuleNotFoundError, ModuleService } from '@/modules/modules/module.service.js';
 
 describe('ModuleService', () => {
 	let moduleService: ModuleService;
@@ -39,9 +33,7 @@ describe('ModuleService', () => {
 
 	describe('listModules', () => {
 		it('should return all modules for a user (happy path)', async () => {
-			vi.mocked(moduleRepositoryMock.findAll).mockResolvedValue([
-				mockModuleRow,
-			]);
+			vi.mocked(moduleRepositoryMock.findAll).mockResolvedValue([mockModuleRow]);
 
 			const result = await moduleService.listModules(1);
 
@@ -65,9 +57,7 @@ describe('ModuleService', () => {
 		it('should throw ModuleNotFoundError when module not found (unhappy path)', async () => {
 			vi.mocked(moduleRepositoryMock.findById).mockResolvedValue(null);
 
-			await expect(moduleService.getModule('non-existent', 1)).rejects.toThrow(
-				ModuleNotFoundError,
-			);
+			await expect(moduleService.getModule('non-existent', 1)).rejects.toThrow(ModuleNotFoundError);
 		});
 	});
 

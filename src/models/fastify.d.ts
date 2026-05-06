@@ -4,14 +4,8 @@ import type { UserRole } from '@/models/users/user.repository.interface.js';
 
 declare module 'fastify' {
 	export interface FastifyInstance {
-		authenticate: (
-			request: FastifyRequest,
-			reply: FastifyReply,
-		) => Promise<void>;
-		requireAdmin: (
-			request: FastifyRequest,
-			reply: FastifyReply,
-		) => Promise<void>;
+		authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+		requireAdmin: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
 		container: AppContainer;
 	}
 }

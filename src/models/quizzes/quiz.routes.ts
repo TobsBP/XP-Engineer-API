@@ -1,10 +1,5 @@
 import { z } from 'zod';
-import {
-	QuizAdminQuestionSchema,
-	QuizQuestionResponseSchema,
-	QuizQuestionTypeSchema,
-	QuizResultSchema,
-} from '@/models/quizzes/quiz.schema.js';
+import { QuizAdminQuestionSchema, QuizQuestionResponseSchema, QuizQuestionTypeSchema, QuizResultSchema } from '@/models/quizzes/quiz.schema.js';
 
 export const getQuizSchema = {
 	tags: ['Quiz'],
@@ -68,8 +63,7 @@ export const createQuizQuestionSchema = {
 
 export const updateQuizQuestionSchema = {
 	tags: ['Quiz'],
-	description:
-		'Atualiza uma pergunta de quiz. Se "options" for enviado, substitui todas. Restrito a administradores.',
+	description: 'Atualiza uma pergunta de quiz. Se "options" for enviado, substitui todas. Restrito a administradores.',
 	params: z.object({
 		questionId: z.coerce.number().int().positive(),
 	}),

@@ -7,22 +7,14 @@ import type {
 	UpdateQuizQuestionRequest,
 } from '@/models/quizzes/quiz.routes.js';
 import type { IQuizService } from '@/models/quizzes/quiz.service.interface.js';
-import {
-	QuizNotFoundError,
-	QuizQuestionNotFoundError,
-} from '@/modules/quizzes/quiz.service.js';
+import { QuizNotFoundError, QuizQuestionNotFoundError } from '@/modules/quizzes/quiz.service.js';
 
 export class QuizController {
 	constructor(private readonly quizService: IQuizService) {}
 
-	getQuestions = async (
-		req: FastifyRequest<GetQuizRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	getQuestions = async (req: FastifyRequest<GetQuizRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const questions = await this.quizService.getQuestions(
-				req.params.moduleId,
-			);
+			const questions = await this.quizService.getQuestions(req.params.moduleId);
 			reply.status(200).send(questions);
 		} catch (err) {
 			if (err instanceof QuizNotFoundError) {
@@ -33,15 +25,9 @@ export class QuizController {
 		}
 	};
 
-	submit = async (
-		req: FastifyRequest<SubmitQuizRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	submit = async (req: FastifyRequest<SubmitQuizRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const result = await this.quizService.submitAnswers(
-				req.params.moduleId,
-				req.body.answers,
-			);
+			const result = await this.quizService.submitAnswers(req.params.moduleId, req.body.answers);
 			reply.status(200).send(result);
 		} catch (err) {
 			if (err instanceof QuizNotFoundError) {
@@ -52,10 +38,7 @@ export class QuizController {
 		}
 	};
 
-	createQuestion = async (
-		req: FastifyRequest<CreateQuizQuestionRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	createQuestion = async (req: FastifyRequest<CreateQuizQuestionRequest>, reply: FastifyReply): Promise<void> => {
 		const question = await this.quizService.createQuestion({
 			module_id: req.params.moduleId,
 			...req.body,
@@ -63,15 +46,9 @@ export class QuizController {
 		reply.status(201).send(question);
 	};
 
-	updateQuestion = async (
-		req: FastifyRequest<UpdateQuizQuestionRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	updateQuestion = async (req: FastifyRequest<UpdateQuizQuestionRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const question = await this.quizService.updateQuestion(
-				req.params.questionId,
-				req.body,
-			);
+			const question = await this.quizService.updateQuestion(req.params.questionId, req.body);
 			reply.status(200).send(question);
 		} catch (err) {
 			if (err instanceof QuizQuestionNotFoundError) {
@@ -82,10 +59,7 @@ export class QuizController {
 		}
 	};
 
-	deleteQuestion = async (
-		req: FastifyRequest<DeleteQuizQuestionRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	deleteQuestion = async (req: FastifyRequest<DeleteQuizQuestionRequest>, reply: FastifyReply): Promise<void> => {
 		try {
 			await this.quizService.deleteQuestion(req.params.questionId);
 			reply.status(204).send();

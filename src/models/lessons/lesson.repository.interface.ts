@@ -137,33 +137,15 @@ export interface ILessonRepository {
 	findConceptExamples(lessonId: number): Promise<ConceptExampleRow[]>;
 	findApplicationItems(lessonId: number): Promise<ApplicationItemRow[]>;
 	create(data: CreateLessonData): Promise<CreatedLessonRow>;
-	createConceptItem(
-		data: CreateConceptItemData,
-	): Promise<CreatedConceptItemRow>;
-	createConceptExample(
-		data: CreateConceptExampleData,
-	): Promise<CreatedConceptExampleRow>;
-	createApplicationItem(
-		data: CreateApplicationItemData,
-	): Promise<CreatedApplicationItemRow>;
-	updateLesson(
-		lessonId: number,
-		data: UpdateLessonData,
-	): Promise<CreatedLessonRow | null>;
+	createConceptItem(data: CreateConceptItemData): Promise<CreatedConceptItemRow>;
+	createConceptExample(data: CreateConceptExampleData): Promise<CreatedConceptExampleRow>;
+	createApplicationItem(data: CreateApplicationItemData): Promise<CreatedApplicationItemRow>;
+	updateLesson(lessonId: number, data: UpdateLessonData): Promise<CreatedLessonRow | null>;
 	deleteLesson(lessonId: number): Promise<boolean>;
-	updateConceptItem(
-		itemId: string,
-		data: UpdateConceptItemData,
-	): Promise<CreatedConceptItemRow | null>;
+	updateConceptItem(itemId: string, data: UpdateConceptItemData): Promise<CreatedConceptItemRow | null>;
 	deleteConceptItem(itemId: string): Promise<boolean>;
-	updateConceptExample(
-		itemId: string,
-		data: UpdateConceptExampleData,
-	): Promise<CreatedConceptExampleRow | null>;
+	updateConceptExample(itemId: string, data: UpdateConceptExampleData): Promise<CreatedConceptExampleRow | null>;
 	deleteConceptExample(itemId: string): Promise<boolean>;
-	updateApplicationItem(
-		itemId: string,
-		data: UpdateApplicationItemData,
-	): Promise<CreatedApplicationItemRow | null>;
+	updateApplicationItem(itemId: string, data: UpdateApplicationItemData): Promise<CreatedApplicationItemRow | null>;
 	deleteApplicationItem(itemId: string): Promise<boolean>;
 }

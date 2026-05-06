@@ -47,23 +47,12 @@ export class ModuleRepository implements IModuleRepository {
 			`INSERT INTO modules (id, title, subtitle, subject, order_index, locked_by_default, min_xp)
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING id, title, subtitle, subject, order_index, locked_by_default, min_xp`,
-			[
-				data.id,
-				data.title,
-				data.subtitle,
-				data.subject,
-				data.order_index,
-				data.locked_by_default,
-				data.min_xp ?? 0,
-			],
+			[data.id, data.title, data.subtitle, data.subject, data.order_index, data.locked_by_default, data.min_xp ?? 0],
 		);
 		return rows[0];
 	}
 
-	async update(
-		moduleId: string,
-		data: UpdateModuleData,
-	): Promise<CreatedModuleRow | null> {
+	async update(moduleId: string, data: UpdateModuleData): Promise<CreatedModuleRow | null> {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) {
 			const { rows } = await this.pool.query<CreatedModuleRow>(
@@ -85,10 +74,7 @@ export class ModuleRepository implements IModuleRepository {
 	}
 
 	async delete(moduleId: string): Promise<boolean> {
-		const { rowCount } = await this.pool.query(
-			'DELETE FROM modules WHERE id = $1',
-			[moduleId],
-		);
+		const { rowCount } = await this.pool.query('DELETE FROM modules WHERE id = $1', [moduleId]);
 		return (rowCount ?? 0) > 0;
 	}
 }

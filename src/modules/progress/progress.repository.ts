@@ -1,17 +1,10 @@
 import type { Pool } from 'pg';
-import type {
-	IProgressRepository,
-	UserModuleDetailRow,
-	UserModuleRow,
-} from '@/models/progress/progress.repository.interface.js';
+import type { IProgressRepository, UserModuleDetailRow, UserModuleRow } from '@/models/progress/progress.repository.interface.js';
 
 export class ProgressRepository implements IProgressRepository {
 	constructor(private readonly pool: Pool) {}
 
-	async findUserModule(
-		userId: number,
-		moduleId: string,
-	): Promise<UserModuleRow | null> {
+	async findUserModule(userId: number, moduleId: string): Promise<UserModuleRow | null> {
 		const { rows } = await this.pool.query<UserModuleRow>(
 			`SELECT user_id, module_id, progress, status, current_page
 			FROM user_modules
@@ -40,10 +33,7 @@ export class ProgressRepository implements IProgressRepository {
 		return rows;
 	}
 
-	async findModuleDetail(
-		userId: number,
-		moduleId: string,
-	): Promise<UserModuleDetailRow | null> {
+	async findModuleDetail(userId: number, moduleId: string): Promise<UserModuleDetailRow | null> {
 		const { rows } = await this.pool.query<UserModuleDetailRow>(
 			`SELECT
 				um.module_id,
@@ -62,10 +52,7 @@ export class ProgressRepository implements IProgressRepository {
 	}
 
 	async getXpTotal(userId: number): Promise<number> {
-		const { rows } = await this.pool.query<{ xp_total: number }>(
-			`SELECT xp_total FROM users WHERE id = $1`,
-			[userId],
-		);
+		const { rows } = await this.pool.query<{ xp_total: number }>(`SELECT xp_total FROM users WHERE id = $1`, [userId]);
 		return rows[0]?.xp_total ?? 0;
 	}
 
@@ -84,10 +71,7 @@ export class ProgressRepository implements IProgressRepository {
 		return rows[0] ?? null;
 	}
 
-	async completeModule(
-		userId: number,
-		moduleId: string,
-	): Promise<UserModuleRow | null> {
+	async completeModule(userId: number, moduleId: string): Promise<UserModuleRow | null> {
 		const { rows } = await this.pool.query<UserModuleRow>(
 			`UPDATE user_modules
 			SET progress = 100, status = 'completed', updated_at = NOW()
@@ -110,17 +94,11 @@ export class ProgressRepository implements IProgressRepository {
 	}
 
 	async updateLevel(userId: number, level: number): Promise<void> {
-		await this.pool.query(`UPDATE users SET level = $2 WHERE id = $1`, [
-			userId,
-			level,
-		]);
+		await this.pool.query(`UPDATE users SET level = $2 WHERE id = $1`, [userId, level]);
 	}
 
 	async getTotalPages(moduleId: string): Promise<number> {
-		const { rows } = await this.pool.query<{ count: string }>(
-			`SELECT COUNT(*)::text AS count FROM lessons WHERE module_id = $1`,
-			[moduleId],
-		);
+		const { rows } = await this.pool.query<{ count: string }>(`SELECT COUNT(*)::text AS count FROM lessons WHERE module_id = $1`, [moduleId]);
 		return Number.parseInt(rows[0].count, 10);
 	}
 }

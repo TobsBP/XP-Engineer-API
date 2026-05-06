@@ -1,13 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type {
-	IQuizRepository,
-	QuizOptionRow,
-	QuizQuestionRow,
-} from '@/models/quizzes/quiz.repository.interface.js';
-import {
-	QuizNotFoundError,
-	QuizService,
-} from '@/modules/quizzes/quiz.service.js';
+import type { IQuizRepository, QuizOptionRow, QuizQuestionRow } from '@/models/quizzes/quiz.repository.interface.js';
+import { QuizNotFoundError, QuizService } from '@/modules/quizzes/quiz.service.js';
 
 describe('QuizService', () => {
 	let quizService: QuizService;
@@ -42,21 +35,13 @@ describe('QuizService', () => {
 
 	describe('getQuestions', () => {
 		it('should return questions with options for a module (happy path)', async () => {
-			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(
-				mockQuestions,
-			);
-			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(
-				mockOptions,
-			);
+			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(mockQuestions);
+			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(mockOptions);
 
 			const result = await quizService.getQuestions('mod-1');
 
-			expect(quizRepositoryMock.findQuestionsByModule).toHaveBeenCalledWith(
-				'mod-1',
-			);
-			expect(quizRepositoryMock.findOptionsByQuestionIds).toHaveBeenCalledWith([
-				1, 2,
-			]);
+			expect(quizRepositoryMock.findQuestionsByModule).toHaveBeenCalledWith('mod-1');
+			expect(quizRepositoryMock.findOptionsByQuestionIds).toHaveBeenCalledWith([1, 2]);
 			expect(result).toHaveLength(2);
 			expect(result[0].id).toBe(1);
 			expect(result[0].type).toBe('multiple_choice');
@@ -66,12 +51,8 @@ describe('QuizService', () => {
 		});
 
 		it('should not expose is_correct in the response options', async () => {
-			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(
-				mockQuestions,
-			);
-			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(
-				mockOptions,
-			);
+			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(mockQuestions);
+			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(mockOptions);
 
 			const result = await quizService.getQuestions('mod-1');
 
@@ -85,20 +66,14 @@ describe('QuizService', () => {
 		it('should throw QuizNotFoundError when module has no questions (unhappy path)', async () => {
 			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue([]);
 
-			await expect(quizService.getQuestions('mod-99')).rejects.toThrow(
-				QuizNotFoundError,
-			);
+			await expect(quizService.getQuestions('mod-99')).rejects.toThrow(QuizNotFoundError);
 		});
 	});
 
 	describe('submitAnswers', () => {
 		it('should return correct results when all answers are right (happy path)', async () => {
-			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(
-				mockQuestions,
-			);
-			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(
-				mockOptions,
-			);
+			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(mockQuestions);
+			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(mockOptions);
 
 			const result = await quizService.submitAnswers('mod-1', [
 				{ question_id: 1, option_id: 2 },
@@ -115,12 +90,8 @@ describe('QuizService', () => {
 		});
 
 		it('should return incorrect results when answers are wrong', async () => {
-			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(
-				mockQuestions,
-			);
-			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(
-				mockOptions,
-			);
+			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(mockQuestions);
+			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(mockOptions);
 
 			const result = await quizService.submitAnswers('mod-1', [
 				{ question_id: 1, option_id: 1 },
@@ -137,12 +108,8 @@ describe('QuizService', () => {
 		});
 
 		it('should calculate partial score correctly', async () => {
-			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(
-				mockQuestions,
-			);
-			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(
-				mockOptions,
-			);
+			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(mockQuestions);
+			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(mockOptions);
 
 			const result = await quizService.submitAnswers('mod-1', [
 				{ question_id: 1, option_id: 2 },
@@ -157,9 +124,7 @@ describe('QuizService', () => {
 		it('should throw QuizNotFoundError when module has no questions (unhappy path)', async () => {
 			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue([]);
 
-			await expect(
-				quizService.submitAnswers('mod-99', [{ question_id: 1, option_id: 1 }]),
-			).rejects.toThrow(QuizNotFoundError);
+			await expect(quizService.submitAnswers('mod-99', [{ question_id: 1, option_id: 1 }])).rejects.toThrow(QuizNotFoundError);
 		});
 	});
 });

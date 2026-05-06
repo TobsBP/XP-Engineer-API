@@ -1,12 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type {
-	IUserRepository,
-	UserRow,
-} from '@/models/users/user.repository.interface.js';
-import {
-	UserNotFoundError,
-	UserService,
-} from '@/modules/users/user.service.js';
+import type { IUserRepository, UserRow } from '@/models/users/user.repository.interface.js';
+import { UserNotFoundError, UserService } from '@/modules/users/user.service.js';
 
 describe('UserService', () => {
 	let userService: UserService;
@@ -105,9 +99,7 @@ describe('UserService', () => {
 		it('should throw UserNotFoundError when updating non-existent user (unhappy path)', async () => {
 			vi.mocked(userRepositoryMock.update).mockResolvedValue(null);
 
-			await expect(
-				userService.updateUser(999, { name: 'Fail' }),
-			).rejects.toThrow(UserNotFoundError);
+			await expect(userService.updateUser(999, { name: 'Fail' })).rejects.toThrow(UserNotFoundError);
 		});
 	});
 
@@ -122,9 +114,7 @@ describe('UserService', () => {
 		it('should throw UserNotFoundError when deleting non-existent user (unhappy path)', async () => {
 			vi.mocked(userRepositoryMock.delete).mockResolvedValue(false);
 
-			await expect(userService.deleteUser(999)).rejects.toThrow(
-				UserNotFoundError,
-			);
+			await expect(userService.deleteUser(999)).rejects.toThrow(UserNotFoundError);
 		});
 	});
 });

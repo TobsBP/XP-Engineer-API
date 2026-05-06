@@ -1,9 +1,4 @@
-import type {
-	CreateUserData,
-	IUserRepository,
-	UpdateUserData,
-	UserRow,
-} from '@/models/users/user.repository.interface.js';
+import type { CreateUserData, IUserRepository, UpdateUserData, UserRow } from '@/models/users/user.repository.interface.js';
 import type { UserResponse } from '@/models/users/user.schema.js';
 import type { IUserService } from '@/models/users/user.service.interface.js';
 

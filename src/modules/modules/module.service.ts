@@ -1,9 +1,4 @@
-import type {
-	CreateModuleData,
-	IModuleRepository,
-	ModuleRow,
-	UpdateModuleData,
-} from '@/models/modules/module.repository.interface.js';
+import type { CreateModuleData, IModuleRepository, ModuleRow, UpdateModuleData } from '@/models/modules/module.repository.interface.js';
 import type { Module, ModuleResponse } from '@/models/modules/module.schema.js';
 import type { IModuleService } from '@/models/modules/module.service.interface.js';
 
@@ -32,10 +27,7 @@ export class ModuleService implements IModuleService {
 		return this.moduleRepository.create(data);
 	}
 
-	async updateModule(
-		moduleId: string,
-		data: UpdateModuleData,
-	): Promise<Module> {
+	async updateModule(moduleId: string, data: UpdateModuleData): Promise<Module> {
 		const updated = await this.moduleRepository.update(moduleId, data);
 		if (!updated) throw new ModuleNotFoundError(moduleId);
 		return updated;

@@ -31,8 +31,6 @@ export const ConceptItemResponseSchema = z.object({
 });
 
 export type ConceptExample = z.infer<typeof ConceptExampleSchema>;
-export type ConceptExampleResponse = z.infer<
-	typeof ConceptExampleResponseSchema
->;
+export type ConceptExampleResponse = z.infer<typeof ConceptExampleResponseSchema>;
 export type ConceptItem = z.infer<typeof ConceptItemSchema>;
 export type ConceptItemResponse = z.infer<typeof ConceptItemResponseSchema>;

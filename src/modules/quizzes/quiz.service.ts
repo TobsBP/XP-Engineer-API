@@ -4,15 +4,8 @@ import type {
 	QuizQuestionWithOptions,
 	UpdateQuizQuestionData,
 } from '@/models/quizzes/quiz.repository.interface.js';
-import type {
-	QuizAdminQuestion,
-	QuizQuestionResponse,
-	QuizResult,
-} from '@/models/quizzes/quiz.schema.js';
-import type {
-	AnswerInput,
-	IQuizService,
-} from '@/models/quizzes/quiz.service.interface.js';
+import type { QuizAdminQuestion, QuizQuestionResponse, QuizResult } from '@/models/quizzes/quiz.schema.js';
+import type { AnswerInput, IQuizService } from '@/models/quizzes/quiz.service.interface.js';
 
 export class QuizNotFoundError extends Error {
 	constructor(moduleId: string) {
@@ -36,29 +29,22 @@ export class QuizService implements IQuizService {
 		if (questions.length === 0) throw new QuizNotFoundError(moduleId);
 
 		const questionIds = questions.map((q) => q.id);
-		const options =
-			await this.quizRepository.findOptionsByQuestionIds(questionIds);
+		const options = await this.quizRepository.findOptionsByQuestionIds(questionIds);
 
 		return questions.map((q) => ({
 			id: q.id,
 			type: q.type,
 			text: q.text,
-			options: options
-				.filter((o) => o.question_id === q.id)
-				.map((o) => ({ id: o.id, text: o.text })),
+			options: options.filter((o) => o.question_id === q.id).map((o) => ({ id: o.id, text: o.text })),
 		}));
 	}
 
-	async submitAnswers(
-		moduleId: string,
-		answers: AnswerInput[],
-	): Promise<QuizResult> {
+	async submitAnswers(moduleId: string, answers: AnswerInput[]): Promise<QuizResult> {
 		const questions = await this.quizRepository.findQuestionsByModule(moduleId);
 		if (questions.length === 0) throw new QuizNotFoundError(moduleId);
 
 		const questionIds = questions.map((q) => q.id);
-		const options =
-			await this.quizRepository.findOptionsByQuestionIds(questionIds);
+		const options = await this.quizRepository.findOptionsByQuestionIds(questionIds);
 
 		const correctOptionMap = new Map<number, number>();
 		for (const opt of options) {
@@ -88,17 +74,12 @@ export class QuizService implements IQuizService {
 		};
 	}
 
-	async createQuestion(
-		data: CreateQuizQuestionData,
-	): Promise<QuizAdminQuestion> {
+	async createQuestion(data: CreateQuizQuestionData): Promise<QuizAdminQuestion> {
 		const result = await this.quizRepository.createQuestionWithOptions(data);
 		return this.toAdminResponse(result);
 	}
 
-	async updateQuestion(
-		id: number,
-		data: UpdateQuizQuestionData,
-	): Promise<QuizAdminQuestion> {
+	async updateQuestion(id: number, data: UpdateQuizQuestionData): Promise<QuizAdminQuestion> {
 		const result = await this.quizRepository.updateQuestion(id, data);
 		if (!result) throw new QuizQuestionNotFoundError(id);
 		return this.toAdminResponse(result);

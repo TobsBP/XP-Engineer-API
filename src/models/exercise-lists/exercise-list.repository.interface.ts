@@ -33,9 +33,6 @@ export interface IExerciseListRepository {
 	findAll(subject?: string): Promise<ExerciseListRow[]>;
 	findById(id: string): Promise<ExerciseListRow | null>;
 	create(data: CreateExerciseListData): Promise<ExerciseListRow>;
-	update(
-		id: string,
-		data: UpdateExerciseListData,
-	): Promise<ExerciseListRow | null>;
+	update(id: string, data: UpdateExerciseListData): Promise<ExerciseListRow | null>;
 	delete(id: string): Promise<boolean>;
 }

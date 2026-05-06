@@ -1,14 +1,9 @@
-import type {
-	IUserModuleRepository,
-	UpdateUserModuleData,
-} from '@/models/user-modules/user-module.repository.interface.js';
+import type { IUserModuleRepository, UpdateUserModuleData } from '@/models/user-modules/user-module.repository.interface.js';
 import type { IUserModuleService } from '@/models/user-modules/user-module.service.interface.js';
 
 export class UserModuleNotFoundError extends Error {
 	constructor(userId: number, moduleId: string) {
-		super(
-			`Progresso não encontrado: usuário '${userId}', módulo '${moduleId}'`,
-		);
+		super(`Progresso não encontrado: usuário '${userId}', módulo '${moduleId}'`);
 		this.name = 'UserModuleNotFoundError';
 	}
 }
@@ -18,9 +13,7 @@ export class ModuleLockedError extends Error {
 	readonly currentXp: number;
 
 	constructor(moduleId: string, requiredXp: number, currentXp: number) {
-		super(
-			`Módulo '${moduleId}' está bloqueado. XP necessário: ${requiredXp}, XP atual: ${currentXp}.`,
-		);
+		super(`Módulo '${moduleId}' está bloqueado. XP necessário: ${requiredXp}, XP atual: ${currentXp}.`);
 		this.name = 'ModuleLockedError';
 		this.requiredXp = requiredXp;
 		this.currentXp = currentXp;
@@ -43,16 +36,8 @@ export class UserModuleService implements IUserModuleService {
 		await this.userModuleRepository.create(userId, moduleId);
 	}
 
-	async updateUserModule(
-		userId: number,
-		moduleId: string,
-		data: UpdateUserModuleData,
-	): Promise<void> {
-		const updated = await this.userModuleRepository.update(
-			userId,
-			moduleId,
-			data,
-		);
+	async updateUserModule(userId: number, moduleId: string, data: UpdateUserModuleData): Promise<void> {
+		const updated = await this.userModuleRepository.update(userId, moduleId, data);
 		if (!updated) throw new UserModuleNotFoundError(userId, moduleId);
 	}
 }

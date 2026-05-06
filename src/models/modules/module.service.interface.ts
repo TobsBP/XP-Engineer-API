@@ -1,7 +1,4 @@
-import type {
-	CreateModuleData,
-	UpdateModuleData,
-} from '@/models/modules/module.repository.interface.js';
+import type { CreateModuleData, UpdateModuleData } from '@/models/modules/module.repository.interface.js';
 import type { Module, ModuleResponse } from '@/models/modules/module.schema.js';
 
 export interface IModuleService {

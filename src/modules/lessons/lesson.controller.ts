@@ -27,23 +27,14 @@ import {
 export class LessonController {
 	constructor(private readonly lessonService: ILessonService) {}
 
-	get = async (
-		req: FastifyRequest<GetAllLessonsRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	get = async (req: FastifyRequest<GetAllLessonsRequest>, reply: FastifyReply): Promise<void> => {
 		const lessons = await this.lessonService.getAllLessons(req.params.moduleId);
 		reply.status(200).send(lessons);
 	};
 
-	getSingle = async (
-		req: FastifyRequest<GetLessonRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	getSingle = async (req: FastifyRequest<GetLessonRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const lesson = await this.lessonService.getLesson(
-				req.params.moduleId,
-				req.params.page,
-			);
+			const lesson = await this.lessonService.getLesson(req.params.moduleId, req.params.page);
 			reply.status(200).send(lesson);
 		} catch (err) {
 			if (err instanceof LessonNotFoundError) {
@@ -54,10 +45,7 @@ export class LessonController {
 		}
 	};
 
-	create = async (
-		req: FastifyRequest<CreateLessonRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	create = async (req: FastifyRequest<CreateLessonRequest>, reply: FastifyReply): Promise<void> => {
 		const lesson = await this.lessonService.createLesson({
 			...req.body,
 			module_id: req.params.moduleId,
@@ -65,10 +53,7 @@ export class LessonController {
 		reply.status(201).send(lesson);
 	};
 
-	createConceptItem = async (
-		req: FastifyRequest<CreateConceptItemRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	createConceptItem = async (req: FastifyRequest<CreateConceptItemRequest>, reply: FastifyReply): Promise<void> => {
 		const item = await this.lessonService.createConceptItem({
 			...req.body,
 			lesson_id: req.params.lessonId,
@@ -77,10 +62,7 @@ export class LessonController {
 		reply.status(201).send(item);
 	};
 
-	createConceptExample = async (
-		req: FastifyRequest<CreateConceptExampleRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	createConceptExample = async (req: FastifyRequest<CreateConceptExampleRequest>, reply: FastifyReply): Promise<void> => {
 		const example = await this.lessonService.createConceptExample({
 			...req.body,
 			lesson_id: req.params.lessonId,
@@ -88,10 +70,7 @@ export class LessonController {
 		reply.status(201).send(example);
 	};
 
-	createApplicationItem = async (
-		req: FastifyRequest<CreateApplicationItemRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	createApplicationItem = async (req: FastifyRequest<CreateApplicationItemRequest>, reply: FastifyReply): Promise<void> => {
 		const item = await this.lessonService.createApplicationItem({
 			...req.body,
 			lesson_id: req.params.lessonId,
@@ -100,15 +79,9 @@ export class LessonController {
 		reply.status(201).send(item);
 	};
 
-	updateLesson = async (
-		req: FastifyRequest<UpdateLessonRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	updateLesson = async (req: FastifyRequest<UpdateLessonRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const lesson = await this.lessonService.updateLesson(
-				req.params.lessonId,
-				req.body,
-			);
+			const lesson = await this.lessonService.updateLesson(req.params.lessonId, req.body);
 			reply.status(200).send(lesson);
 		} catch (err) {
 			if (err instanceof LessonByIdNotFoundError) {
@@ -119,10 +92,7 @@ export class LessonController {
 		}
 	};
 
-	deleteLesson = async (
-		req: FastifyRequest<DeleteLessonRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	deleteLesson = async (req: FastifyRequest<DeleteLessonRequest>, reply: FastifyReply): Promise<void> => {
 		try {
 			await this.lessonService.deleteLesson(req.params.lessonId);
 			reply.status(204).send();
@@ -135,15 +105,9 @@ export class LessonController {
 		}
 	};
 
-	updateConceptItem = async (
-		req: FastifyRequest<UpdateConceptItemRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	updateConceptItem = async (req: FastifyRequest<UpdateConceptItemRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const item = await this.lessonService.updateConceptItem(
-				req.params.itemId,
-				req.body,
-			);
+			const item = await this.lessonService.updateConceptItem(req.params.itemId, req.body);
 			reply.status(200).send(item);
 		} catch (err) {
 			if (err instanceof ConceptItemNotFoundError) {
@@ -154,10 +118,7 @@ export class LessonController {
 		}
 	};
 
-	deleteConceptItem = async (
-		req: FastifyRequest<DeleteConceptItemRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	deleteConceptItem = async (req: FastifyRequest<DeleteConceptItemRequest>, reply: FastifyReply): Promise<void> => {
 		try {
 			await this.lessonService.deleteConceptItem(req.params.itemId);
 			reply.status(204).send();
@@ -170,15 +131,9 @@ export class LessonController {
 		}
 	};
 
-	updateConceptExample = async (
-		req: FastifyRequest<UpdateConceptExampleRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	updateConceptExample = async (req: FastifyRequest<UpdateConceptExampleRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const example = await this.lessonService.updateConceptExample(
-				req.params.itemId,
-				req.body,
-			);
+			const example = await this.lessonService.updateConceptExample(req.params.itemId, req.body);
 			reply.status(200).send(example);
 		} catch (err) {
 			if (err instanceof ConceptExampleNotFoundError) {
@@ -189,10 +144,7 @@ export class LessonController {
 		}
 	};
 
-	deleteConceptExample = async (
-		req: FastifyRequest<DeleteConceptExampleRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	deleteConceptExample = async (req: FastifyRequest<DeleteConceptExampleRequest>, reply: FastifyReply): Promise<void> => {
 		try {
 			await this.lessonService.deleteConceptExample(req.params.itemId);
 			reply.status(204).send();
@@ -205,15 +157,9 @@ export class LessonController {
 		}
 	};
 
-	updateApplicationItem = async (
-		req: FastifyRequest<UpdateApplicationItemRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	updateApplicationItem = async (req: FastifyRequest<UpdateApplicationItemRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const item = await this.lessonService.updateApplicationItem(
-				req.params.itemId,
-				req.body,
-			);
+			const item = await this.lessonService.updateApplicationItem(req.params.itemId, req.body);
 			reply.status(200).send(item);
 		} catch (err) {
 			if (err instanceof ApplicationItemNotFoundError) {
@@ -224,10 +170,7 @@ export class LessonController {
 		}
 	};
 
-	deleteApplicationItem = async (
-		req: FastifyRequest<DeleteApplicationItemRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	deleteApplicationItem = async (req: FastifyRequest<DeleteApplicationItemRequest>, reply: FastifyReply): Promise<void> => {
 		try {
 			await this.lessonService.deleteApplicationItem(req.params.itemId);
 			reply.status(204).send();

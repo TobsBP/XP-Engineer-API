@@ -1,7 +1,4 @@
-import type {
-	CreateUserData,
-	UpdateUserData,
-} from '@/models/users/user.repository.interface.js';
+import type { CreateUserData, UpdateUserData } from '@/models/users/user.repository.interface.js';
 import type { UserResponse } from '@/models/users/user.schema.js';
 
 export interface IUserService {

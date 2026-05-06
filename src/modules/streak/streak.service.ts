@@ -1,16 +1,12 @@
 import type { IStreakRepository } from '@/models/streak/streak.repository.interface.js';
-import type {
-	IStreakService,
-	StreakResponse,
-} from '@/models/streak/streak.service.interface.js';
+import type { IStreakService, StreakResponse } from '@/models/streak/streak.service.interface.js';
 
 export class StreakService implements IStreakService {
 	constructor(private readonly streakRepository: IStreakRepository) {}
 
 	async registerActivity(userId: number): Promise<void> {
 		const today = new Date().toISOString().split('T')[0];
-		const lastActivity =
-			await this.streakRepository.getLastActivityDate(userId);
+		const lastActivity = await this.streakRepository.getLastActivityDate(userId);
 
 		if (lastActivity === today) {
 			return;
@@ -19,26 +15,18 @@ export class StreakService implements IStreakService {
 		const yesterday = this.getYesterday();
 
 		if (lastActivity && lastActivity < yesterday) {
-			const streakStart =
-				await this.streakRepository.getCurrentStreakStart(userId);
-			const currentStreak =
-				await this.streakRepository.getUserStreakDays(userId);
+			const streakStart = await this.streakRepository.getCurrentStreakStart(userId);
+			const currentStreak = await this.streakRepository.getUserStreakDays(userId);
 
 			if (streakStart && currentStreak > 0) {
-				await this.streakRepository.saveStreakHistory(
-					userId,
-					streakStart,
-					lastActivity,
-					currentStreak,
-				);
+				await this.streakRepository.saveStreakHistory(userId, streakStart, lastActivity, currentStreak);
 			}
 
 			await this.streakRepository.registerActivity(userId, today);
 			await this.streakRepository.updateUserStreak(userId, 1);
 		} else {
 			await this.streakRepository.registerActivity(userId, today);
-			const currentStreak =
-				await this.streakRepository.getUserStreakDays(userId);
+			const currentStreak = await this.streakRepository.getUserStreakDays(userId);
 			await this.streakRepository.updateUserStreak(userId, currentStreak + 1);
 		}
 	}

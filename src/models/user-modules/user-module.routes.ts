@@ -14,8 +14,7 @@ export const createUserModuleSchema = {
 
 export const updateUserModuleSchema = {
 	tags: ['Modules'],
-	description:
-		'Atualiza o progresso e status de um módulo para o usuário logado.',
+	description: 'Atualiza o progresso e status de um módulo para o usuário logado.',
 	params: z.object({
 		moduleId: z.string().min(1, 'ID do módulo é obrigatório'),
 	}),

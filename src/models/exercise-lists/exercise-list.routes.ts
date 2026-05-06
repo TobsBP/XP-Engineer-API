@@ -44,8 +44,7 @@ export const createExerciseListSchema = {
 
 export const updateExerciseListSchema = {
 	tags: ['Exercise Lists'],
-	description:
-		'Atualiza metadados de uma lista de exercícios (sem trocar PDF). Restrito a administradores.',
+	description: 'Atualiza metadados de uma lista de exercícios (sem trocar PDF). Restrito a administradores.',
 	params: z.object({
 		id: z.string().min(1, 'ID é obrigatório'),
 	}),
@@ -69,8 +68,7 @@ export const updateExerciseListSchema = {
 
 export const deleteExerciseListSchema = {
 	tags: ['Exercise Lists'],
-	description:
-		'Remove uma lista de exercícios e seu PDF do storage. Restrito a administradores.',
+	description: 'Remove uma lista de exercícios e seu PDF do storage. Restrito a administradores.',
 	params: z.object({
 		id: z.string().min(1, 'ID é obrigatório'),
 	}),

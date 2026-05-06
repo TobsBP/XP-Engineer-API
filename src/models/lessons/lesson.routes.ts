@@ -1,13 +1,7 @@
 import { z } from 'zod';
 import { ApplicationItemSchema } from '@/models/lessons/application-item.schema.js';
-import {
-	ConceptExampleSchema,
-	ConceptItemSchema,
-} from '@/models/lessons/concept-example.schema.js';
-import {
-	LessonContentSchema,
-	LessonSchema,
-} from '@/models/lessons/lesson.schema.js';
+import { ConceptExampleSchema, ConceptItemSchema } from '@/models/lessons/concept-example.schema.js';
+import { LessonContentSchema, LessonSchema } from '@/models/lessons/lesson.schema.js';
 
 export const getLessonSchema = {
 	tags: ['Lessons'],
@@ -132,8 +126,7 @@ const lessonIdParam = z.object({
 const itemIdParam = z.object({
 	itemId: z.string().uuid('ID do item deve ser um UUID válido'),
 });
-const requireOneField = (d: Record<string, unknown>) =>
-	Object.keys(d).length > 0;
+const requireOneField = (d: Record<string, unknown>) => Object.keys(d).length > 0;
 const requireOneFieldMessage = {
 	message: 'Envie ao menos um campo para atualizar',
 };

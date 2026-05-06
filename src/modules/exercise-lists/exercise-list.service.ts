@@ -1,21 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import type { S3Client } from '@aws-sdk/client-s3';
-import {
-	DeleteObjectCommand,
-	GetObjectCommand,
-	PutObjectCommand,
-} from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import type {
-	ExerciseListRow,
-	IExerciseListRepository,
-	UpdateExerciseListData,
-} from '@/models/exercise-lists/exercise-list.repository.interface.js';
-import type {
-	CreateExerciseListInput,
-	ExerciseListResponse,
-	IExerciseListService,
-} from '@/models/exercise-lists/exercise-list.service.interface.js';
+import type { ExerciseListRow, IExerciseListRepository, UpdateExerciseListData } from '@/models/exercise-lists/exercise-list.repository.interface.js';
+import type { CreateExerciseListInput, ExerciseListResponse, IExerciseListService } from '@/models/exercise-lists/exercise-list.service.interface.js';
 
 const SIGNED_URL_EXPIRES_IN = 3600; // 1 hora
 const PDF_KEY_PREFIX = 'exercise-lists/';
@@ -39,9 +27,7 @@ export class ExerciseListService implements IExerciseListService {
 		return Promise.all(rows.map((row) => this.toResponse(row)));
 	}
 
-	async createExerciseList(
-		data: CreateExerciseListInput,
-	): Promise<ExerciseListResponse> {
+	async createExerciseList(data: CreateExerciseListInput): Promise<ExerciseListResponse> {
 		const id = randomUUID();
 		const pdfPath = `${PDF_KEY_PREFIX}${id}.pdf`;
 
@@ -79,10 +65,7 @@ export class ExerciseListService implements IExerciseListService {
 		}
 	}
 
-	async updateExerciseList(
-		id: string,
-		data: UpdateExerciseListData,
-	): Promise<ExerciseListResponse> {
+	async updateExerciseList(id: string, data: UpdateExerciseListData): Promise<ExerciseListResponse> {
 		const updated = await this.exerciseListRepository.update(id, data);
 		if (!updated) throw new ExerciseListNotFoundError(id);
 		return this.toResponse(updated);
@@ -101,9 +84,7 @@ export class ExerciseListService implements IExerciseListService {
 		await this.exerciseListRepository.delete(id);
 	}
 
-	private async toResponse(
-		row: ExerciseListRow,
-	): Promise<ExerciseListResponse> {
+	private async toResponse(row: ExerciseListRow): Promise<ExerciseListResponse> {
 		const pdfUrl = await this.generateSignedUrl(row.pdf_path);
 		return {
 			id: row.id,

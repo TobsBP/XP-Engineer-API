@@ -33,23 +33,11 @@ import {
 export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('lessonController');
 
-	app.get<GetAllLessonsRequest>(
-		'/:moduleId',
-		{ preHandler: app.authenticate, schema: getLessonSchema },
-		controller.get,
-	);
+	app.get<GetAllLessonsRequest>('/:moduleId', { preHandler: app.authenticate, schema: getLessonSchema }, controller.get);
 
-	app.get<GetLessonRequest>(
-		'/:moduleId/:page',
-		{ preHandler: app.authenticate, schema: getSingleLessonSchema },
-		controller.getSingle,
-	);
+	app.get<GetLessonRequest>('/:moduleId/:page', { preHandler: app.authenticate, schema: getSingleLessonSchema }, controller.getSingle);
 
-	app.post<CreateLessonRequest>(
-		'/:moduleId',
-		{ preHandler: app.requireAdmin, schema: createLessonSchema },
-		controller.create,
-	);
+	app.post<CreateLessonRequest>('/:moduleId', { preHandler: app.requireAdmin, schema: createLessonSchema }, controller.create);
 
 	app.post<CreateConceptItemRequest>(
 		'/:lessonId/concept-item',
@@ -69,17 +57,9 @@ export const lessonRoutes = async (app: FastifyInstance): Promise<void> => {
 		controller.createApplicationItem,
 	);
 
-	app.patch<UpdateLessonRequest>(
-		'/:lessonId',
-		{ preHandler: app.requireAdmin, schema: updateLessonSchema },
-		controller.updateLesson,
-	);
+	app.patch<UpdateLessonRequest>('/:lessonId', { preHandler: app.requireAdmin, schema: updateLessonSchema }, controller.updateLesson);
 
-	app.delete<DeleteLessonRequest>(
-		'/:lessonId',
-		{ preHandler: app.requireAdmin, schema: deleteLessonSchema },
-		controller.deleteLesson,
-	);
+	app.delete<DeleteLessonRequest>('/:lessonId', { preHandler: app.requireAdmin, schema: deleteLessonSchema }, controller.deleteLesson);
 
 	app.patch<UpdateConceptItemRequest>(
 		'/concept-item/:itemId',

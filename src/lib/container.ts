@@ -28,9 +28,7 @@ export function buildContainer(app: FastifyInstance) {
 		authService: asClass(Services.AuthService).classic(),
 		authController: asClass(Controllers.AuthController).classic(),
 
-		achievementRepository: asClass(
-			Repositories.AchievementRepository,
-		).classic(),
+		achievementRepository: asClass(Repositories.AchievementRepository).classic(),
 		achievementService: asClass(Services.AchievementService).classic(),
 		achievementController: asClass(Controllers.AchievementController).classic(),
 
@@ -54,27 +52,18 @@ export function buildContainer(app: FastifyInstance) {
 		userModuleService: asClass(Services.UserModuleService).classic(),
 		userModuleController: asClass(Controllers.UserModuleController).classic(),
 
-		leaderboardRepository: asClass(
-			Repositories.LeaderboardRepository,
-		).classic(),
+		leaderboardRepository: asClass(Repositories.LeaderboardRepository).classic(),
 		leaderboardService: asClass(Services.LeaderboardService).classic(),
 		leaderboardController: asClass(Controllers.LeaderboardController).classic(),
 
-		exerciseListRepository: asClass(
-			Repositories.ExerciseListRepository,
-		).classic(),
+		exerciseListRepository: asClass(Repositories.ExerciseListRepository).classic(),
 		exerciseListService: asClass(Services.ExerciseListService).classic(),
-		exerciseListController: asClass(
-			Controllers.ExerciseListController,
-		).classic(),
+		exerciseListController: asClass(Controllers.ExerciseListController).classic(),
 	});
 
 	return container;
 }
 
-export function registerAwilixContainer(
-	app: FastifyInstance,
-	container: AppContainer,
-) {
+export function registerAwilixContainer(app: FastifyInstance, container: AppContainer) {
 	app.decorate('container', container);
 }

@@ -8,11 +8,7 @@ export type UpdateUserModuleData = {
 
 export interface IUserModuleRepository {
 	create(userId: number, moduleId: string): Promise<void>;
-	update(
-		userId: number,
-		moduleId: string,
-		data: UpdateUserModuleData,
-	): Promise<boolean>;
+	update(userId: number, moduleId: string, data: UpdateUserModuleData): Promise<boolean>;
 	getModuleMinXp(moduleId: string): Promise<number>;
 	getUserXpTotal(userId: number): Promise<number>;
 }

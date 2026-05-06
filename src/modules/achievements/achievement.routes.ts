@@ -8,9 +8,7 @@ import {
 	unlockAchievementSchema,
 } from '@/models/achievements/achievement.routes.js';
 
-export const achievementRoutes = async (
-	app: FastifyInstance,
-): Promise<void> => {
+export const achievementRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('achievementController');
 
 	app.get<ListUserAchievementsRequest>(
@@ -23,9 +21,5 @@ export const achievementRoutes = async (
 		{ preHandler: app.authenticate, schema: unlockAchievementSchema },
 		controller.unlock,
 	);
-	app.post<CreateAchievementRequest>(
-		'/achievement',
-		{ preHandler: app.authenticate, schema: createAchievementSchema },
-		controller.create,
-	);
+	app.post<CreateAchievementRequest>('/achievement', { preHandler: app.authenticate, schema: createAchievementSchema }, controller.create);
 };

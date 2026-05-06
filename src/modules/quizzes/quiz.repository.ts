@@ -22,9 +22,7 @@ export class QuizRepository implements IQuizRepository {
 		return rows;
 	}
 
-	async findOptionsByQuestionIds(
-		questionIds: number[],
-	): Promise<QuizOptionRow[]> {
+	async findOptionsByQuestionIds(questionIds: number[]): Promise<QuizOptionRow[]> {
 		if (questionIds.length === 0) return [];
 		const { rows } = await this.pool.query<QuizOptionRow>(
 			`SELECT id, question_id, text, is_correct
@@ -37,10 +35,7 @@ export class QuizRepository implements IQuizRepository {
 	}
 
 	async findQuestionById(id: number): Promise<QuizQuestionWithOptions | null> {
-		const { rows: qRows } = await this.pool.query<QuizQuestionRow>(
-			`SELECT id, module_id, type, text FROM quiz_questions WHERE id = $1`,
-			[id],
-		);
+		const { rows: qRows } = await this.pool.query<QuizQuestionRow>(`SELECT id, module_id, type, text FROM quiz_questions WHERE id = $1`, [id]);
 		const question = qRows[0];
 		if (!question) return null;
 
@@ -48,9 +43,7 @@ export class QuizRepository implements IQuizRepository {
 		return { question, options };
 	}
 
-	async createQuestionWithOptions(
-		data: CreateQuizQuestionData,
-	): Promise<QuizQuestionWithOptions> {
+	async createQuestionWithOptions(data: CreateQuizQuestionData): Promise<QuizQuestionWithOptions> {
 		const client = await this.pool.connect();
 		try {
 			await client.query('BEGIN');
@@ -61,11 +54,7 @@ export class QuizRepository implements IQuizRepository {
 				[data.module_id, data.type, data.text],
 			);
 			const question = qRows[0];
-			const options = await this.insertOptions(
-				client,
-				question.id,
-				data.options,
-			);
+			const options = await this.insertOptions(client, question.id, data.options);
 			await client.query('COMMIT');
 			return { question, options };
 		} catch (err) {
@@ -76,10 +65,7 @@ export class QuizRepository implements IQuizRepository {
 		}
 	}
 
-	async updateQuestion(
-		id: number,
-		data: UpdateQuizQuestionData,
-	): Promise<QuizQuestionWithOptions | null> {
+	async updateQuestion(id: number, data: UpdateQuizQuestionData): Promise<QuizQuestionWithOptions | null> {
 		const client = await this.pool.connect();
 		try {
 			await client.query('BEGIN');
@@ -91,9 +77,7 @@ export class QuizRepository implements IQuizRepository {
 
 			let question: QuizQuestionRow | undefined;
 			if (fieldEntries.length > 0) {
-				const set = fieldEntries
-					.map(([col], i) => `${col} = $${i + 2}`)
-					.join(', ');
+				const set = fieldEntries.map(([col], i) => `${col} = $${i + 2}`).join(', ');
 				const { rows } = await client.query<QuizQuestionRow>(
 					`UPDATE quiz_questions SET ${set}
 					WHERE id = $1
@@ -102,10 +86,7 @@ export class QuizRepository implements IQuizRepository {
 				);
 				question = rows[0];
 			} else {
-				const { rows } = await client.query<QuizQuestionRow>(
-					`SELECT id, module_id, type, text FROM quiz_questions WHERE id = $1`,
-					[id],
-				);
+				const { rows } = await client.query<QuizQuestionRow>(`SELECT id, module_id, type, text FROM quiz_questions WHERE id = $1`, [id]);
 				question = rows[0];
 			}
 
@@ -116,9 +97,7 @@ export class QuizRepository implements IQuizRepository {
 
 			let options: QuizOptionRow[];
 			if (data.options) {
-				await client.query('DELETE FROM quiz_options WHERE question_id = $1', [
-					id,
-				]);
+				await client.query('DELETE FROM quiz_options WHERE question_id = $1', [id]);
 				options = await this.insertOptions(client, id, data.options);
 			} else {
 				const { rows } = await client.query<QuizOptionRow>(
@@ -145,13 +124,8 @@ export class QuizRepository implements IQuizRepository {
 		const client = await this.pool.connect();
 		try {
 			await client.query('BEGIN');
-			await client.query('DELETE FROM quiz_options WHERE question_id = $1', [
-				id,
-			]);
-			const { rowCount } = await client.query(
-				'DELETE FROM quiz_questions WHERE id = $1',
-				[id],
-			);
+			await client.query('DELETE FROM quiz_options WHERE question_id = $1', [id]);
+			const { rowCount } = await client.query('DELETE FROM quiz_questions WHERE id = $1', [id]);
 			await client.query('COMMIT');
 			return (rowCount ?? 0) > 0;
 		} catch (err) {
@@ -162,11 +136,7 @@ export class QuizRepository implements IQuizRepository {
 		}
 	}
 
-	private async insertOptions(
-		client: PoolClient,
-		questionId: number,
-		options: { text: string; is_correct: boolean }[],
-	): Promise<QuizOptionRow[]> {
+	private async insertOptions(client: PoolClient, questionId: number, options: { text: string; is_correct: boolean }[]): Promise<QuizOptionRow[]> {
 		const inserted: QuizOptionRow[] = [];
 		for (const opt of options) {
 			const { rows } = await client.query<QuizOptionRow>(

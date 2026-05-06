@@ -1,14 +1,6 @@
 import bcrypt from 'bcryptjs';
-import type {
-	AuthResponse,
-	LoginRequest,
-	RegisterRequest,
-	UpdateMeRequest,
-} from '@/models/auth/auth.service.interface.js';
-import type {
-	IUserRepository,
-	UserRow,
-} from '@/models/users/user.repository.interface.js';
+import type { AuthResponse, LoginRequest, RegisterRequest, UpdateMeRequest } from '@/models/auth/auth.service.interface.js';
+import type { IUserRepository, UserRow } from '@/models/users/user.repository.interface.js';
 import type { UserResponse } from '@/models/users/user.schema.js';
 
 export class UserAlreadyExistsError extends Error {
@@ -67,10 +59,7 @@ export class AuthService {
 			if (!data.current_password) {
 				throw new InvalidCredentialsError();
 			}
-			const isValid = await bcrypt.compare(
-				data.current_password,
-				userRow.password_hash,
-			);
+			const isValid = await bcrypt.compare(data.current_password, userRow.password_hash);
 			if (!isValid) {
 				throw new InvalidCredentialsError();
 			}
@@ -104,10 +93,7 @@ export class AuthService {
 			throw new InvalidCredentialsError();
 		}
 
-		const isPasswordValid = await bcrypt.compare(
-			data.password,
-			userRow.password_hash,
-		);
+		const isPasswordValid = await bcrypt.compare(data.password, userRow.password_hash);
 		if (!isPasswordValid) {
 			throw new InvalidCredentialsError();
 		}

@@ -1,15 +1,7 @@
 import type { IProgressRepository } from '@/models/progress/progress.repository.interface.js';
-import type {
-	LessonCompleteResponse,
-	ModuleCompleteResponse,
-	UserProgress,
-	UserProgressSummary,
-} from '@/models/progress/progress.schema.js';
+import type { LessonCompleteResponse, ModuleCompleteResponse, UserProgress, UserProgressSummary } from '@/models/progress/progress.schema.js';
 import type { IProgressService } from '@/models/progress/progress.service.interface.js';
-import type {
-	AnswerInput,
-	IQuizService,
-} from '@/models/quizzes/quiz.service.interface.js';
+import type { AnswerInput, IQuizService } from '@/models/quizzes/quiz.service.interface.js';
 import type { IStreakService } from '@/models/streak/streak.service.interface.js';
 import { calculateLevel } from '@/utils/calc-level.js';
 
@@ -18,9 +10,7 @@ const MIN_SCORE_TO_PASS = 80;
 
 export class ProgressNotFoundError extends Error {
 	constructor(moduleId: string) {
-		super(
-			`Progresso não encontrado para o módulo '${moduleId}'. Inicie o módulo primeiro.`,
-		);
+		super(`Progresso não encontrado para o módulo '${moduleId}'. Inicie o módulo primeiro.`);
 		this.name = 'ProgressNotFoundError';
 	}
 }
@@ -28,9 +18,7 @@ export class ProgressNotFoundError extends Error {
 export class QuizScoreInsufficientError extends Error {
 	score: number;
 	constructor(score: number) {
-		super(
-			`Nota insuficiente: ${score}%. É necessário pelo menos ${MIN_SCORE_TO_PASS}% para concluir o módulo.`,
-		);
+		super(`Nota insuficiente: ${score}%. É necessário pelo menos ${MIN_SCORE_TO_PASS}% para concluir o módulo.`);
 		this.name = 'QuizScoreInsufficientError';
 		this.score = score;
 	}
@@ -54,12 +42,8 @@ export class ProgressService implements IProgressService {
 		const modules = await this.progressRepository.findAllByUser(userId);
 		const xpTotal = await this.progressRepository.getXpTotal(userId);
 
-		const modulesCompleted = modules.filter(
-			(m) => m.status === 'completed',
-		).length;
-		const modulesInProgress = modules.filter(
-			(m) => m.status === 'in_progress',
-		).length;
+		const modulesCompleted = modules.filter((m) => m.status === 'completed').length;
+		const modulesInProgress = modules.filter((m) => m.status === 'in_progress').length;
 
 		return {
 			xp_total: xpTotal,
@@ -77,14 +61,8 @@ export class ProgressService implements IProgressService {
 		};
 	}
 
-	async getModuleProgress(
-		userId: number,
-		moduleId: string,
-	): Promise<UserProgress> {
-		const detail = await this.progressRepository.findModuleDetail(
-			userId,
-			moduleId,
-		);
+	async getModuleProgress(userId: number, moduleId: string): Promise<UserProgress> {
+		const detail = await this.progressRepository.findModuleDetail(userId, moduleId);
 		if (!detail) throw new ProgressNotFoundError(moduleId);
 
 		return {
@@ -98,15 +76,8 @@ export class ProgressService implements IProgressService {
 		};
 	}
 
-	async completeLesson(
-		userId: number,
-		moduleId: string,
-		page: number,
-	): Promise<LessonCompleteResponse> {
-		const userModule = await this.progressRepository.findUserModule(
-			userId,
-			moduleId,
-		);
+	async completeLesson(userId: number, moduleId: string, page: number): Promise<LessonCompleteResponse> {
+		const userModule = await this.progressRepository.findUserModule(userId, moduleId);
 		if (!userModule) throw new ProgressNotFoundError(moduleId);
 
 		if (userModule.status === 'completed') {
@@ -122,15 +93,11 @@ export class ProgressService implements IProgressService {
 		const newPage = Math.max(userModule.current_page, page + 1);
 		const progress = Math.min(Math.round((page / totalPages) * 100), 99);
 
-		const updated = await this.progressRepository.updateProgress(
-			userId,
-			moduleId,
-			{
-				progress,
-				status: 'in_progress',
-				current_page: newPage,
-			},
-		);
+		const updated = await this.progressRepository.updateProgress(userId, moduleId, {
+			progress,
+			status: 'in_progress',
+			current_page: newPage,
+		});
 
 		if (!updated) throw new ProgressNotFoundError(moduleId);
 
@@ -144,15 +111,8 @@ export class ProgressService implements IProgressService {
 		};
 	}
 
-	async completeModule(
-		userId: number,
-		moduleId: string,
-		answers: AnswerInput[],
-	): Promise<ModuleCompleteResponse> {
-		const userModule = await this.progressRepository.findUserModule(
-			userId,
-			moduleId,
-		);
+	async completeModule(userId: number, moduleId: string, answers: AnswerInput[]): Promise<ModuleCompleteResponse> {
+		const userModule = await this.progressRepository.findUserModule(userId, moduleId);
 		if (!userModule) throw new ProgressNotFoundError(moduleId);
 		if (userModule.status === 'completed') {
 			throw new ModuleAlreadyCompletedError(moduleId);

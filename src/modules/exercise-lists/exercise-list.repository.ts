@@ -6,8 +6,7 @@ import type {
 	UpdateExerciseListData,
 } from '@/models/exercise-lists/exercise-list.repository.interface.js';
 
-const RETURN_COLUMNS =
-	'id, title, subject, description, questions_count, difficulty, pdf_path, module_id';
+const RETURN_COLUMNS = 'id, title, subject, description, questions_count, difficulty, pdf_path, module_id';
 
 export class ExerciseListRepository implements IExerciseListRepository {
 	constructor(private readonly pool: Pool) {}
@@ -48,24 +47,12 @@ export class ExerciseListRepository implements IExerciseListRepository {
 			(id, title, subject, description, questions_count, difficulty, pdf_path, module_id)
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 			RETURNING ${RETURN_COLUMNS}`,
-			[
-				data.id,
-				data.title,
-				data.subject,
-				data.description,
-				data.questions_count,
-				data.difficulty,
-				data.pdf_path,
-				data.module_id,
-			],
+			[data.id, data.title, data.subject, data.description, data.questions_count, data.difficulty, data.pdf_path, data.module_id],
 		);
 		return rows[0];
 	}
 
-	async update(
-		id: string,
-		data: UpdateExerciseListData,
-	): Promise<ExerciseListRow | null> {
+	async update(id: string, data: UpdateExerciseListData): Promise<ExerciseListRow | null> {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) return this.findById(id);
 
@@ -80,10 +67,7 @@ export class ExerciseListRepository implements IExerciseListRepository {
 	}
 
 	async delete(id: string): Promise<boolean> {
-		const { rowCount } = await this.pool.query(
-			'DELETE FROM exercise_lists WHERE id = $1',
-			[id],
-		);
+		const { rowCount } = await this.pool.query('DELETE FROM exercise_lists WHERE id = $1', [id]);
 		return (rowCount ?? 0) > 0;
 	}
 }

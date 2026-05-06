@@ -1,12 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type {
-	ILessonRepository,
-	LessonRow,
-} from '@/models/lessons/lesson.repository.interface.js';
-import {
-	LessonNotFoundError,
-	LessonService,
-} from '@/modules/lessons/lesson.service.js';
+import type { ILessonRepository, LessonRow } from '@/models/lessons/lesson.repository.interface.js';
+import { LessonNotFoundError, LessonService } from '@/modules/lessons/lesson.service.js';
 
 describe('LessonService', () => {
 	let lessonService: LessonService;
@@ -51,18 +45,10 @@ describe('LessonService', () => {
 
 	describe('getLesson', () => {
 		it('should return lesson content when exists (happy path)', async () => {
-			vi.mocked(lessonRepositoryMock.findByPage).mockResolvedValue(
-				mockLessonRow,
-			);
-			vi.mocked(lessonRepositoryMock.findConceptItems).mockResolvedValue([
-				{ id: '1', title: 'C1', description: 'D1', latex: null },
-			]);
-			vi.mocked(lessonRepositoryMock.findConceptExamples).mockResolvedValue([
-				{ id: '1', label: 'E1', latex: 'L1' },
-			]);
-			vi.mocked(lessonRepositoryMock.findApplicationItems).mockResolvedValue([
-				{ id: '1', title: 'A1', description: 'D1', latex: null },
-			]);
+			vi.mocked(lessonRepositoryMock.findByPage).mockResolvedValue(mockLessonRow);
+			vi.mocked(lessonRepositoryMock.findConceptItems).mockResolvedValue([{ id: '1', title: 'C1', description: 'D1', latex: null }]);
+			vi.mocked(lessonRepositoryMock.findConceptExamples).mockResolvedValue([{ id: '1', label: 'E1', latex: 'L1' }]);
+			vi.mocked(lessonRepositoryMock.findApplicationItems).mockResolvedValue([{ id: '1', title: 'A1', description: 'D1', latex: null }]);
 
 			const result = await lessonService.getLesson('mod-1', 1);
 
@@ -75,9 +61,7 @@ describe('LessonService', () => {
 		it('should throw LessonNotFoundError when lesson not found (unhappy path)', async () => {
 			vi.mocked(lessonRepositoryMock.findByPage).mockResolvedValue(null);
 
-			await expect(lessonService.getLesson('mod-1', 99)).rejects.toThrow(
-				LessonNotFoundError,
-			);
+			await expect(lessonService.getLesson('mod-1', 99)).rejects.toThrow(LessonNotFoundError);
 		});
 	});
 

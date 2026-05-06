@@ -22,12 +22,7 @@ export type CreateExerciseListInput = {
 
 export interface IExerciseListService {
 	listExerciseLists(subject?: string): Promise<ExerciseListResponse[]>;
-	createExerciseList(
-		data: CreateExerciseListInput,
-	): Promise<ExerciseListResponse>;
-	updateExerciseList(
-		id: string,
-		data: UpdateExerciseListData,
-	): Promise<ExerciseListResponse>;
+	createExerciseList(data: CreateExerciseListInput): Promise<ExerciseListResponse>;
+	updateExerciseList(id: string, data: UpdateExerciseListData): Promise<ExerciseListResponse>;
 	deleteExerciseList(id: string): Promise<void>;
 }

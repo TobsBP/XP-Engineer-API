@@ -1,8 +1,5 @@
 import type { Pool } from 'pg';
-import type {
-	ILeaderboardRepository,
-	LeaderboardRow,
-} from '@/models/leaderboard/leaderboard.repository.interface.js';
+import type { ILeaderboardRepository, LeaderboardRow } from '@/models/leaderboard/leaderboard.repository.interface.js';
 
 export class LeaderboardRepository implements ILeaderboardRepository {
 	constructor(private readonly pool: Pool) {}

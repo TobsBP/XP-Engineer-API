@@ -27,8 +27,7 @@ export const getModuleProgressSchema = {
 
 export const completeLessonSchema = {
 	tags: ['Progress'],
-	description:
-		'Marca uma lição como concluída e atualiza o progresso do módulo.',
+	description: 'Marca uma lição como concluída e atualiza o progresso do módulo.',
 	params: z.object({
 		moduleId: z.string().min(1, 'ID do módulo é obrigatório'),
 		page: z.coerce.number().int().positive('Número da página é obrigatório'),
@@ -40,8 +39,7 @@ export const completeLessonSchema = {
 
 export const completeModuleSchema = {
 	tags: ['Progress'],
-	description:
-		'Finaliza um módulo após aprovação no quiz (>= 80%) e concede XP.',
+	description: 'Finaliza um módulo após aprovação no quiz (>= 80%) e concede XP.',
 	params: z.object({
 		moduleId: z.string().min(1, 'ID do módulo é obrigatório'),
 	}),

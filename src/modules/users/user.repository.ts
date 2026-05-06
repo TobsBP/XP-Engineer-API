@@ -1,10 +1,5 @@
 import type { Pool } from 'pg';
-import type {
-	CreateUserData,
-	IUserRepository,
-	UpdateUserData,
-	UserRow,
-} from '@/models/users/user.repository.interface.js';
+import type { CreateUserData, IUserRepository, UpdateUserData, UserRow } from '@/models/users/user.repository.interface.js';
 
 export class UserRepository implements IUserRepository {
 	constructor(private readonly pool: Pool) {}
@@ -32,13 +27,7 @@ export class UserRepository implements IUserRepository {
 			`INSERT INTO users (name, email, password_hash, avatar_url, specialization)
 			VALUES ($1, $2, $3, $4, $5)
 			RETURNING id, name, email, password_hash, avatar_url, xp_total, streak_days, rank, level, specialization, role, created_at`,
-			[
-				data.name,
-				data.email,
-				data.password_hash,
-				data.avatar_url ?? null,
-				data.specialization ?? null,
-			],
+			[data.name, data.email, data.password_hash, data.avatar_url ?? null, data.specialization ?? null],
 		);
 		return rows[0];
 	}
@@ -58,10 +47,7 @@ export class UserRepository implements IUserRepository {
 	}
 
 	async delete(id: number): Promise<boolean> {
-		const { rowCount } = await this.pool.query(
-			'DELETE FROM users WHERE id = $1',
-			[id],
-		);
+		const { rowCount } = await this.pool.query('DELETE FROM users WHERE id = $1', [id]);
 		return (rowCount ?? 0) > 0;
 	}
 }

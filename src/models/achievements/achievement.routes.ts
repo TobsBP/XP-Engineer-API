@@ -1,8 +1,5 @@
 import { z } from 'zod';
-import {
-	AchievementResponseSchema,
-	AchievementSchema,
-} from '@/models/achievements/achievement.schema.js';
+import { AchievementResponseSchema, AchievementSchema } from '@/models/achievements/achievement.schema.js';
 
 export const listUserAchievementsSchema = {
 	tags: ['Achievements'],

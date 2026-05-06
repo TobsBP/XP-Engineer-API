@@ -1,8 +1,5 @@
 import type { Pool } from 'pg';
-import type {
-	IUserModuleRepository,
-	UpdateUserModuleData,
-} from '@/models/user-modules/user-module.repository.interface.js';
+import type { IUserModuleRepository, UpdateUserModuleData } from '@/models/user-modules/user-module.repository.interface.js';
 
 export class UserModuleRepository implements IUserModuleRepository {
 	constructor(private readonly pool: Pool) {}
@@ -16,11 +13,7 @@ export class UserModuleRepository implements IUserModuleRepository {
 		);
 	}
 
-	async update(
-		userId: number,
-		moduleId: string,
-		data: UpdateUserModuleData,
-	): Promise<boolean> {
+	async update(userId: number, moduleId: string, data: UpdateUserModuleData): Promise<boolean> {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) return true;
 
@@ -34,18 +27,12 @@ export class UserModuleRepository implements IUserModuleRepository {
 	}
 
 	async getModuleMinXp(moduleId: string): Promise<number> {
-		const { rows } = await this.pool.query<{ min_xp: number }>(
-			`SELECT COALESCE(min_xp, 0)::int AS min_xp FROM modules WHERE id = $1`,
-			[moduleId],
-		);
+		const { rows } = await this.pool.query<{ min_xp: number }>(`SELECT COALESCE(min_xp, 0)::int AS min_xp FROM modules WHERE id = $1`, [moduleId]);
 		return rows[0]?.min_xp ?? 0;
 	}
 
 	async getUserXpTotal(userId: number): Promise<number> {
-		const { rows } = await this.pool.query<{ xp_total: number }>(
-			`SELECT COALESCE(xp_total, 0)::int AS xp_total FROM users WHERE id = $1`,
-			[userId],
-		);
+		const { rows } = await this.pool.query<{ xp_total: number }>(`SELECT COALESCE(xp_total, 0)::int AS xp_total FROM users WHERE id = $1`, [userId]);
 		return rows[0]?.xp_total ?? 0;
 	}
 }

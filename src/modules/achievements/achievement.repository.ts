@@ -1,9 +1,5 @@
 import type { Pool } from 'pg';
-import type {
-	AchievementRow,
-	CreateAchievementData,
-	IAchievementRepository,
-} from '@/models/achievements/achievement.repository.interface.js';
+import type { AchievementRow, CreateAchievementData, IAchievementRepository } from '@/models/achievements/achievement.repository.interface.js';
 
 export class AchievementRepository implements IAchievementRepository {
 	constructor(private readonly pool: Pool) {}

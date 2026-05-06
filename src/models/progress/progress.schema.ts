@@ -34,9 +34,5 @@ export const ModuleCompleteResponseSchema = z.object({
 
 export type UserProgress = z.infer<typeof UserProgressSchema>;
 export type UserProgressSummary = z.infer<typeof UserProgressSummarySchema>;
-export type LessonCompleteResponse = z.infer<
-	typeof LessonCompleteResponseSchema
->;
-export type ModuleCompleteResponse = z.infer<
-	typeof ModuleCompleteResponseSchema
->;
+export type LessonCompleteResponse = z.infer<typeof LessonCompleteResponseSchema>;
+export type ModuleCompleteResponse = z.infer<typeof ModuleCompleteResponseSchema>;

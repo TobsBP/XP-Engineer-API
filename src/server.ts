@@ -4,12 +4,7 @@ import multipart from '@fastify/multipart';
 import { fastifySwagger } from '@fastify/swagger';
 import ScalarApiReference from '@scalar/fastify-api-reference';
 import { type FastifyReply, type FastifyRequest, fastify } from 'fastify';
-import {
-	jsonSchemaTransform,
-	serializerCompiler,
-	validatorCompiler,
-	type ZodTypeProvider,
-} from 'fastify-type-provider-zod';
+import { jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
 
 import { buildContainer, registerAwilixContainer } from '@/lib/container.js';
 import { routes } from '@/router.js';
@@ -44,32 +39,24 @@ app.register(fastifyJwt, {
 	},
 });
 
-app.decorate(
-	'authenticate',
-	async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			await request.jwtVerify();
-		} catch (err) {
-			reply.send(err);
-		}
-	},
-);
+app.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
+	try {
+		await request.jwtVerify();
+	} catch (err) {
+		reply.send(err);
+	}
+});
 
-app.decorate(
-	'requireAdmin',
-	async (request: FastifyRequest, reply: FastifyReply) => {
-		try {
-			await request.jwtVerify();
-		} catch (err) {
-			return reply.send(err);
-		}
-		if (request.user.role !== 'admin') {
-			return reply
-				.code(403)
-				.send({ message: 'Acesso restrito a administradores' });
-		}
-	},
-);
+app.decorate('requireAdmin', async (request: FastifyRequest, reply: FastifyReply) => {
+	try {
+		await request.jwtVerify();
+	} catch (err) {
+		return reply.send(err);
+	}
+	if (request.user.role !== 'admin') {
+		return reply.code(403).send({ message: 'Acesso restrito a administradores' });
+	}
+});
 
 app.register(fastifySwagger, {
 	openapi: {

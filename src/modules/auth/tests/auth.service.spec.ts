@@ -1,14 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type {
-	IUserRepository,
-	UserRow,
-} from '@/models/users/user.repository.interface.js';
-import {
-	AuthService,
-	InvalidCredentialsError,
-	UserAlreadyExistsError,
-} from '../auth.service.js';
+import type { IUserRepository, UserRow } from '@/models/users/user.repository.interface.js';
+import { AuthService, InvalidCredentialsError, UserAlreadyExistsError } from '../auth.service.js';
 
 describe('AuthService', () => {
 	let authService: AuthService;
@@ -81,9 +74,7 @@ describe('AuthService', () => {
 
 			userRepositoryMock.findByEmail = vi.fn().mockResolvedValue(mockUser);
 
-			await expect(authService.register(registerData)).rejects.toThrow(
-				UserAlreadyExistsError,
-			);
+			await expect(authService.register(registerData)).rejects.toThrow(UserAlreadyExistsError);
 		});
 	});
 
@@ -114,9 +105,7 @@ describe('AuthService', () => {
 
 			userRepositoryMock.findByEmail = vi.fn().mockResolvedValue(null);
 
-			await expect(authService.login(loginData)).rejects.toThrow(
-				InvalidCredentialsError,
-			);
+			await expect(authService.login(loginData)).rejects.toThrow(InvalidCredentialsError);
 		});
 
 		it('should throw InvalidCredentialsError if password is incorrect', async () => {
@@ -131,9 +120,7 @@ describe('AuthService', () => {
 				password_hash: hashedPassword,
 			});
 
-			await expect(authService.login(loginData)).rejects.toThrow(
-				InvalidCredentialsError,
-			);
+			await expect(authService.login(loginData)).rejects.toThrow(InvalidCredentialsError);
 		});
 	});
 });

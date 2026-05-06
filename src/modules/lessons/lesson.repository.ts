@@ -91,22 +91,12 @@ export class LessonRepository implements ILessonRepository {
 			`INSERT INTO lessons (module_id, title, intro, hero_caption, concepts_title, applications_title, footer_cta)
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING id, module_id, page_number, title, intro, hero_caption, concepts_title, applications_title, footer_cta`,
-			[
-				data.module_id,
-				data.title,
-				data.intro,
-				data.hero_caption ?? null,
-				data.concepts_title,
-				data.applications_title,
-				data.footer_cta,
-			],
+			[data.module_id, data.title, data.intro, data.hero_caption ?? null, data.concepts_title, data.applications_title, data.footer_cta],
 		);
 		return rows[0];
 	}
 
-	async createConceptItem(
-		data: CreateConceptItemData,
-	): Promise<CreatedConceptItemRow> {
+	async createConceptItem(data: CreateConceptItemData): Promise<CreatedConceptItemRow> {
 		const { rows } = await this.pool.query<CreatedConceptItemRow>(
 			`INSERT INTO concept_items (lesson_id, title, description, latex)
 			VALUES ($1, $2, $3, $4)
@@ -116,9 +106,7 @@ export class LessonRepository implements ILessonRepository {
 		return rows[0];
 	}
 
-	async createConceptExample(
-		data: CreateConceptExampleData,
-	): Promise<CreatedConceptExampleRow> {
+	async createConceptExample(data: CreateConceptExampleData): Promise<CreatedConceptExampleRow> {
 		const { rows } = await this.pool.query<CreatedConceptExampleRow>(
 			`INSERT INTO concept_examples (lesson_id, label, latex)
 			VALUES ($1, $2, $3)
@@ -128,9 +116,7 @@ export class LessonRepository implements ILessonRepository {
 		return rows[0];
 	}
 
-	async createApplicationItem(
-		data: CreateApplicationItemData,
-	): Promise<CreatedApplicationItemRow> {
+	async createApplicationItem(data: CreateApplicationItemData): Promise<CreatedApplicationItemRow> {
 		const { rows } = await this.pool.query<CreatedApplicationItemRow>(
 			`INSERT INTO application_items (lesson_id, title, description, latex)
 			VALUES ($1, $2, $3, $4)
@@ -140,10 +126,7 @@ export class LessonRepository implements ILessonRepository {
 		return rows[0];
 	}
 
-	async updateLesson(
-		lessonId: number,
-		data: UpdateLessonData,
-	): Promise<CreatedLessonRow | null> {
+	async updateLesson(lessonId: number, data: UpdateLessonData): Promise<CreatedLessonRow | null> {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) {
 			const { rows } = await this.pool.query<CreatedLessonRow>(
@@ -164,17 +147,11 @@ export class LessonRepository implements ILessonRepository {
 	}
 
 	async deleteLesson(lessonId: number): Promise<boolean> {
-		const { rowCount } = await this.pool.query(
-			'DELETE FROM lessons WHERE id = $1',
-			[lessonId],
-		);
+		const { rowCount } = await this.pool.query('DELETE FROM lessons WHERE id = $1', [lessonId]);
 		return (rowCount ?? 0) > 0;
 	}
 
-	async updateConceptItem(
-		itemId: string,
-		data: UpdateConceptItemData,
-	): Promise<CreatedConceptItemRow | null> {
+	async updateConceptItem(itemId: string, data: UpdateConceptItemData): Promise<CreatedConceptItemRow | null> {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) {
 			const { rows } = await this.pool.query<CreatedConceptItemRow>(
@@ -195,17 +172,11 @@ export class LessonRepository implements ILessonRepository {
 	}
 
 	async deleteConceptItem(itemId: string): Promise<boolean> {
-		const { rowCount } = await this.pool.query(
-			'DELETE FROM concept_items WHERE id = $1',
-			[itemId],
-		);
+		const { rowCount } = await this.pool.query('DELETE FROM concept_items WHERE id = $1', [itemId]);
 		return (rowCount ?? 0) > 0;
 	}
 
-	async updateConceptExample(
-		itemId: string,
-		data: UpdateConceptExampleData,
-	): Promise<CreatedConceptExampleRow | null> {
+	async updateConceptExample(itemId: string, data: UpdateConceptExampleData): Promise<CreatedConceptExampleRow | null> {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) {
 			const { rows } = await this.pool.query<CreatedConceptExampleRow>(
@@ -226,17 +197,11 @@ export class LessonRepository implements ILessonRepository {
 	}
 
 	async deleteConceptExample(itemId: string): Promise<boolean> {
-		const { rowCount } = await this.pool.query(
-			'DELETE FROM concept_examples WHERE id = $1',
-			[itemId],
-		);
+		const { rowCount } = await this.pool.query('DELETE FROM concept_examples WHERE id = $1', [itemId]);
 		return (rowCount ?? 0) > 0;
 	}
 
-	async updateApplicationItem(
-		itemId: string,
-		data: UpdateApplicationItemData,
-	): Promise<CreatedApplicationItemRow | null> {
+	async updateApplicationItem(itemId: string, data: UpdateApplicationItemData): Promise<CreatedApplicationItemRow | null> {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) {
 			const { rows } = await this.pool.query<CreatedApplicationItemRow>(
@@ -257,10 +222,7 @@ export class LessonRepository implements ILessonRepository {
 	}
 
 	async deleteApplicationItem(itemId: string): Promise<boolean> {
-		const { rowCount } = await this.pool.query(
-			'DELETE FROM application_items WHERE id = $1',
-			[itemId],
-		);
+		const { rowCount } = await this.pool.query('DELETE FROM application_items WHERE id = $1', [itemId]);
 		return (rowCount ?? 0) > 0;
 	}
 }

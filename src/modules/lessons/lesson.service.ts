@@ -61,18 +61,12 @@ export class LessonService implements ILessonService {
 		const lessons = await this.lessonRepository.findAllByModule(moduleId);
 		return Promise.all(
 			lessons.map(async (lessonRow) => {
-				const [conceptItems, conceptExamples, applicationItems] =
-					await Promise.all([
-						this.lessonRepository.findConceptItems(lessonRow.id),
-						this.lessonRepository.findConceptExamples(lessonRow.id),
-						this.lessonRepository.findApplicationItems(lessonRow.id),
-					]);
-				return this.toContent(
-					lessonRow,
-					conceptItems,
-					conceptExamples,
-					applicationItems,
-				);
+				const [conceptItems, conceptExamples, applicationItems] = await Promise.all([
+					this.lessonRepository.findConceptItems(lessonRow.id),
+					this.lessonRepository.findConceptExamples(lessonRow.id),
+					this.lessonRepository.findApplicationItems(lessonRow.id),
+				]);
+				return this.toContent(lessonRow, conceptItems, conceptExamples, applicationItems);
 			}),
 		);
 	}
@@ -81,48 +75,32 @@ export class LessonService implements ILessonService {
 		const lessonRow = await this.lessonRepository.findByPage(moduleId, page);
 		if (!lessonRow) throw new LessonNotFoundError(moduleId, page);
 
-		const [conceptItems, conceptExamples, applicationItems] = await Promise.all(
-			[
-				this.lessonRepository.findConceptItems(lessonRow.id),
-				this.lessonRepository.findConceptExamples(lessonRow.id),
-				this.lessonRepository.findApplicationItems(lessonRow.id),
-			],
-		);
+		const [conceptItems, conceptExamples, applicationItems] = await Promise.all([
+			this.lessonRepository.findConceptItems(lessonRow.id),
+			this.lessonRepository.findConceptExamples(lessonRow.id),
+			this.lessonRepository.findApplicationItems(lessonRow.id),
+		]);
 
-		return this.toContent(
-			lessonRow,
-			conceptItems,
-			conceptExamples,
-			applicationItems,
-		);
+		return this.toContent(lessonRow, conceptItems, conceptExamples, applicationItems);
 	}
 
 	async createLesson(data: CreateLessonData): Promise<Lesson> {
 		return this.lessonRepository.create(data);
 	}
 
-	async createConceptItem(
-		data: CreateConceptItemData,
-	): Promise<CreatedConceptItemRow> {
+	async createConceptItem(data: CreateConceptItemData): Promise<CreatedConceptItemRow> {
 		return this.lessonRepository.createConceptItem(data);
 	}
 
-	async createConceptExample(
-		data: CreateConceptExampleData,
-	): Promise<CreatedConceptExampleRow> {
+	async createConceptExample(data: CreateConceptExampleData): Promise<CreatedConceptExampleRow> {
 		return this.lessonRepository.createConceptExample(data);
 	}
 
-	async createApplicationItem(
-		data: CreateApplicationItemData,
-	): Promise<CreatedApplicationItemRow> {
+	async createApplicationItem(data: CreateApplicationItemData): Promise<CreatedApplicationItemRow> {
 		return this.lessonRepository.createApplicationItem(data);
 	}
 
-	async updateLesson(
-		lessonId: number,
-		data: UpdateLessonData,
-	): Promise<Lesson> {
+	async updateLesson(lessonId: number, data: UpdateLessonData): Promise<Lesson> {
 		const updated = await this.lessonRepository.updateLesson(lessonId, data);
 		if (!updated) throw new LessonByIdNotFoundError(lessonId);
 		return updated;
@@ -133,10 +111,7 @@ export class LessonService implements ILessonService {
 		if (!deleted) throw new LessonByIdNotFoundError(lessonId);
 	}
 
-	async updateConceptItem(
-		itemId: string,
-		data: UpdateConceptItemData,
-	): Promise<CreatedConceptItemRow> {
+	async updateConceptItem(itemId: string, data: UpdateConceptItemData): Promise<CreatedConceptItemRow> {
 		const updated = await this.lessonRepository.updateConceptItem(itemId, data);
 		if (!updated) throw new ConceptItemNotFoundError(itemId);
 		return updated;
@@ -147,14 +122,8 @@ export class LessonService implements ILessonService {
 		if (!deleted) throw new ConceptItemNotFoundError(itemId);
 	}
 
-	async updateConceptExample(
-		itemId: string,
-		data: UpdateConceptExampleData,
-	): Promise<CreatedConceptExampleRow> {
-		const updated = await this.lessonRepository.updateConceptExample(
-			itemId,
-			data,
-		);
+	async updateConceptExample(itemId: string, data: UpdateConceptExampleData): Promise<CreatedConceptExampleRow> {
+		const updated = await this.lessonRepository.updateConceptExample(itemId, data);
 		if (!updated) throw new ConceptExampleNotFoundError(itemId);
 		return updated;
 	}
@@ -164,14 +133,8 @@ export class LessonService implements ILessonService {
 		if (!deleted) throw new ConceptExampleNotFoundError(itemId);
 	}
 
-	async updateApplicationItem(
-		itemId: string,
-		data: UpdateApplicationItemData,
-	): Promise<CreatedApplicationItemRow> {
-		const updated = await this.lessonRepository.updateApplicationItem(
-			itemId,
-			data,
-		);
+	async updateApplicationItem(itemId: string, data: UpdateApplicationItemData): Promise<CreatedApplicationItemRow> {
+		const updated = await this.lessonRepository.updateApplicationItem(itemId, data);
 		if (!updated) throw new ApplicationItemNotFoundError(itemId);
 		return updated;
 	}
@@ -187,11 +150,7 @@ export class LessonService implements ILessonService {
 		conceptExamples: ConceptExampleRow[],
 		applicationItems: ApplicationItemRow[],
 	): LessonContent {
-		const {
-			page_number: page,
-			total_pages: totalPages,
-			module_id: moduleId,
-		} = lesson;
+		const { page_number: page, total_pages: totalPages, module_id: moduleId } = lesson;
 
 		return {
 			id: lesson.id,

@@ -13,24 +13,8 @@ import {
 export const userRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('userController');
 
-	app.get<GetUserRequest>(
-		'/user/:id',
-		{ preHandler: app.authenticate, schema: getUserSchema },
-		controller.get,
-	);
-	app.post<CreateUserRequest>(
-		'/user',
-		{ preHandler: app.authenticate, schema: createUserSchema },
-		controller.create,
-	);
-	app.patch<PatchUserRequest>(
-		'/user/:id',
-		{ preHandler: app.authenticate, schema: patchUserSchema },
-		controller.patch,
-	);
-	app.delete<DeleteUserRequest>(
-		'/user/:id',
-		{ preHandler: app.authenticate, schema: deleteUserSchema },
-		controller.delete,
-	);
+	app.get<GetUserRequest>('/user/:id', { preHandler: app.authenticate, schema: getUserSchema }, controller.get);
+	app.post<CreateUserRequest>('/user', { preHandler: app.authenticate, schema: createUserSchema }, controller.create);
+	app.patch<PatchUserRequest>('/user/:id', { preHandler: app.authenticate, schema: patchUserSchema }, controller.patch);
+	app.delete<DeleteUserRequest>('/user/:id', { preHandler: app.authenticate, schema: deleteUserSchema }, controller.delete);
 };

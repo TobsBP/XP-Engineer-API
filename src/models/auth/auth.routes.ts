@@ -1,13 +1,6 @@
 import { z } from 'zod';
-import {
-	LoginSchema,
-	RegisterSchema,
-	UpdateMeSchema,
-} from '@/models/auth/auth.schema.js';
-import {
-	MeResponseSchema,
-	UserResponseSchema,
-} from '@/models/users/user.schema.js';
+import { LoginSchema, RegisterSchema, UpdateMeSchema } from '@/models/auth/auth.schema.js';
+import { MeResponseSchema, UserResponseSchema } from '@/models/users/user.schema.js';
 
 export const registerSchema = {
 	tags: ['Auth'],

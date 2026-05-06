@@ -1,10 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { IUserModuleRepository } from '@/models/user-modules/user-module.repository.interface.js';
-import {
-	ModuleLockedError,
-	UserModuleNotFoundError,
-	UserModuleService,
-} from '@/modules/user-modules/user-module.service.js';
+import { ModuleLockedError, UserModuleNotFoundError, UserModuleService } from '@/modules/user-modules/user-module.service.js';
 
 describe('UserModuleService', () => {
 	let userModuleService: UserModuleService;
@@ -26,9 +22,7 @@ describe('UserModuleService', () => {
 			vi.mocked(userModuleRepositoryMock.getModuleMinXp).mockResolvedValue(0);
 			vi.mocked(userModuleRepositoryMock.create).mockResolvedValue();
 
-			await expect(
-				userModuleService.createUserModule(1, 'mod-1'),
-			).resolves.not.toThrow();
+			await expect(userModuleService.createUserModule(1, 'mod-1')).resolves.not.toThrow();
 			expect(userModuleRepositoryMock.create).toHaveBeenCalledWith(1, 'mod-1');
 		});
 
@@ -37,9 +31,7 @@ describe('UserModuleService', () => {
 			vi.mocked(userModuleRepositoryMock.getUserXpTotal).mockResolvedValue(300);
 			vi.mocked(userModuleRepositoryMock.create).mockResolvedValue();
 
-			await expect(
-				userModuleService.createUserModule(1, 'mod-2'),
-			).resolves.not.toThrow();
+			await expect(userModuleService.createUserModule(1, 'mod-2')).resolves.not.toThrow();
 			expect(userModuleRepositoryMock.create).toHaveBeenCalledWith(1, 'mod-2');
 		});
 
@@ -47,9 +39,7 @@ describe('UserModuleService', () => {
 			vi.mocked(userModuleRepositoryMock.getModuleMinXp).mockResolvedValue(500);
 			vi.mocked(userModuleRepositoryMock.getUserXpTotal).mockResolvedValue(100);
 
-			await expect(
-				userModuleService.createUserModule(1, 'mod-3'),
-			).rejects.toThrow(ModuleLockedError);
+			await expect(userModuleService.createUserModule(1, 'mod-3')).rejects.toThrow(ModuleLockedError);
 			expect(userModuleRepositoryMock.create).not.toHaveBeenCalled();
 		});
 	});
@@ -59,22 +49,14 @@ describe('UserModuleService', () => {
 			const updateData = { current_page: 3 };
 			vi.mocked(userModuleRepositoryMock.update).mockResolvedValue(true);
 
-			await expect(
-				userModuleService.updateUserModule(1, 'mod-1', updateData),
-			).resolves.not.toThrow();
-			expect(userModuleRepositoryMock.update).toHaveBeenCalledWith(
-				1,
-				'mod-1',
-				updateData,
-			);
+			await expect(userModuleService.updateUserModule(1, 'mod-1', updateData)).resolves.not.toThrow();
+			expect(userModuleRepositoryMock.update).toHaveBeenCalledWith(1, 'mod-1', updateData);
 		});
 
 		it('should throw UserModuleNotFoundError when progress entry not found (unhappy path)', async () => {
 			vi.mocked(userModuleRepositoryMock.update).mockResolvedValue(false);
 
-			await expect(
-				userModuleService.updateUserModule(1, 'mod-1', { current_page: 3 }),
-			).rejects.toThrow(UserModuleNotFoundError);
+			await expect(userModuleService.updateUserModule(1, 'mod-1', { current_page: 3 })).rejects.toThrow(UserModuleNotFoundError);
 		});
 	});
 });

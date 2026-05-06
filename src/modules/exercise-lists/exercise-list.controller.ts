@@ -11,10 +11,7 @@ import { ExerciseListNotFoundError } from '@/modules/exercise-lists/exercise-lis
 export class ExerciseListController {
 	constructor(private readonly exerciseListService: IExerciseListService) {}
 
-	list = async (
-		req: FastifyRequest<ListExerciseListsRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	list = async (req: FastifyRequest<ListExerciseListsRequest>, reply: FastifyReply): Promise<void> => {
 		const { subject } = req.query;
 		const result = await this.exerciseListService.listExerciseLists(subject);
 		reply.status(200).send(result);
@@ -27,14 +24,10 @@ export class ExerciseListController {
 		for await (const part of req.parts()) {
 			if (part.type === 'file') {
 				if (part.fieldname !== 'pdf') {
-					return reply
-						.code(400)
-						.send({ message: 'Campo do arquivo deve se chamar "pdf"' });
+					return reply.code(400).send({ message: 'Campo do arquivo deve se chamar "pdf"' });
 				}
 				if (part.mimetype !== 'application/pdf') {
-					return reply
-						.code(400)
-						.send({ message: 'Apenas arquivos application/pdf são aceitos' });
+					return reply.code(400).send({ message: 'Apenas arquivos application/pdf são aceitos' });
 				}
 				pdfBuffer = await part.toBuffer();
 			} else if (typeof part.value === 'string') {
@@ -49,9 +42,7 @@ export class ExerciseListController {
 		const parsed = ExerciseListBodyFieldsSchema.safeParse(fields);
 		if (!parsed.success) {
 			return reply.code(400).send({
-				message: parsed.error.issues
-					.map((i) => `${i.path.join('.')}: ${i.message}`)
-					.join('; '),
+				message: parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; '),
 			});
 		}
 
@@ -68,15 +59,9 @@ export class ExerciseListController {
 		reply.status(201).send(result);
 	};
 
-	update = async (
-		req: FastifyRequest<UpdateExerciseListRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	update = async (req: FastifyRequest<UpdateExerciseListRequest>, reply: FastifyReply): Promise<void> => {
 		try {
-			const result = await this.exerciseListService.updateExerciseList(
-				req.params.id,
-				req.body,
-			);
+			const result = await this.exerciseListService.updateExerciseList(req.params.id, req.body);
 			reply.status(200).send(result);
 		} catch (err) {
 			if (err instanceof ExerciseListNotFoundError) {
@@ -87,10 +72,7 @@ export class ExerciseListController {
 		}
 	};
 
-	remove = async (
-		req: FastifyRequest<DeleteExerciseListRequest>,
-		reply: FastifyReply,
-	): Promise<void> => {
+	remove = async (req: FastifyRequest<DeleteExerciseListRequest>, reply: FastifyReply): Promise<void> => {
 		try {
 			await this.exerciseListService.deleteExerciseList(req.params.id);
 			reply.status(204).send();

@@ -17,6 +17,4 @@ export const ApplicationItemResponseSchema = z.object({
 });
 
 export type ApplicationItem = z.infer<typeof ApplicationItemSchema>;
-export type ApplicationItemResponse = z.infer<
-	typeof ApplicationItemResponseSchema
->;
+export type ApplicationItemResponse = z.infer<typeof ApplicationItemResponseSchema>;

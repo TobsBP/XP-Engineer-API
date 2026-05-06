@@ -1,17 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type {
-	LoginRequest,
-	RegisterRequest,
-	UpdateMeRequest,
-} from '@/models/auth/auth.routes.js';
+import type { LoginRequest, RegisterRequest, UpdateMeRequest } from '@/models/auth/auth.routes.js';
 import type { IStreakService } from '@/models/streak/streak.service.interface.js';
 import type { IUserRepository } from '@/models/users/user.repository.interface.js';
 import { UserNotFoundError } from '@/modules/users/user.service.js';
 import type { AuthService } from './auth.service.js';
-import {
-	InvalidCredentialsError,
-	UserAlreadyExistsError,
-} from './auth.service.js';
+import { InvalidCredentialsError, UserAlreadyExistsError } from './auth.service.js';
 
 export class AuthController {
 	constructor(
@@ -20,10 +13,7 @@ export class AuthController {
 		private readonly streakService: IStreakService,
 	) {}
 
-	register = async (
-		req: FastifyRequest<RegisterRequest>,
-		reply: FastifyReply,
-	) => {
+	register = async (req: FastifyRequest<RegisterRequest>, reply: FastifyReply) => {
 		try {
 			const result = await this.authService.register(req.body);
 			return reply.status(201).send(result);
@@ -47,10 +37,7 @@ export class AuthController {
 		}
 	};
 
-	updateMe = async (
-		req: FastifyRequest<UpdateMeRequest>,
-		reply: FastifyReply,
-	) => {
+	updateMe = async (req: FastifyRequest<UpdateMeRequest>, reply: FastifyReply) => {
 		try {
 			const userId = req.user.sub as number;
 			const result = await this.authService.updateMe(userId, req.body);

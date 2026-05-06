@@ -44,9 +44,6 @@ export interface IModuleRepository {
 	findAll(userId: number): Promise<ModuleRow[]>;
 	findById(moduleId: string, userId: number): Promise<ModuleRow | null>;
 	create(data: CreateModuleData): Promise<CreatedModuleRow>;
-	update(
-		moduleId: string,
-		data: UpdateModuleData,
-	): Promise<CreatedModuleRow | null>;
+	update(moduleId: string, data: UpdateModuleData): Promise<CreatedModuleRow | null>;
 	delete(moduleId: string): Promise<boolean>;
 }

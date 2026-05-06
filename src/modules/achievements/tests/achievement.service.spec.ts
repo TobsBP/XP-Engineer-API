@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type {
-	AchievementRow,
-	IAchievementRepository,
-} from '@/models/achievements/achievement.repository.interface.js';
+import type { AchievementRow, IAchievementRepository } from '@/models/achievements/achievement.repository.interface.js';
 import { AchievementService } from '@/modules/achievements/achievement.service.js';
 
 describe('AchievementService', () => {
@@ -46,18 +43,14 @@ describe('AchievementService', () => {
 
 	describe('listByUser', () => {
 		it('should return achievements for a user (happy path)', async () => {
-			vi.mocked(achievementRepositoryMock.findAllByUser).mockResolvedValue([
-				mockAchievementRow,
-			]);
+			vi.mocked(achievementRepositoryMock.findAllByUser).mockResolvedValue([mockAchievementRow]);
 
 			const result = await achievementService.listByUser(1);
 
 			expect(achievementRepositoryMock.findAllByUser).toHaveBeenCalledWith(1);
 			expect(result).toHaveLength(1);
 			expect(result[0].id).toBe('ach-1');
-			expect(result[0].unlocked_at).toBe(
-				mockAchievementRow.unlocked_at?.toISOString(),
-			);
+			expect(result[0].unlocked_at).toBe(mockAchievementRow.unlocked_at?.toISOString());
 		});
 
 		it('should return empty array if user has no achievements (happy path)', async () => {
@@ -73,9 +66,7 @@ describe('AchievementService', () => {
 		it('should unlock an achievement for a user (happy path)', async () => {
 			vi.mocked(achievementRepositoryMock.unlock).mockResolvedValue();
 
-			await expect(
-				achievementService.unlock(1, 'ach-1'),
-			).resolves.not.toThrow();
+			await expect(achievementService.unlock(1, 'ach-1')).resolves.not.toThrow();
 			expect(achievementRepositoryMock.unlock).toHaveBeenCalledWith(1, 'ach-1');
 		});
 	});

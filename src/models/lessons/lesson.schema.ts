@@ -1,9 +1,6 @@
 import { z } from 'zod';
 import { ApplicationItemResponseSchema } from '@/models/lessons/application-item.schema.js';
-import {
-	ConceptExampleResponseSchema,
-	ConceptItemResponseSchema,
-} from '@/models/lessons/concept-example.schema.js';
+import { ConceptExampleResponseSchema, ConceptItemResponseSchema } from '@/models/lessons/concept-example.schema.js';
 
 export const LessonSchema = z.object({
 	id: z.number().int(),

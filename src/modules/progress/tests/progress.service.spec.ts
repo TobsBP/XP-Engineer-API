@@ -35,11 +35,7 @@ describe('ProgressService', () => {
 			getStreak: vi.fn(),
 		} as unknown as IStreakService;
 
-		progressService = new ProgressService(
-			progressRepoMock,
-			quizServiceMock,
-			streakServiceMock,
-		);
+		progressService = new ProgressService(progressRepoMock, quizServiceMock, streakServiceMock);
 	});
 
 	describe('completeLesson', () => {
@@ -99,9 +95,7 @@ describe('ProgressService', () => {
 		it('should throw ProgressNotFoundError when user module does not exist', async () => {
 			vi.mocked(progressRepoMock.findUserModule).mockResolvedValue(null);
 
-			await expect(
-				progressService.completeLesson(1, 'mod-99', 1),
-			).rejects.toThrow(ProgressNotFoundError);
+			await expect(progressService.completeLesson(1, 'mod-99', 1)).rejects.toThrow(ProgressNotFoundError);
 		});
 	});
 
@@ -139,10 +133,7 @@ describe('ProgressService', () => {
 
 			const result = await progressService.completeModule(1, 'mod-1', answers);
 
-			expect(quizServiceMock.submitAnswers).toHaveBeenCalledWith(
-				'mod-1',
-				answers,
-			);
+			expect(quizServiceMock.submitAnswers).toHaveBeenCalledWith('mod-1', answers);
 			expect(progressRepoMock.completeModule).toHaveBeenCalledWith(1, 'mod-1');
 			expect(progressRepoMock.addXp).toHaveBeenCalledWith(1, 100);
 			expect(result.status).toBe('completed');
@@ -168,9 +159,7 @@ describe('ProgressService', () => {
 
 			const answers = [{ question_id: 1, option_id: 1 }];
 
-			await expect(
-				progressService.completeModule(1, 'mod-1', answers),
-			).rejects.toThrow(QuizScoreInsufficientError);
+			await expect(progressService.completeModule(1, 'mod-1', answers)).rejects.toThrow(QuizScoreInsufficientError);
 
 			expect(progressRepoMock.completeModule).not.toHaveBeenCalled();
 			expect(progressRepoMock.addXp).not.toHaveBeenCalled();
@@ -187,9 +176,7 @@ describe('ProgressService', () => {
 
 			const answers = [{ question_id: 1, option_id: 1 }];
 
-			await expect(
-				progressService.completeModule(1, 'mod-1', answers),
-			).rejects.toThrow(ModuleAlreadyCompletedError);
+			await expect(progressService.completeModule(1, 'mod-1', answers)).rejects.toThrow(ModuleAlreadyCompletedError);
 
 			expect(quizServiceMock.submitAnswers).not.toHaveBeenCalled();
 		});
@@ -199,9 +186,7 @@ describe('ProgressService', () => {
 
 			const answers = [{ question_id: 1, option_id: 1 }];
 
-			await expect(
-				progressService.completeModule(1, 'mod-99', answers),
-			).rejects.toThrow(ProgressNotFoundError);
+			await expect(progressService.completeModule(1, 'mod-99', answers)).rejects.toThrow(ProgressNotFoundError);
 		});
 	});
 });

@@ -12,17 +12,9 @@ import {
 export const progressRoutes = async (app: FastifyInstance): Promise<void> => {
 	const controller = app.container.resolve('progressController');
 
-	app.get(
-		'',
-		{ preHandler: app.authenticate, schema: getProgressSchema },
-		controller.getProgress,
-	);
+	app.get('', { preHandler: app.authenticate, schema: getProgressSchema }, controller.getProgress);
 
-	app.get<GetModuleProgressRequest>(
-		'/:moduleId',
-		{ preHandler: app.authenticate, schema: getModuleProgressSchema },
-		controller.getModuleProgress,
-	);
+	app.get<GetModuleProgressRequest>('/:moduleId', { preHandler: app.authenticate, schema: getModuleProgressSchema }, controller.getModuleProgress);
 
 	app.post<CompleteLessonRequest>(
 		'/:moduleId/lesson/:page/complete',
@@ -30,9 +22,5 @@ export const progressRoutes = async (app: FastifyInstance): Promise<void> => {
 		controller.completeLesson,
 	);
 
-	app.post<CompleteModuleRequest>(
-		'/:moduleId/complete',
-		{ preHandler: app.authenticate, schema: completeModuleSchema },
-		controller.completeModule,
-	);
+	app.post<CompleteModuleRequest>('/:moduleId/complete', { preHandler: app.authenticate, schema: completeModuleSchema }, controller.completeModule);
 };

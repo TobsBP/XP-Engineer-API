@@ -1,8 +1,5 @@
 import type { Pool } from 'pg';
-import type {
-	IStreakRepository,
-	StreakHistoryRow,
-} from '@/models/streak/streak.repository.interface.js';
+import type { IStreakRepository, StreakHistoryRow } from '@/models/streak/streak.repository.interface.js';
 
 export class StreakRepository implements IStreakRepository {
 	constructor(private readonly pool: Pool) {}
@@ -50,12 +47,7 @@ export class StreakRepository implements IStreakRepository {
 		return rows[0]?.streak_start ?? null;
 	}
 
-	async saveStreakHistory(
-		userId: number,
-		startDate: string,
-		endDate: string,
-		duration: number,
-	): Promise<void> {
+	async saveStreakHistory(userId: number, startDate: string, endDate: string, duration: number): Promise<void> {
 		await this.pool.query(
 			`INSERT INTO streak_history (user_id, start_date, end_date, duration)
 			VALUES ($1, $2, $3, $4)`,
@@ -75,17 +67,13 @@ export class StreakRepository implements IStreakRepository {
 	}
 
 	async updateUserStreak(userId: number, streakDays: number): Promise<void> {
-		await this.pool.query(`UPDATE users SET streak_days = $2 WHERE id = $1`, [
-			userId,
-			streakDays,
-		]);
+		await this.pool.query(`UPDATE users SET streak_days = $2 WHERE id = $1`, [userId, streakDays]);
 	}
 
 	async getUserStreakDays(userId: number): Promise<number> {
-		const { rows } = await this.pool.query<{ streak_days: number }>(
-			`SELECT COALESCE(streak_days, 0)::int AS streak_days FROM users WHERE id = $1`,
-			[userId],
-		);
+		const { rows } = await this.pool.query<{ streak_days: number }>(`SELECT COALESCE(streak_days, 0)::int AS streak_days FROM users WHERE id = $1`, [
+			userId,
+		]);
 		return rows[0]?.streak_days ?? 0;
 	}
 }
