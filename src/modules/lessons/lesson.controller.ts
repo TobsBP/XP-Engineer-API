@@ -16,13 +16,6 @@ import type {
 	UpdateLessonRequest,
 } from '@/models/lessons/lesson.routes.js';
 import type { ILessonService } from '@/models/lessons/lesson.service.interface.js';
-import {
-	ApplicationItemNotFoundError,
-	ConceptExampleNotFoundError,
-	ConceptItemNotFoundError,
-	LessonByIdNotFoundError,
-	LessonNotFoundError,
-} from '@/modules/lessons/lesson.service.js';
 
 export class LessonController {
 	constructor(private readonly lessonService: ILessonService) {}
@@ -33,16 +26,8 @@ export class LessonController {
 	};
 
 	getSingle = async (req: FastifyRequest<GetLessonRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			const lesson = await this.lessonService.getLesson(req.params.moduleId, req.params.page);
-			reply.status(200).send(lesson);
-		} catch (err) {
-			if (err instanceof LessonNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		const lesson = await this.lessonService.getLesson(req.params.moduleId, req.params.page);
+		reply.status(200).send(lesson);
 	};
 
 	create = async (req: FastifyRequest<CreateLessonRequest>, reply: FastifyReply): Promise<void> => {
@@ -80,106 +65,42 @@ export class LessonController {
 	};
 
 	updateLesson = async (req: FastifyRequest<UpdateLessonRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			const lesson = await this.lessonService.updateLesson(req.params.lessonId, req.body);
-			reply.status(200).send(lesson);
-		} catch (err) {
-			if (err instanceof LessonByIdNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		const lesson = await this.lessonService.updateLesson(req.params.lessonId, req.body);
+		reply.status(200).send(lesson);
 	};
 
 	deleteLesson = async (req: FastifyRequest<DeleteLessonRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			await this.lessonService.deleteLesson(req.params.lessonId);
-			reply.status(204).send();
-		} catch (err) {
-			if (err instanceof LessonByIdNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		await this.lessonService.deleteLesson(req.params.lessonId);
+		reply.status(204).send();
 	};
 
 	updateConceptItem = async (req: FastifyRequest<UpdateConceptItemRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			const item = await this.lessonService.updateConceptItem(req.params.itemId, req.body);
-			reply.status(200).send(item);
-		} catch (err) {
-			if (err instanceof ConceptItemNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		const item = await this.lessonService.updateConceptItem(req.params.itemId, req.body);
+		reply.status(200).send(item);
 	};
 
 	deleteConceptItem = async (req: FastifyRequest<DeleteConceptItemRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			await this.lessonService.deleteConceptItem(req.params.itemId);
-			reply.status(204).send();
-		} catch (err) {
-			if (err instanceof ConceptItemNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		await this.lessonService.deleteConceptItem(req.params.itemId);
+		reply.status(204).send();
 	};
 
 	updateConceptExample = async (req: FastifyRequest<UpdateConceptExampleRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			const example = await this.lessonService.updateConceptExample(req.params.itemId, req.body);
-			reply.status(200).send(example);
-		} catch (err) {
-			if (err instanceof ConceptExampleNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		const example = await this.lessonService.updateConceptExample(req.params.itemId, req.body);
+		reply.status(200).send(example);
 	};
 
 	deleteConceptExample = async (req: FastifyRequest<DeleteConceptExampleRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			await this.lessonService.deleteConceptExample(req.params.itemId);
-			reply.status(204).send();
-		} catch (err) {
-			if (err instanceof ConceptExampleNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		await this.lessonService.deleteConceptExample(req.params.itemId);
+		reply.status(204).send();
 	};
 
 	updateApplicationItem = async (req: FastifyRequest<UpdateApplicationItemRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			const item = await this.lessonService.updateApplicationItem(req.params.itemId, req.body);
-			reply.status(200).send(item);
-		} catch (err) {
-			if (err instanceof ApplicationItemNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		const item = await this.lessonService.updateApplicationItem(req.params.itemId, req.body);
+		reply.status(200).send(item);
 	};
 
 	deleteApplicationItem = async (req: FastifyRequest<DeleteApplicationItemRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			await this.lessonService.deleteApplicationItem(req.params.itemId);
-			reply.status(204).send();
-		} catch (err) {
-			if (err instanceof ApplicationItemNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		await this.lessonService.deleteApplicationItem(req.params.itemId);
+		reply.status(204).send();
 	};
 }

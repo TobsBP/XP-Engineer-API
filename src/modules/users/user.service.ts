@@ -1,13 +1,7 @@
+import { UserNotFoundError } from '@/models/users/user.errors.js';
 import type { CreateUserData, IUserRepository, UpdateUserData, UserRow } from '@/models/users/user.repository.interface.js';
 import type { UserResponse } from '@/models/users/user.schema.js';
 import type { IUserService } from '@/models/users/user.service.interface.js';
-
-export class UserNotFoundError extends Error {
-	constructor(id: number) {
-		super(`Usuário '${id}' não encontrado`);
-		this.name = 'UserNotFoundError';
-	}
-}
 
 export class UserService implements IUserService {
 	constructor(private readonly userRepository: IUserRepository) {}

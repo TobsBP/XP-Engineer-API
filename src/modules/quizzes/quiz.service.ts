@@ -1,3 +1,4 @@
+import { QuizNotFoundError, QuizQuestionNotFoundError } from '@/models/quizzes/quiz.errors.js';
 import type {
 	CreateQuizQuestionData,
 	IQuizRepository,
@@ -6,20 +7,6 @@ import type {
 } from '@/models/quizzes/quiz.repository.interface.js';
 import type { QuizAdminQuestion, QuizQuestionResponse, QuizResult } from '@/models/quizzes/quiz.schema.js';
 import type { AnswerInput, IQuizService } from '@/models/quizzes/quiz.service.interface.js';
-
-export class QuizNotFoundError extends Error {
-	constructor(moduleId: string) {
-		super(`Nenhuma pergunta encontrada para o módulo '${moduleId}'`);
-		this.name = 'QuizNotFoundError';
-	}
-}
-
-export class QuizQuestionNotFoundError extends Error {
-	constructor(id: number) {
-		super(`Pergunta '${id}' não encontrada`);
-		this.name = 'QuizQuestionNotFoundError';
-	}
-}
 
 export class QuizService implements IQuizService {
 	constructor(private readonly quizRepository: IQuizRepository) {}

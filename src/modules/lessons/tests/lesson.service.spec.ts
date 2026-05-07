@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { LessonNotFoundError } from '@/models/lessons/lesson.errors.js';
 import type { ILessonRepository, LessonRow } from '@/models/lessons/lesson.repository.interface.js';
-import { LessonNotFoundError, LessonService } from '@/modules/lessons/lesson.service.js';
+import { LessonService } from '@/modules/lessons/lesson.service.js';
 
 describe('LessonService', () => {
 	let lessonService: LessonService;

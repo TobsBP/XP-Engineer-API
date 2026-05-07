@@ -3,15 +3,19 @@ import fastifyJwt from '@fastify/jwt';
 import multipart from '@fastify/multipart';
 import { fastifySwagger } from '@fastify/swagger';
 import ScalarApiReference from '@scalar/fastify-api-reference';
-import { type FastifyReply, type FastifyRequest, fastify } from 'fastify';
+import { type FastifyError, type FastifyReply, type FastifyRequest, fastify } from 'fastify';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
 
 import { registerAuditHook } from '@/lib/audit-hook.js';
 import { buildContainer, registerAwilixContainer } from '@/lib/container.js';
 import { connectMongo } from '@/lib/mongo.js';
+import { initSentry, Sentry } from '@/lib/sentry.js';
+import { AppError } from '@/models/errors.js';
 import { routes } from '@/router.js';
 
-const app = fastify().withTypeProvider<ZodTypeProvider>();
+initSentry();
+
+const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
 const container = buildContainer(app);
 registerAwilixContainer(app, container);
@@ -86,6 +90,26 @@ app.register(ScalarApiReference, {
 });
 
 registerAuditHook(app);
+
+app.setErrorHandler((err: FastifyError, req, reply) => {
+	if (err instanceof AppError) {
+		return reply.code(err.statusCode).send({ message: err.message });
+	}
+	if (err.validation) {
+		return reply.code(400).send({ message: err.message, issues: err.validation });
+	}
+	req.log.error({ err }, 'Unhandled error');
+	const status = typeof err.statusCode === 'number' ? err.statusCode : 500;
+	if (status >= 500) {
+		Sentry.captureException(err, {
+			tags: { route: req.routeOptions?.url, method: req.method },
+			user: req.user ? { id: String(req.user.sub), role: req.user.role } : undefined,
+		});
+	}
+	return reply.code(status).send({
+		message: status < 500 ? err.message : 'Erro interno',
+	});
+});
 
 app.register(routes);
 

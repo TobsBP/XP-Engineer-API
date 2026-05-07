@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { UserNotFoundError } from '@/models/users/user.errors.js';
 import type { IUserRepository, UserRow } from '@/models/users/user.repository.interface.js';
-import { UserNotFoundError, UserService } from '@/modules/users/user.service.js';
+import { UserService } from '@/modules/users/user.service.js';
 
 describe('UserService', () => {
 	let userService: UserService;

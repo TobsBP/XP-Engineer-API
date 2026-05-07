@@ -1,13 +1,7 @@
+import { ModuleNotFoundError } from '@/models/modules/module.errors.js';
 import type { CreateModuleData, IModuleRepository, ModuleRow, UpdateModuleData } from '@/models/modules/module.repository.interface.js';
 import type { Module, ModuleResponse } from '@/models/modules/module.schema.js';
 import type { IModuleService } from '@/models/modules/module.service.interface.js';
-
-export class ModuleNotFoundError extends Error {
-	constructor(moduleId: string) {
-		super(`Módulo '${moduleId}' não encontrado`);
-		this.name = 'ModuleNotFoundError';
-	}
-}
 
 export class ModuleService implements IModuleService {
 	constructor(private readonly moduleRepository: IModuleRepository) {}

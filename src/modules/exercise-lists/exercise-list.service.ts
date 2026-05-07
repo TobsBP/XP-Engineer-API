@@ -2,18 +2,10 @@ import { randomUUID } from 'node:crypto';
 import type { S3Client } from '@aws-sdk/client-s3';
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { PDF_KEY_PREFIX, SIGNED_URL_EXPIRES_IN } from '@/models/exercise-lists/exercise-list.constants.js';
+import { ExerciseListNotFoundError } from '@/models/exercise-lists/exercise-list.errors.js';
 import type { ExerciseListRow, IExerciseListRepository, UpdateExerciseListData } from '@/models/exercise-lists/exercise-list.repository.interface.js';
 import type { CreateExerciseListInput, ExerciseListResponse, IExerciseListService } from '@/models/exercise-lists/exercise-list.service.interface.js';
-
-const SIGNED_URL_EXPIRES_IN = 3600; // 1 hora
-const PDF_KEY_PREFIX = 'exercise-lists/';
-
-export class ExerciseListNotFoundError extends Error {
-	constructor(id: string) {
-		super(`Lista de exercícios '${id}' não encontrada`);
-		this.name = 'ExerciseListNotFoundError';
-	}
-}
 
 export class ExerciseListService implements IExerciseListService {
 	constructor(

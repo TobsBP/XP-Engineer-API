@@ -1,3 +1,10 @@
+import {
+	ApplicationItemNotFoundError,
+	ConceptExampleNotFoundError,
+	ConceptItemNotFoundError,
+	LessonByIdNotFoundError,
+	LessonNotFoundError,
+} from '@/models/lessons/lesson.errors.js';
 import type {
 	ApplicationItemRow,
 	ConceptExampleRow,
@@ -18,41 +25,6 @@ import type {
 } from '@/models/lessons/lesson.repository.interface.js';
 import type { Lesson, LessonContent } from '@/models/lessons/lesson.schema.js';
 import type { ILessonService } from '@/models/lessons/lesson.service.interface.js';
-
-export class LessonNotFoundError extends Error {
-	constructor(moduleId: string, page: number) {
-		super(`Lição não encontrada: módulo '${moduleId}', página ${page}`);
-		this.name = 'LessonNotFoundError';
-	}
-}
-
-export class LessonByIdNotFoundError extends Error {
-	constructor(id: number) {
-		super(`Lição '${id}' não encontrada`);
-		this.name = 'LessonByIdNotFoundError';
-	}
-}
-
-export class ConceptItemNotFoundError extends Error {
-	constructor(id: string) {
-		super(`Item de conceito '${id}' não encontrado`);
-		this.name = 'ConceptItemNotFoundError';
-	}
-}
-
-export class ConceptExampleNotFoundError extends Error {
-	constructor(id: string) {
-		super(`Exemplo de conceito '${id}' não encontrado`);
-		this.name = 'ConceptExampleNotFoundError';
-	}
-}
-
-export class ApplicationItemNotFoundError extends Error {
-	constructor(id: string) {
-		super(`Item de aplicação '${id}' não encontrado`);
-		this.name = 'ApplicationItemNotFoundError';
-	}
-}
 
 export class LessonService implements ILessonService {
 	constructor(private readonly lessonRepository: ILessonRepository) {}

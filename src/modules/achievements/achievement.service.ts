@@ -1,3 +1,4 @@
+import { AchievementNotFoundError } from '@/models/achievements/achievement.errors.js';
 import type { AchievementRow, CreateAchievementData, IAchievementRepository } from '@/models/achievements/achievement.repository.interface.js';
 import type { Achievement, AchievementResponse } from '@/models/achievements/achievement.schema.js';
 import type { IAchievementService } from '@/models/achievements/achievement.service.interface.js';
@@ -15,6 +16,8 @@ export class AchievementService implements IAchievementService {
 	}
 
 	async unlock(userId: number, achievementId: string): Promise<void> {
+		const exists = await this.achievementRepository.existsById(achievementId);
+		if (!exists) throw new AchievementNotFoundError(achievementId);
 		await this.achievementRepository.unlock(userId, achievementId);
 	}
 

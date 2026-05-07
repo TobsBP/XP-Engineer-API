@@ -29,6 +29,11 @@ export class AchievementRepository implements IAchievementRepository {
 		return rows;
 	}
 
+	async existsById(achievementId: string): Promise<boolean> {
+		const { rowCount } = await this.pool.query(`SELECT 1 FROM achievements WHERE id = $1`, [achievementId]);
+		return (rowCount ?? 0) > 0;
+	}
+
 	async unlock(userId: number, achievementId: string): Promise<void> {
 		await this.pool.query(
 			`INSERT INTO user_achievements (user_id, achievement_id, unlocked_at)

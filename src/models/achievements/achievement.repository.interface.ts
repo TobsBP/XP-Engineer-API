@@ -15,6 +15,7 @@ export type CreateAchievementData = {
 
 export interface IAchievementRepository {
 	findAllByUser(userId: number): Promise<AchievementRow[]>;
+	existsById(achievementId: string): Promise<boolean>;
 	create(data: CreateAchievementData): Promise<CreateAchievementData>;
 	unlock(userId: number, achievementId: string): Promise<void>;
 }

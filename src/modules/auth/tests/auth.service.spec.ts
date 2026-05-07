@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { InvalidCredentialsError, UserAlreadyExistsError } from '@/models/auth/auth.errors.js';
 import type { IUserRepository, UserRow } from '@/models/users/user.repository.interface.js';
-import { AuthService, InvalidCredentialsError, UserAlreadyExistsError } from '../auth.service.js';
+import { AuthService } from '../auth.service.js';
 
 describe('AuthService', () => {
 	let authService: AuthService;

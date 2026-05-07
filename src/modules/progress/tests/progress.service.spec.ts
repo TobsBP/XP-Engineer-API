@@ -1,13 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ModuleAlreadyCompletedError, ProgressNotFoundError, QuizScoreInsufficientError } from '@/models/progress/progress.errors.js';
 import type { IProgressRepository } from '@/models/progress/progress.repository.interface.js';
 import type { IQuizService } from '@/models/quizzes/quiz.service.interface.js';
 import type { IStreakService } from '@/models/streak/streak.service.interface.js';
-import {
-	ModuleAlreadyCompletedError,
-	ProgressNotFoundError,
-	ProgressService,
-	QuizScoreInsufficientError,
-} from '@/modules/progress/progress.service.js';
+import { ProgressService } from '@/modules/progress/progress.service.js';
 
 describe('ProgressService', () => {
 	let progressService: ProgressService;

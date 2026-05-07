@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ModuleLockedError, UserModuleNotFoundError } from '@/models/user-modules/user-module.errors.js';
 import type { IUserModuleRepository } from '@/models/user-modules/user-module.repository.interface.js';
-import { ModuleLockedError, UserModuleNotFoundError, UserModuleService } from '@/modules/user-modules/user-module.service.js';
+import { UserModuleService } from '@/modules/user-modules/user-module.service.js';
 
 describe('UserModuleService', () => {
 	let userModuleService: UserModuleService;

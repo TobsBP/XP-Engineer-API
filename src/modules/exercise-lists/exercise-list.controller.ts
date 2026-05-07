@@ -6,7 +6,6 @@ import {
 	type UpdateExerciseListRequest,
 } from '@/models/exercise-lists/exercise-list.routes.js';
 import type { IExerciseListService } from '@/models/exercise-lists/exercise-list.service.interface.js';
-import { ExerciseListNotFoundError } from '@/modules/exercise-lists/exercise-list.service.js';
 
 export class ExerciseListController {
 	constructor(private readonly exerciseListService: IExerciseListService) {}
@@ -60,28 +59,12 @@ export class ExerciseListController {
 	};
 
 	update = async (req: FastifyRequest<UpdateExerciseListRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			const result = await this.exerciseListService.updateExerciseList(req.params.id, req.body);
-			reply.status(200).send(result);
-		} catch (err) {
-			if (err instanceof ExerciseListNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		const result = await this.exerciseListService.updateExerciseList(req.params.id, req.body);
+		reply.status(200).send(result);
 	};
 
 	remove = async (req: FastifyRequest<DeleteExerciseListRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			await this.exerciseListService.deleteExerciseList(req.params.id);
-			reply.status(204).send();
-		} catch (err) {
-			if (err instanceof ExerciseListNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		await this.exerciseListService.deleteExerciseList(req.params.id);
+		reply.status(204).send();
 	};
 }

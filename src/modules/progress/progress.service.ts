@@ -1,35 +1,11 @@
+import { MIN_SCORE_TO_PASS, XP_PER_MODULE } from '@/models/progress/progress.constants.js';
+import { ModuleAlreadyCompletedError, ProgressNotFoundError, QuizScoreInsufficientError } from '@/models/progress/progress.errors.js';
 import type { IProgressRepository } from '@/models/progress/progress.repository.interface.js';
 import type { LessonCompleteResponse, ModuleCompleteResponse, UserProgress, UserProgressSummary } from '@/models/progress/progress.schema.js';
 import type { IProgressService } from '@/models/progress/progress.service.interface.js';
 import type { AnswerInput, IQuizService } from '@/models/quizzes/quiz.service.interface.js';
 import type { IStreakService } from '@/models/streak/streak.service.interface.js';
 import { calculateLevel } from '@/utils/calc-level.js';
-
-const XP_PER_MODULE = 100;
-const MIN_SCORE_TO_PASS = 80;
-
-export class ProgressNotFoundError extends Error {
-	constructor(moduleId: string) {
-		super(`Progresso não encontrado para o módulo '${moduleId}'. Inicie o módulo primeiro.`);
-		this.name = 'ProgressNotFoundError';
-	}
-}
-
-export class QuizScoreInsufficientError extends Error {
-	score: number;
-	constructor(score: number) {
-		super(`Nota insuficiente: ${score}%. É necessário pelo menos ${MIN_SCORE_TO_PASS}% para concluir o módulo.`);
-		this.name = 'QuizScoreInsufficientError';
-		this.score = score;
-	}
-}
-
-export class ModuleAlreadyCompletedError extends Error {
-	constructor(moduleId: string) {
-		super(`O módulo '${moduleId}' já foi concluído.`);
-		this.name = 'ModuleAlreadyCompletedError';
-	}
-}
 
 export class ProgressService implements IProgressService {
 	constructor(

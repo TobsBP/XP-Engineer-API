@@ -1,21 +1,8 @@
 import bcrypt from 'bcryptjs';
+import { InvalidCredentialsError, UserAlreadyExistsError } from '@/models/auth/auth.errors.js';
 import type { AuthResponse, LoginRequest, RegisterRequest, UpdateMeRequest } from '@/models/auth/auth.service.interface.js';
 import type { IUserRepository, UserRow } from '@/models/users/user.repository.interface.js';
 import type { UserResponse } from '@/models/users/user.schema.js';
-
-export class UserAlreadyExistsError extends Error {
-	constructor(email: string) {
-		super(`Usuário com email '${email}' já existe`);
-		this.name = 'UserAlreadyExistsError';
-	}
-}
-
-export class InvalidCredentialsError extends Error {
-	constructor() {
-		super('Email ou senha inválidos');
-		this.name = 'InvalidCredentialsError';
-	}
-}
 
 interface JWTService {
 	sign(payload: object): string;

@@ -1,7 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { CreateModuleRequest, DeleteModuleRequest, GetModuleRequest, UpdateModuleRequest } from '@/models/modules/module.routes.js';
 import type { IModuleService } from '@/models/modules/module.service.interface.js';
-import { ModuleNotFoundError } from '@/modules/modules/module.service.js';
 
 export class ModuleController {
 	constructor(private readonly moduleService: IModuleService) {}
@@ -13,17 +12,9 @@ export class ModuleController {
 	};
 
 	get = async (req: FastifyRequest<GetModuleRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			const userId = req.user.sub as number;
-			const module = await this.moduleService.getModule(req.params.moduleId, userId);
-			reply.status(200).send(module);
-		} catch (err) {
-			if (err instanceof ModuleNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		const userId = req.user.sub as number;
+		const module = await this.moduleService.getModule(req.params.moduleId, userId);
+		reply.status(200).send(module);
 	};
 
 	create = async (req: FastifyRequest<CreateModuleRequest>, reply: FastifyReply): Promise<void> => {
@@ -32,28 +23,12 @@ export class ModuleController {
 	};
 
 	update = async (req: FastifyRequest<UpdateModuleRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			const module = await this.moduleService.updateModule(req.params.moduleId, req.body);
-			reply.status(200).send(module);
-		} catch (err) {
-			if (err instanceof ModuleNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		const module = await this.moduleService.updateModule(req.params.moduleId, req.body);
+		reply.status(200).send(module);
 	};
 
 	remove = async (req: FastifyRequest<DeleteModuleRequest>, reply: FastifyReply): Promise<void> => {
-		try {
-			await this.moduleService.deleteModule(req.params.moduleId);
-			reply.status(204).send();
-		} catch (err) {
-			if (err instanceof ModuleNotFoundError) {
-				reply.status(404).send({ message: err.message });
-				return;
-			}
-			throw err;
-		}
+		await this.moduleService.deleteModule(req.params.moduleId);
+		reply.status(204).send();
 	};
 }
