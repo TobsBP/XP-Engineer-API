@@ -24,3 +24,7 @@ export interface AuthResponse {
 	user: UserResponse;
 	token: string;
 }
+
+export interface JWTService {
+	sign(payload: object): string;
+}

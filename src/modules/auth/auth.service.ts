@@ -1,12 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { InvalidCredentialsError, UserAlreadyExistsError } from '@/models/auth/auth.errors.js';
-import type { AuthResponse, LoginRequest, RegisterRequest, UpdateMeRequest } from '@/models/auth/auth.service.interface.js';
+import type { AuthResponse, JWTService, LoginRequest, RegisterRequest, UpdateMeRequest } from '@/models/auth/auth.service.interface.js';
 import type { IUserRepository, UserRow } from '@/models/users/user.repository.interface.js';
 import type { UserResponse } from '@/models/users/user.schema.js';
-
-interface JWTService {
-	sign(payload: object): string;
-}
 
 export class AuthService {
 	constructor(
