@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { AchievementNotFoundError } from '@/models/achievements/achievement.errors.js';
 import type { AchievementRow, IAchievementRepository } from '@/models/achievements/achievement.repository.interface.js';
 import { AchievementService } from '@/modules/achievements/achievement.service.js';
 
@@ -18,6 +19,7 @@ describe('AchievementService', () => {
 		achievementRepositoryMock = {
 			create: vi.fn(),
 			findAllByUser: vi.fn(),
+			existsById: vi.fn(),
 			unlock: vi.fn(),
 		} as unknown as IAchievementRepository;
 
@@ -64,10 +66,19 @@ describe('AchievementService', () => {
 
 	describe('unlock', () => {
 		it('should unlock an achievement for a user (happy path)', async () => {
+			vi.mocked(achievementRepositoryMock.existsById).mockResolvedValue(true);
 			vi.mocked(achievementRepositoryMock.unlock).mockResolvedValue();
 
 			await expect(achievementService.unlock(1, 'ach-1')).resolves.not.toThrow();
+			expect(achievementRepositoryMock.existsById).toHaveBeenCalledWith('ach-1');
 			expect(achievementRepositoryMock.unlock).toHaveBeenCalledWith(1, 'ach-1');
+		});
+
+		it('should throw AchievementNotFoundError when achievement does not exist (unhappy path)', async () => {
+			vi.mocked(achievementRepositoryMock.existsById).mockResolvedValue(false);
+
+			await expect(achievementService.unlock(1, 'ach-missing')).rejects.toThrow(AchievementNotFoundError);
+			expect(achievementRepositoryMock.unlock).not.toHaveBeenCalled();
 		});
 	});
 });
