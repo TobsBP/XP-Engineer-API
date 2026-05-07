@@ -4,6 +4,7 @@ export { ExerciseListController } from '@/modules/exercise-lists/exercise-list.c
 export { LeaderboardController } from '@/modules/leaderboard/leaderboard.controller.js';
 export { LessonController } from '@/modules/lessons/lesson.controller.js';
 export { ModuleController } from '@/modules/modules/module.controller.js';
+export { PdfImportController } from '@/modules/pdf-import/pdf-import.controller.js';
 export { ProgressController } from '@/modules/progress/progress.controller.js';
 export { QuizController } from '@/modules/quizzes/quiz.controller.js';
 export { UserModuleController } from '@/modules/user-modules/user-module.controller.js';

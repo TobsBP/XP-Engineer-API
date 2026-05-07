@@ -4,6 +4,7 @@ export { ExerciseListService } from '@/modules/exercise-lists/exercise-list.serv
 export { LeaderboardService } from '@/modules/leaderboard/leaderboard.service.js';
 export { LessonService } from '@/modules/lessons/lesson.service.js';
 export { ModuleService } from '@/modules/modules/module.service.js';
+export { PdfImportService } from '@/modules/pdf-import/pdf-import.service.js';
 export { ProgressService } from '@/modules/progress/progress.service.js';
 export { QuizService } from '@/modules/quizzes/quiz.service.js';
 export { StreakService } from '@/modules/streak/streak.service.js';

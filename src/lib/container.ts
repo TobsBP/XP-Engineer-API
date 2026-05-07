@@ -56,6 +56,10 @@ export function buildContainer(app: FastifyInstance) {
 		leaderboardService: asClass(Services.LeaderboardService).classic(),
 		leaderboardController: asClass(Controllers.LeaderboardController).classic(),
 
+		pdfImportRepository: asClass(Repositories.PdfImportRepository).classic(),
+		pdfImportService: asClass(Services.PdfImportService).classic(),
+		pdfImportController: asClass(Controllers.PdfImportController).classic(),
+
 		exerciseListRepository: asClass(Repositories.ExerciseListRepository).classic(),
 		exerciseListService: asClass(Services.ExerciseListService).classic(),
 		exerciseListController: asClass(Controllers.ExerciseListController).classic(),

@@ -3,6 +3,7 @@ export { ExerciseListRepository } from '@/modules/exercise-lists/exercise-list.r
 export { LeaderboardRepository } from '@/modules/leaderboard/leaderboard.repository.js';
 export { LessonRepository } from '@/modules/lessons/lesson.repository.js';
 export { ModuleRepository } from '@/modules/modules/module.repository.js';
+export { PdfImportRepository } from '@/modules/pdf-import/pdf-import.repository.js';
 export { ProgressRepository } from '@/modules/progress/progress.repository.js';
 export { QuizRepository } from '@/modules/quizzes/quiz.repository.js';
 export { StreakRepository } from '@/modules/streak/streak.repository.js';

@@ -48,6 +48,10 @@ export type Cradle = {
 	leaderboardService: Services.LeaderboardService;
 	leaderboardController: Controllers.LeaderboardController;
 
+	pdfImportRepository: Repositories.PdfImportRepository;
+	pdfImportService: Services.PdfImportService;
+	pdfImportController: Controllers.PdfImportController;
+
 	exerciseListRepository: Repositories.ExerciseListRepository;
 	exerciseListService: Services.ExerciseListService;
 	exerciseListController: Controllers.ExerciseListController;

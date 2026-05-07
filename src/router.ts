@@ -5,6 +5,7 @@ import { exerciseListRoutes } from '@/modules/exercise-lists/exercise-list.route
 import { leaderboardRoutes } from '@/modules/leaderboard/leaderboard.routes.js';
 import { lessonRoutes } from '@/modules/lessons/lesson.routes.js';
 import { moduleRoutes } from '@/modules/modules/module.routes.js';
+import { pdfImportRoutes } from '@/modules/pdf-import/pdf-import.routes.js';
 import { progressRoutes } from '@/modules/progress/progress.routes.js';
 import { quizRoutes } from '@/modules/quizzes/quiz.routes.js';
 import { uploadRoutes } from '@/modules/upload/upload.routes.js';
@@ -22,5 +23,6 @@ export const routes = async (app: FastifyInstance): Promise<void> => {
 	app.register(progressRoutes, { prefix: '/progress' });
 	app.register(exerciseListRoutes);
 	app.register(uploadRoutes);
+	app.register(pdfImportRoutes);
 	app.register(leaderboardRoutes);
 };
