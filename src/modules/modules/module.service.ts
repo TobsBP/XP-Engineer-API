@@ -49,6 +49,8 @@ export class ModuleService implements IModuleService {
 			status: row.status as ModuleResponse['status'],
 			link: locked ? null : `/module/${row.id}/lesson/${row.current_page}`,
 			locked,
+			xp: row.min_xp,
+			order: row.order_index,
 		};
 	}
 }

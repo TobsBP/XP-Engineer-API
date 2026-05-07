@@ -21,6 +21,8 @@ export const ModuleResponseSchema = z.object({
 	status: ModuleStatusSchema,
 	link: z.string().nullable(),
 	locked: z.boolean().optional(),
+	xp: z.number().int().min(0),
+	order: z.number().int().min(0),
 });
 
 export type Module = z.infer<typeof ModuleSchema>;
