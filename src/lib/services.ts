@@ -1,4 +1,5 @@
 export { AchievementService } from '@/modules/achievements/achievement.service.js';
+export { AuditService } from '@/modules/audit/audit.service.js';
 export { AuthService } from '@/modules/auth/auth.service.js';
 export { ExerciseListService } from '@/modules/exercise-lists/exercise-list.service.js';
 export { LeaderboardService } from '@/modules/leaderboard/leaderboard.service.js';

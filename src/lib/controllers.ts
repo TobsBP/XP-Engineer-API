@@ -1,4 +1,5 @@
 export { AchievementController } from '@/modules/achievements/achievement.controller.js';
+export { AuditController } from '@/modules/audit/audit.controller.js';
 export { AuthController } from '@/modules/auth/auth.controller.js';
 export { ExerciseListController } from '@/modules/exercise-lists/exercise-list.controller.js';
 export { LeaderboardController } from '@/modules/leaderboard/leaderboard.controller.js';

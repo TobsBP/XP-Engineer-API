@@ -1,0 +1,35 @@
+import { z } from 'zod';
+import { AUDIT_ENTITIES } from '@/models/audit/audit.repository.interface.js';
+
+export const auditQuerySchema = z.object({
+	userId: z.coerce.number().int().positive().optional(),
+	entity: z.enum(AUDIT_ENTITIES).optional(),
+	action: z.enum(['create', 'update', 'delete']).optional(),
+	from: z.coerce.date().optional(),
+	to: z.coerce.date().optional(),
+	page: z.coerce.number().int().positive().default(1),
+	pageSize: z.coerce.number().int().positive().max(100).default(20),
+});
+
+export const auditLogResponseSchema = z.object({
+	userId: z.number(),
+	userRole: z.string(),
+	action: z.enum(['create', 'update', 'delete']),
+	entity: z.enum(AUDIT_ENTITIES),
+	entityId: z.string().optional(),
+	route: z.string().optional(),
+	method: z.string(),
+	statusCode: z.number().optional(),
+	ip: z.string().optional(),
+	userAgent: z.string().optional(),
+	createdAt: z.date(),
+});
+
+export const auditListResponseSchema = z.object({
+	items: z.array(auditLogResponseSchema),
+	total: z.number(),
+	page: z.number(),
+	pageSize: z.number(),
+});
+
+export type AuditQuery = z.infer<typeof auditQuerySchema>;

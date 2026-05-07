@@ -1,4 +1,5 @@
 export { AchievementRepository } from '@/modules/achievements/achievement.repository.js';
+export { AuditRepository } from '@/modules/audit/audit.repository.js';
 export { ExerciseListRepository } from '@/modules/exercise-lists/exercise-list.repository.js';
 export { LeaderboardRepository } from '@/modules/leaderboard/leaderboard.repository.js';
 export { LessonRepository } from '@/modules/lessons/lesson.repository.js';

@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { achievementRoutes } from '@/modules/achievements/achievement.routes.js';
+import { auditRoutes } from '@/modules/audit/audit.routes.js';
 import { authRoutes } from '@/modules/auth/auth.routes.js';
 import { exerciseListRoutes } from '@/modules/exercise-lists/exercise-list.routes.js';
 import { leaderboardRoutes } from '@/modules/leaderboard/leaderboard.routes.js';
@@ -25,4 +26,5 @@ export const routes = async (app: FastifyInstance): Promise<void> => {
 	app.register(uploadRoutes);
 	app.register(pdfImportRoutes);
 	app.register(leaderboardRoutes);
+	app.register(auditRoutes, { prefix: '/audit' });
 };

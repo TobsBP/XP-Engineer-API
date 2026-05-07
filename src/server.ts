@@ -6,7 +6,9 @@ import ScalarApiReference from '@scalar/fastify-api-reference';
 import { type FastifyReply, type FastifyRequest, fastify } from 'fastify';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
 
+import { registerAuditHook } from '@/lib/audit-hook.js';
 import { buildContainer, registerAwilixContainer } from '@/lib/container.js';
+import { connectMongo } from '@/lib/mongo.js';
 import { routes } from '@/router.js';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -83,7 +85,13 @@ app.register(ScalarApiReference, {
 	routePrefix: '/docs',
 });
 
+registerAuditHook(app);
+
 app.register(routes);
+
+connectMongo()
+	.then(() => console.log('Connected to MongoDB'))
+	.catch((err) => console.error('MongoDB connection failed:', err));
 
 app.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
 	console.log('Docs availablee at http://localhost:3333/docs');

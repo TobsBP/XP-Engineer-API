@@ -2,6 +2,7 @@ import { asClass, asFunction, asValue, createContainer } from 'awilix';
 import type { FastifyInstance } from 'fastify';
 import * as Controllers from '@/lib/controllers.js';
 import { pool } from '@/lib/db.js';
+import { getAuditCollection } from '@/lib/mongo.js';
 import { R2_BUCKET_NAME, r2Client } from '@/lib/r2.js';
 import * as Repositories from '@/lib/repositories.js';
 import * as Services from '@/lib/services.js';
@@ -17,6 +18,11 @@ export function buildContainer(app: FastifyInstance) {
 		s3Client: asValue(r2Client),
 		bucketName: asValue(R2_BUCKET_NAME),
 		jwt: asFunction(() => app.jwt).singleton(),
+		auditCollection: asFunction(() => getAuditCollection()).singleton(),
+
+		auditRepository: asClass(Repositories.AuditRepository).classic(),
+		auditService: asClass(Services.AuditService).classic(),
+		auditController: asClass(Controllers.AuditController).classic(),
 
 		userRepository: asClass(Repositories.UserRepository).classic(),
 		userService: asClass(Services.UserService).classic(),

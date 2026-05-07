@@ -1,14 +1,21 @@
 import type { S3Client } from '@aws-sdk/client-s3';
+import type { Collection } from 'mongodb';
 import type { Pool } from 'pg';
 import type * as Controllers from '@/lib/controllers.js';
 import type * as Repositories from '@/lib/repositories.js';
 import type * as Services from '@/lib/services.js';
+import type { AuditLog } from '@/models/audit/audit.repository.interface.js';
 
 export type Cradle = {
 	pool: Pool;
 	s3Client: S3Client;
 	bucketName: string;
 	jwt: { sign(payload: object): string };
+	auditCollection: Collection<AuditLog>;
+
+	auditRepository: Repositories.AuditRepository;
+	auditService: Services.AuditService;
+	auditController: Controllers.AuditController;
 
 	userRepository: Repositories.UserRepository;
 	userService: Services.UserService;
