@@ -33,6 +33,12 @@ export class UserService implements IUserService {
 		return this.toResponse(row);
 	}
 
+	async upgradeToAdmin(id: number): Promise<UserResponse> {
+		const row = await this.userRepository.update(id, { role: 'admin' });
+		if (!row) throw new UserNotFoundError(id);
+		return this.toResponse(row);
+	}
+
 	async deleteUser(id: number): Promise<void> {
 		const deleted = await this.userRepository.delete(id);
 		if (!deleted) throw new UserNotFoundError(id);

@@ -13,5 +13,6 @@ export interface IUserService {
 	listUsers(pagination: UserPagination): Promise<ListUsersResult>;
 	createUser(data: CreateUserData): Promise<UserResponse>;
 	updateUser(id: number, data: UpdateUserData): Promise<UserResponse>;
+	upgradeToAdmin(id: number): Promise<UserResponse>;
 	deleteUser(id: number): Promise<void>;
 }

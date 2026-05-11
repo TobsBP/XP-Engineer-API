@@ -1,5 +1,12 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { CreateUserRequest, DeleteUserRequest, GetUserRequest, ListUsersRequest, PatchUserRequest } from '@/models/users/user.routes.js';
+import type {
+	CreateUserRequest,
+	DeleteUserRequest,
+	GetUserRequest,
+	ListUsersRequest,
+	PatchUserRequest,
+	UpgradeToAdminRequest,
+} from '@/models/users/user.routes.js';
 import type { IUserService } from '@/models/users/user.service.interface.js';
 
 export class UserController {
@@ -22,6 +29,11 @@ export class UserController {
 
 	patch = async (req: FastifyRequest<PatchUserRequest>, reply: FastifyReply): Promise<void> => {
 		const user = await this.userService.updateUser(req.params.id, req.body);
+		reply.status(200).send(user);
+	};
+
+	upgradeToAdmin = async (req: FastifyRequest<UpgradeToAdminRequest>, reply: FastifyReply): Promise<void> => {
+		const user = await this.userService.upgradeToAdmin(req.params.id);
 		reply.status(200).send(user);
 	};
 

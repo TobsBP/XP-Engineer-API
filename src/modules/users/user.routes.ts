@@ -10,6 +10,8 @@ import {
 	listUsersSchema,
 	type PatchUserRequest,
 	patchUserSchema,
+	type UpgradeToAdminRequest,
+	upgradeToAdminSchema,
 } from '@/models/users/user.routes.js';
 
 export const userRoutes = async (app: FastifyInstance): Promise<void> => {
@@ -19,5 +21,10 @@ export const userRoutes = async (app: FastifyInstance): Promise<void> => {
 	app.get<GetUserRequest>('/user/:id', { preHandler: app.authenticate, schema: getUserSchema }, controller.get);
 	app.post<CreateUserRequest>('/user', { preHandler: app.authenticate, schema: createUserSchema }, controller.create);
 	app.patch<PatchUserRequest>('/user/:id', { preHandler: app.authenticate, schema: patchUserSchema }, controller.patch);
+	app.patch<UpgradeToAdminRequest>(
+		'/user/:id/upgrade-to-admin',
+		{ preHandler: app.requireAdmin, schema: upgradeToAdminSchema },
+		controller.upgradeToAdmin,
+	);
 	app.delete<DeleteUserRequest>('/user/:id', { preHandler: app.authenticate, schema: deleteUserSchema }, controller.delete);
 };

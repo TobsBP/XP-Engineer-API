@@ -64,6 +64,18 @@ export const patchUserSchema = {
 	},
 };
 
+export const upgradeToAdminSchema = {
+	tags: ['Users'],
+	description: 'Promove um usuário a administrador. Restrito a administradores.',
+	params: z.object({
+		id: z.coerce.number().int().positive('ID do usuário é obrigatório'),
+	}),
+	response: {
+		200: UserResponseSchema,
+		404: z.object({ message: z.string() }),
+	},
+};
+
 export const deleteUserSchema = {
 	tags: ['Users'],
 	description: 'Remove um usuário.',
@@ -94,4 +106,8 @@ export type PatchUserRequest = {
 
 export type DeleteUserRequest = {
 	Params: z.infer<typeof deleteUserSchema.params>;
+};
+
+export type UpgradeToAdminRequest = {
+	Params: z.infer<typeof upgradeToAdminSchema.params>;
 };
