@@ -7,12 +7,15 @@ export class ModuleService implements IModuleService {
 	constructor(private readonly moduleRepository: IModuleRepository) {}
 
 	async listModules(userId: number, filters?: ListModulesFilters): Promise<ModuleResponse[]> {
-		const rows = await this.moduleRepository.findAll(userId, filters);
+		const rows = await this.moduleRepository.findAll(userId, {
+			subjects: filters?.subjects,
+			includeHidden: filters?.isAdmin === true,
+		});
 		return rows.map((row) => this.toResponse(row));
 	}
 
-	async getModule(moduleId: string, userId: number): Promise<ModuleResponse> {
-		const row = await this.moduleRepository.findById(moduleId, userId);
+	async getModule(moduleId: string, userId: number, isAdmin = false): Promise<ModuleResponse> {
+		const row = await this.moduleRepository.findById(moduleId, userId, isAdmin);
 		if (!row) throw new ModuleNotFoundError(moduleId);
 		return this.toResponse(row);
 	}
@@ -45,6 +48,7 @@ export class ModuleService implements IModuleService {
 			locked,
 			xp: row.min_xp,
 			order: row.order_index,
+			visible: row.visible,
 		};
 	}
 }

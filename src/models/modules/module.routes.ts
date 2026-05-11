@@ -42,6 +42,7 @@ export const createModuleSchema = {
 		order_index: z.number().int().min(0),
 		locked_by_default: z.boolean().default(false),
 		min_xp: z.number().int().min(0).optional(),
+		visible: z.boolean().optional(),
 	}),
 	response: {
 		201: ModuleSchema,
@@ -62,6 +63,7 @@ export const updateModuleSchema = {
 			order_index: z.number().int().min(0).optional(),
 			locked_by_default: z.boolean().optional(),
 			min_xp: z.number().int().min(0).optional(),
+			visible: z.boolean().optional(),
 		})
 		.refine((d) => Object.keys(d).length > 0, {
 			message: 'Envie ao menos um campo para atualizar',

@@ -10,6 +10,7 @@ export const ModuleSchema = z.object({
 	order_index: z.number().int(),
 	locked_by_default: z.boolean(),
 	min_xp: z.number().int().min(0),
+	visible: z.boolean(),
 });
 
 export const ModuleResponseSchema = z.object({
@@ -23,6 +24,7 @@ export const ModuleResponseSchema = z.object({
 	locked: z.boolean().optional(),
 	xp: z.number().int().min(0),
 	order: z.number().int().min(0),
+	visible: z.boolean(),
 });
 
 export type Module = z.infer<typeof ModuleSchema>;

@@ -13,13 +13,15 @@ export class ModuleController {
 
 	list = async (req: FastifyRequest<ListModulesRequest>, reply: FastifyReply): Promise<void> => {
 		const userId = req.user.sub as number;
-		const modules = await this.moduleService.listModules(userId, { subjects: req.query.subjects });
+		const isAdmin = req.user.role === 'admin';
+		const modules = await this.moduleService.listModules(userId, { subjects: req.query.subjects, isAdmin });
 		reply.status(200).send(modules);
 	};
 
 	get = async (req: FastifyRequest<GetModuleRequest>, reply: FastifyReply): Promise<void> => {
 		const userId = req.user.sub as number;
-		const module = await this.moduleService.getModule(req.params.moduleId, userId);
+		const isAdmin = req.user.role === 'admin';
+		const module = await this.moduleService.getModule(req.params.moduleId, userId, isAdmin);
 		reply.status(200).send(module);
 	};
 
