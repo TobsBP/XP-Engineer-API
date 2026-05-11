@@ -40,8 +40,12 @@ export type CreatedModuleRow = {
 	min_xp: number;
 };
 
+export type ModuleListFilters = {
+	subjects?: string[];
+};
+
 export interface IModuleRepository {
-	findAll(userId: number): Promise<ModuleRow[]>;
+	findAll(userId: number, filters?: ModuleListFilters): Promise<ModuleRow[]>;
 	findById(moduleId: string, userId: number): Promise<ModuleRow | null>;
 	create(data: CreateModuleData): Promise<CreatedModuleRow>;
 	update(moduleId: string, data: UpdateModuleData): Promise<CreatedModuleRow | null>;

@@ -4,6 +4,17 @@ import { ModuleResponseSchema, ModuleSchema } from '@/models/modules/module.sche
 export const listModulesSchema = {
 	tags: ['Modules'],
 	description: 'Retorna todos os módulos com o progresso do usuário logado.',
+	querystring: z.object({
+		subjects: z
+			.union([z.string(), z.array(z.string())])
+			.optional()
+			.transform((v) => {
+				if (v === undefined) return undefined;
+				const arr = Array.isArray(v) ? v : v.split(',');
+				const cleaned = arr.map((s) => s.trim()).filter((s) => s.length > 0);
+				return cleaned.length > 0 ? cleaned : undefined;
+			}),
+	}),
 	response: {
 		200: z.array(ModuleResponseSchema),
 	},
@@ -71,6 +82,10 @@ export const deleteModuleSchema = {
 		204: z.null(),
 		404: z.object({ message: z.string() }),
 	},
+};
+
+export type ListModulesRequest = {
+	Querystring: z.infer<typeof listModulesSchema.querystring>;
 };
 
 export type GetModuleRequest = {

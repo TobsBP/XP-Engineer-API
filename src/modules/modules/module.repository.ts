@@ -3,6 +3,7 @@ import type {
 	CreatedModuleRow,
 	CreateModuleData,
 	IModuleRepository,
+	ModuleListFilters,
 	ModuleRow,
 	UpdateModuleData,
 } from '@/models/modules/module.repository.interface.js';
@@ -10,7 +11,13 @@ import type {
 export class ModuleRepository implements IModuleRepository {
 	constructor(private readonly pool: Pool) {}
 
-	async findAll(userId: number): Promise<ModuleRow[]> {
+	async findAll(userId: number, filters?: ModuleListFilters): Promise<ModuleRow[]> {
+		const params: unknown[] = [userId];
+		let where = '';
+		if (filters?.subjects && filters.subjects.length > 0) {
+			params.push(filters.subjects);
+			where = `WHERE m.subject = ANY($${params.length}::text[])`;
+		}
 		const { rows } = await this.pool.query<ModuleRow>(
 			`SELECT
 				m.id, m.title, m.subtitle, m.subject, m.order_index, m.locked_by_default,
@@ -20,8 +27,9 @@ export class ModuleRepository implements IModuleRepository {
 				COALESCE(um.current_page, 1) AS current_page
 			FROM modules m
 			LEFT JOIN user_modules um ON m.id = um.module_id AND um.user_id = $1
+			${where}
 			ORDER BY m.order_index`,
-			[userId],
+			params,
 		);
 		return rows;
 	}

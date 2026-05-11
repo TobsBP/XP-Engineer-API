@@ -16,12 +16,12 @@ export const auditLogResponseSchema = z.object({
 	userRole: z.string(),
 	action: z.enum(['create', 'update', 'delete']),
 	entity: z.enum(AUDIT_ENTITIES),
-	entityId: z.string().optional(),
-	route: z.string().optional(),
+	entityId: z.string().nullish(),
+	route: z.string().nullish(),
 	method: z.string(),
-	statusCode: z.number().optional(),
-	ip: z.string().optional(),
-	userAgent: z.string().optional(),
+	statusCode: z.number().nullish(),
+	ip: z.string().nullish(),
+	userAgent: z.string().nullish(),
 	createdAt: z.date(),
 });
 

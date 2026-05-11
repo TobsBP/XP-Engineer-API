@@ -1,13 +1,19 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { CreateModuleRequest, DeleteModuleRequest, GetModuleRequest, UpdateModuleRequest } from '@/models/modules/module.routes.js';
+import type {
+	CreateModuleRequest,
+	DeleteModuleRequest,
+	GetModuleRequest,
+	ListModulesRequest,
+	UpdateModuleRequest,
+} from '@/models/modules/module.routes.js';
 import type { IModuleService } from '@/models/modules/module.service.interface.js';
 
 export class ModuleController {
 	constructor(private readonly moduleService: IModuleService) {}
 
-	list = async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
+	list = async (req: FastifyRequest<ListModulesRequest>, reply: FastifyReply): Promise<void> => {
 		const userId = req.user.sub as number;
-		const modules = await this.moduleService.listModules(userId);
+		const modules = await this.moduleService.listModules(userId, { subjects: req.query.subjects });
 		reply.status(200).send(modules);
 	};
 

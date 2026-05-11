@@ -1,13 +1,13 @@
 import { ModuleNotFoundError } from '@/models/modules/module.errors.js';
 import type { CreateModuleData, IModuleRepository, ModuleRow, UpdateModuleData } from '@/models/modules/module.repository.interface.js';
 import type { Module, ModuleResponse } from '@/models/modules/module.schema.js';
-import type { IModuleService } from '@/models/modules/module.service.interface.js';
+import type { IModuleService, ListModulesFilters } from '@/models/modules/module.service.interface.js';
 
 export class ModuleService implements IModuleService {
 	constructor(private readonly moduleRepository: IModuleRepository) {}
 
-	async listModules(userId: number): Promise<ModuleResponse[]> {
-		const rows = await this.moduleRepository.findAll(userId);
+	async listModules(userId: number, filters?: ListModulesFilters): Promise<ModuleResponse[]> {
+		const rows = await this.moduleRepository.findAll(userId, filters);
 		return rows.map((row) => this.toResponse(row));
 	}
 
