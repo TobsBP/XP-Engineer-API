@@ -17,7 +17,8 @@ export class QuizController {
 	};
 
 	submit = async (req: FastifyRequest<SubmitQuizRequest>, reply: FastifyReply): Promise<void> => {
-		const result = await this.quizService.submitAnswers(req.params.moduleId, req.body.answers);
+		const userId = req.user.sub as number;
+		const result = await this.quizService.submitAnswers(req.params.moduleId, userId, req.body.answers);
 		reply.status(200).send(result);
 	};
 

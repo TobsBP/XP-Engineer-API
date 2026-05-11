@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { IAchievementService } from '@/models/achievements/achievement.service.interface.js';
 import { QuizNotFoundError } from '@/models/quizzes/quiz.errors.js';
 import type { IQuizRepository, QuizOptionRow, QuizQuestionRow } from '@/models/quizzes/quiz.repository.interface.js';
 import { QuizService } from '@/modules/quizzes/quiz.service.js';
@@ -6,6 +7,7 @@ import { QuizService } from '@/modules/quizzes/quiz.service.js';
 describe('QuizService', () => {
 	let quizService: QuizService;
 	let quizRepositoryMock: IQuizRepository;
+	let achievementServiceMock: IAchievementService;
 
 	const mockQuestions: QuizQuestionRow[] = [
 		{ id: 1, module_id: 'mod-1', type: 'multiple_choice', text: 'Qual é 2+2?' },
@@ -31,7 +33,14 @@ describe('QuizService', () => {
 			deleteQuestion: vi.fn(),
 		} as unknown as IQuizRepository;
 
-		quizService = new QuizService(quizRepositoryMock);
+		achievementServiceMock = {
+			listByUser: vi.fn(),
+			listAll: vi.fn(),
+			createAchievement: vi.fn(),
+			unlock: vi.fn(),
+			unlockForModuleIfAny: vi.fn().mockResolvedValue([]),
+		};
+		quizService = new QuizService(quizRepositoryMock, achievementServiceMock);
 	});
 
 	describe('getQuestions', () => {
@@ -76,7 +85,7 @@ describe('QuizService', () => {
 			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(mockQuestions);
 			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(mockOptions);
 
-			const result = await quizService.submitAnswers('mod-1', [
+			const result = await quizService.submitAnswers('mod-1', 1, [
 				{ question_id: 1, option_id: 2 },
 				{ question_id: 2, option_id: 5 },
 			]);
@@ -94,7 +103,7 @@ describe('QuizService', () => {
 			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(mockQuestions);
 			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(mockOptions);
 
-			const result = await quizService.submitAnswers('mod-1', [
+			const result = await quizService.submitAnswers('mod-1', 1, [
 				{ question_id: 1, option_id: 1 },
 				{ question_id: 2, option_id: 6 },
 			]);
@@ -112,7 +121,7 @@ describe('QuizService', () => {
 			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue(mockQuestions);
 			vi.mocked(quizRepositoryMock.findOptionsByQuestionIds).mockResolvedValue(mockOptions);
 
-			const result = await quizService.submitAnswers('mod-1', [
+			const result = await quizService.submitAnswers('mod-1', 1, [
 				{ question_id: 1, option_id: 2 },
 				{ question_id: 2, option_id: 6 },
 			]);
@@ -125,7 +134,7 @@ describe('QuizService', () => {
 		it('should throw QuizNotFoundError when module has no questions (unhappy path)', async () => {
 			vi.mocked(quizRepositoryMock.findQuestionsByModule).mockResolvedValue([]);
 
-			await expect(quizService.submitAnswers('mod-99', [{ question_id: 1, option_id: 1 }])).rejects.toThrow(QuizNotFoundError);
+			await expect(quizService.submitAnswers('mod-99', 1, [{ question_id: 1, option_id: 1 }])).rejects.toThrow(QuizNotFoundError);
 		});
 	});
 });

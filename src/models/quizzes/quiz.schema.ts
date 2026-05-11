@@ -33,6 +33,7 @@ export const QuizResultSchema = z.object({
 	correct: z.number().int(),
 	score: z.number().min(0).max(100),
 	results: z.array(QuizAnswerResultSchema),
+	unlocked_achievements: z.array(z.string()).default([]),
 });
 
 export const QuizAdminOptionSchema = z.object({

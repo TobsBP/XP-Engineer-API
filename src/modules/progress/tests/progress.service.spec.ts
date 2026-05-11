@@ -109,6 +109,7 @@ describe('ProgressService', () => {
 				correct: 4,
 				score: 80,
 				results: [],
+				unlocked_achievements: [],
 			});
 			vi.mocked(progressRepoMock.completeModule).mockResolvedValue({
 				user_id: 1,
@@ -129,7 +130,7 @@ describe('ProgressService', () => {
 
 			const result = await progressService.completeModule(1, 'mod-1', answers);
 
-			expect(quizServiceMock.submitAnswers).toHaveBeenCalledWith('mod-1', answers);
+			expect(quizServiceMock.submitAnswers).toHaveBeenCalledWith('mod-1', 1, answers);
 			expect(progressRepoMock.completeModule).toHaveBeenCalledWith(1, 'mod-1');
 			expect(progressRepoMock.addXp).toHaveBeenCalledWith(1, 100);
 			expect(result.status).toBe('completed');
@@ -151,6 +152,7 @@ describe('ProgressService', () => {
 				correct: 3,
 				score: 60,
 				results: [],
+				unlocked_achievements: [],
 			});
 
 			const answers = [{ question_id: 1, option_id: 1 }];

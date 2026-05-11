@@ -12,6 +12,7 @@ describe('AchievementService', () => {
 		title: 'First Code',
 		description: 'You wrote your first code!',
 		icon: '💻',
+		module_id: null,
 		unlocked_at: new Date('2024-01-01'),
 	};
 
@@ -29,12 +30,11 @@ describe('AchievementService', () => {
 	describe('createAchievement', () => {
 		it('should create an achievement (happy path)', async () => {
 			const data = {
-				id: 'ach-2',
 				title: 'New',
 				description: 'Desc',
 				icon: '🔥',
 			};
-			vi.mocked(achievementRepositoryMock.create).mockResolvedValue(data);
+			vi.mocked(achievementRepositoryMock.create).mockResolvedValue({ ...data, id: 'ach-2', module_id: null });
 
 			const result = await achievementService.createAchievement(data);
 

@@ -5,6 +5,7 @@ export const AchievementSchema = z.object({
 	title: z.string().max(200),
 	description: z.string().max(300),
 	icon: z.string().max(100),
+	module_id: z.string().max(20).nullable(),
 });
 
 export const AchievementResponseSchema = z.object({
@@ -12,6 +13,7 @@ export const AchievementResponseSchema = z.object({
 	title: z.string(),
 	description: z.string(),
 	icon: z.string(),
+	module_id: z.string().nullable(),
 	unlocked_at: z.string().datetime().nullable(),
 });
 

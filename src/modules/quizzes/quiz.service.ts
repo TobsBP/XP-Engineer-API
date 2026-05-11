@@ -1,3 +1,4 @@
+import type { IAchievementService } from '@/models/achievements/achievement.service.interface.js';
 import { QuizNotFoundError, QuizQuestionNotFoundError } from '@/models/quizzes/quiz.errors.js';
 import type {
 	CreateQuizQuestionData,
@@ -8,8 +9,13 @@ import type {
 import type { QuizAdminQuestion, QuizQuestionResponse, QuizResult } from '@/models/quizzes/quiz.schema.js';
 import type { AnswerInput, IQuizService } from '@/models/quizzes/quiz.service.interface.js';
 
+const ACHIEVEMENT_THRESHOLD = 80;
+
 export class QuizService implements IQuizService {
-	constructor(private readonly quizRepository: IQuizRepository) {}
+	constructor(
+		private readonly quizRepository: IQuizRepository,
+		private readonly achievementService: IAchievementService,
+	) {}
 
 	async getQuestions(moduleId: string): Promise<QuizQuestionResponse[]> {
 		const questions = await this.quizRepository.findQuestionsByModule(moduleId);
@@ -26,7 +32,7 @@ export class QuizService implements IQuizService {
 		}));
 	}
 
-	async submitAnswers(moduleId: string, answers: AnswerInput[]): Promise<QuizResult> {
+	async submitAnswers(moduleId: string, userId: number, answers: AnswerInput[]): Promise<QuizResult> {
 		const questions = await this.quizRepository.findQuestionsByModule(moduleId);
 		if (questions.length === 0) throw new QuizNotFoundError(moduleId);
 
@@ -53,11 +59,14 @@ export class QuizService implements IQuizService {
 		const total = results.length;
 		const score = total > 0 ? Math.round((correctCount / total) * 100) : 0;
 
+		const unlocked_achievements = score >= ACHIEVEMENT_THRESHOLD ? await this.achievementService.unlockForModuleIfAny(userId, moduleId) : [];
+
 		return {
 			total,
 			correct: correctCount,
 			score,
 			results,
+			unlocked_achievements,
 		};
 	}
 

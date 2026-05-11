@@ -94,7 +94,7 @@ export class ProgressService implements IProgressService {
 			throw new ModuleAlreadyCompletedError(moduleId);
 		}
 
-		const quizResult = await this.quizService.submitAnswers(moduleId, answers);
+		const quizResult = await this.quizService.submitAnswers(moduleId, userId, answers);
 
 		if (quizResult.score < MIN_SCORE_TO_PASS) {
 			throw new QuizScoreInsufficientError(quizResult.score);
