@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
+import { ServiceUnavailableError } from '@/models/errors.js';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '');
 
@@ -121,23 +122,47 @@ Regras obrigatórias:
 - Para disciplinas de programação, inclua "code" (snippet) e "code_language" (ex: "python", "javascript", "sql") quando relevante; omita ou use null se não for código
 - Todos os textos devem estar em português`;
 
+const TRANSIENT_STATUS = new Set([429, 500, 502, 503, 504]);
+
+function isOverloadedGeminiError(err: unknown): boolean {
+	if (!err || typeof err !== 'object') return false;
+	const e = err as { status?: number; statusCode?: number; message?: string };
+	if (e.status && TRANSIENT_STATUS.has(e.status)) return true;
+	if (e.statusCode && TRANSIENT_STATUS.has(e.statusCode)) return true;
+	const msg = (e.message ?? '').toLowerCase();
+	return (
+		msg.includes('overloaded') ||
+		msg.includes('unavailable') ||
+		msg.includes('rate limit') ||
+		msg.includes('resource_exhausted') ||
+		msg.includes('429') ||
+		msg.includes('503')
+	);
+}
+
 export async function analyzePdf(buffer: Buffer): Promise<GeminiImportData> {
 	const model = genAI.getGenerativeModel({
 		model: 'gemini-2.5-flash',
 		generationConfig: { responseMimeType: 'application/json' },
 	});
 
-	const result = await model.generateContent([
-		{ text: PROMPT },
-		{
-			inlineData: {
-				mimeType: 'application/pdf',
-				data: buffer.toString('base64'),
+	try {
+		const result = await model.generateContent([
+			{ text: PROMPT },
+			{
+				inlineData: {
+					mimeType: 'application/pdf',
+					data: buffer.toString('base64'),
+				},
 			},
-		},
-	]);
-
-	const raw = result.response.text();
-	const parsed = JSON.parse(raw);
-	return GeminiResponseSchema.parse(parsed);
+		]);
+		const raw = result.response.text();
+		const parsed = JSON.parse(raw);
+		return GeminiResponseSchema.parse(parsed);
+	} catch (err) {
+		if (isOverloadedGeminiError(err)) {
+			throw new ServiceUnavailableError('O serviço de IA está sobrecarregado no momento. Tente novamente em alguns instantes.');
+		}
+		throw err;
+	}
 }
