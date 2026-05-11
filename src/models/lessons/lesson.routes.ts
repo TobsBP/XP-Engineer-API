@@ -55,6 +55,8 @@ export const createConceptItemSchema = {
 		title: z.string().min(1, 'Título é obrigatório').max(200),
 		description: z.string().min(1, 'Descrição é obrigatória'),
 		latex: z.string().optional(),
+		code: z.string().optional(),
+		code_language: z.string().max(50).optional(),
 	}),
 	response: {
 		201: ConceptItemSchema,
@@ -70,6 +72,8 @@ export const createConceptExampleSchema = {
 	body: z.object({
 		label: z.string().min(1, 'Label é obrigatória').max(200),
 		latex: z.string().min(1, 'LaTeX é obrigatório'),
+		code: z.string().optional(),
+		code_language: z.string().max(50).optional(),
 	}),
 	response: {
 		201: ConceptExampleSchema,
@@ -86,6 +90,8 @@ export const createApplicationItemSchema = {
 		title: z.string().min(1, 'Título é obrigatório').max(200),
 		description: z.string().min(1, 'Descrição é obrigatória'),
 		latex: z.string().optional(),
+		code: z.string().optional(),
+		code_language: z.string().max(50).optional(),
 	}),
 	response: {
 		201: ApplicationItemSchema,
@@ -171,6 +177,8 @@ export const updateConceptItemSchema = {
 			title: z.string().min(1).max(200).optional(),
 			description: z.string().min(1).optional(),
 			latex: z.string().nullable().optional(),
+			code: z.string().nullable().optional(),
+			code_language: z.string().max(50).nullable().optional(),
 			order_index: z.number().int().min(0).optional(),
 		})
 		.refine(requireOneField, requireOneFieldMessage),
@@ -198,6 +206,8 @@ export const updateConceptExampleSchema = {
 		.object({
 			label: z.string().min(1).max(200).optional(),
 			latex: z.string().min(1).optional(),
+			code: z.string().nullable().optional(),
+			code_language: z.string().max(50).nullable().optional(),
 			order_index: z.number().int().min(0).optional(),
 		})
 		.refine(requireOneField, requireOneFieldMessage),
@@ -226,6 +236,8 @@ export const updateApplicationItemSchema = {
 			title: z.string().min(1).max(200).optional(),
 			description: z.string().min(1).optional(),
 			latex: z.string().nullable().optional(),
+			code: z.string().nullable().optional(),
+			code_language: z.string().max(50).nullable().optional(),
 			order_index: z.number().int().min(0).optional(),
 		})
 		.refine(requireOneField, requireOneFieldMessage),

@@ -55,7 +55,7 @@ export class LessonRepository implements ILessonRepository {
 
 	async findConceptItems(lessonId: number): Promise<ConceptItemRow[]> {
 		const { rows } = await this.pool.query<ConceptItemRow>(
-			`SELECT id, title, description, latex
+			`SELECT id, title, description, latex, code, code_language
 			FROM concept_items
 			WHERE lesson_id = $1
 			ORDER BY order_index`,
@@ -66,7 +66,7 @@ export class LessonRepository implements ILessonRepository {
 
 	async findConceptExamples(lessonId: number): Promise<ConceptExampleRow[]> {
 		const { rows } = await this.pool.query<ConceptExampleRow>(
-			`SELECT id, label, latex
+			`SELECT id, label, latex, code, code_language
 			FROM concept_examples
 			WHERE lesson_id = $1
 			ORDER BY order_index`,
@@ -77,7 +77,7 @@ export class LessonRepository implements ILessonRepository {
 
 	async findApplicationItems(lessonId: number): Promise<ApplicationItemRow[]> {
 		const { rows } = await this.pool.query<ApplicationItemRow>(
-			`SELECT id, title, description, latex
+			`SELECT id, title, description, latex, code, code_language
 			FROM application_items
 			WHERE lesson_id = $1
 			ORDER BY order_index`,
@@ -98,30 +98,30 @@ export class LessonRepository implements ILessonRepository {
 
 	async createConceptItem(data: CreateConceptItemData): Promise<CreatedConceptItemRow> {
 		const { rows } = await this.pool.query<CreatedConceptItemRow>(
-			`INSERT INTO concept_items (lesson_id, title, description, latex)
-			VALUES ($1, $2, $3, $4)
-			RETURNING id, lesson_id, title, description, latex, order_index`,
-			[data.lesson_id, data.title, data.description, data.latex],
+			`INSERT INTO concept_items (lesson_id, title, description, latex, code, code_language)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			RETURNING id, lesson_id, title, description, latex, code, code_language, order_index`,
+			[data.lesson_id, data.title, data.description, data.latex, data.code ?? null, data.code_language ?? null],
 		);
 		return rows[0];
 	}
 
 	async createConceptExample(data: CreateConceptExampleData): Promise<CreatedConceptExampleRow> {
 		const { rows } = await this.pool.query<CreatedConceptExampleRow>(
-			`INSERT INTO concept_examples (lesson_id, label, latex)
-			VALUES ($1, $2, $3)
-			RETURNING id, lesson_id, label, latex, order_index`,
-			[data.lesson_id, data.label, data.latex],
+			`INSERT INTO concept_examples (lesson_id, label, latex, code, code_language)
+			VALUES ($1, $2, $3, $4, $5)
+			RETURNING id, lesson_id, label, latex, code, code_language, order_index`,
+			[data.lesson_id, data.label, data.latex, data.code ?? null, data.code_language ?? null],
 		);
 		return rows[0];
 	}
 
 	async createApplicationItem(data: CreateApplicationItemData): Promise<CreatedApplicationItemRow> {
 		const { rows } = await this.pool.query<CreatedApplicationItemRow>(
-			`INSERT INTO application_items (lesson_id, title, description, latex)
-			VALUES ($1, $2, $3, $4)
-			RETURNING id, lesson_id, title, description, latex, order_index`,
-			[data.lesson_id, data.title, data.description, data.latex],
+			`INSERT INTO application_items (lesson_id, title, description, latex, code, code_language)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			RETURNING id, lesson_id, title, description, latex, code, code_language, order_index`,
+			[data.lesson_id, data.title, data.description, data.latex, data.code ?? null, data.code_language ?? null],
 		);
 		return rows[0];
 	}
@@ -155,7 +155,7 @@ export class LessonRepository implements ILessonRepository {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) {
 			const { rows } = await this.pool.query<CreatedConceptItemRow>(
-				`SELECT id, lesson_id, title, description, latex, order_index
+				`SELECT id, lesson_id, title, description, latex, code, code_language, order_index
 				FROM concept_items WHERE id = $1`,
 				[itemId],
 			);
@@ -165,7 +165,7 @@ export class LessonRepository implements ILessonRepository {
 		const { rows } = await this.pool.query<CreatedConceptItemRow>(
 			`UPDATE concept_items SET ${set}
 			WHERE id = $1
-			RETURNING id, lesson_id, title, description, latex, order_index`,
+			RETURNING id, lesson_id, title, description, latex, code, code_language, order_index`,
 			[itemId, ...entries.map(([, v]) => v)],
 		);
 		return rows[0] ?? null;
@@ -180,7 +180,7 @@ export class LessonRepository implements ILessonRepository {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) {
 			const { rows } = await this.pool.query<CreatedConceptExampleRow>(
-				`SELECT id, lesson_id, label, latex, order_index
+				`SELECT id, lesson_id, label, latex, code, code_language, order_index
 				FROM concept_examples WHERE id = $1`,
 				[itemId],
 			);
@@ -190,7 +190,7 @@ export class LessonRepository implements ILessonRepository {
 		const { rows } = await this.pool.query<CreatedConceptExampleRow>(
 			`UPDATE concept_examples SET ${set}
 			WHERE id = $1
-			RETURNING id, lesson_id, label, latex, order_index`,
+			RETURNING id, lesson_id, label, latex, code, code_language, order_index`,
 			[itemId, ...entries.map(([, v]) => v)],
 		);
 		return rows[0] ?? null;
@@ -205,7 +205,7 @@ export class LessonRepository implements ILessonRepository {
 		const entries = Object.entries(data).filter(([, v]) => v !== undefined);
 		if (entries.length === 0) {
 			const { rows } = await this.pool.query<CreatedApplicationItemRow>(
-				`SELECT id, lesson_id, title, description, latex, order_index
+				`SELECT id, lesson_id, title, description, latex, code, code_language, order_index
 				FROM application_items WHERE id = $1`,
 				[itemId],
 			);
@@ -215,7 +215,7 @@ export class LessonRepository implements ILessonRepository {
 		const { rows } = await this.pool.query<CreatedApplicationItemRow>(
 			`UPDATE application_items SET ${set}
 			WHERE id = $1
-			RETURNING id, lesson_id, title, description, latex, order_index`,
+			RETURNING id, lesson_id, title, description, latex, code, code_language, order_index`,
 			[itemId, ...entries.map(([, v]) => v)],
 		);
 		return rows[0] ?? null;

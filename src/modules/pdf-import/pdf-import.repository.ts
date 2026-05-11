@@ -73,10 +73,10 @@ export class PdfImportRepository implements IPdfImportRepository {
 		const concept_items: ConceptItemRow[] = [];
 		for (const item of data.concept_items) {
 			const { rows } = await client.query<ConceptItemRow>(
-				`INSERT INTO concept_items (lesson_id, title, description, latex)
-				VALUES ($1, $2, $3, $4)
-				RETURNING id, lesson_id, title, description, latex, order_index`,
-				[lessonId, item.title, item.description, item.latex ?? null],
+				`INSERT INTO concept_items (lesson_id, title, description, latex, code, code_language)
+				VALUES ($1, $2, $3, $4, $5, $6)
+				RETURNING id, lesson_id, title, description, latex, code, code_language, order_index`,
+				[lessonId, item.title, item.description, item.latex ?? null, item.code ?? null, item.code_language ?? null],
 			);
 			concept_items.push(rows[0]);
 		}
@@ -84,10 +84,10 @@ export class PdfImportRepository implements IPdfImportRepository {
 		const concept_examples: ConceptExampleRow[] = [];
 		for (const ex of data.concept_examples) {
 			const { rows } = await client.query<ConceptExampleRow>(
-				`INSERT INTO concept_examples (lesson_id, label, latex)
-				VALUES ($1, $2, $3)
-				RETURNING id, lesson_id, label, latex, order_index`,
-				[lessonId, ex.label, ex.latex],
+				`INSERT INTO concept_examples (lesson_id, label, latex, code, code_language)
+				VALUES ($1, $2, $3, $4, $5)
+				RETURNING id, lesson_id, label, latex, code, code_language, order_index`,
+				[lessonId, ex.label, ex.latex, ex.code ?? null, ex.code_language ?? null],
 			);
 			concept_examples.push(rows[0]);
 		}
@@ -95,10 +95,10 @@ export class PdfImportRepository implements IPdfImportRepository {
 		const application_items: ApplicationItemRow[] = [];
 		for (const item of data.application_items) {
 			const { rows } = await client.query<ApplicationItemRow>(
-				`INSERT INTO application_items (lesson_id, title, description, latex)
-				VALUES ($1, $2, $3, $4)
-				RETURNING id, lesson_id, title, description, latex, order_index`,
-				[lessonId, item.title, item.description, item.latex ?? null],
+				`INSERT INTO application_items (lesson_id, title, description, latex, code, code_language)
+				VALUES ($1, $2, $3, $4, $5, $6)
+				RETURNING id, lesson_id, title, description, latex, code, code_language, order_index`,
+				[lessonId, item.title, item.description, item.latex ?? null, item.code ?? null, item.code_language ?? null],
 			);
 			application_items.push(rows[0]);
 		}

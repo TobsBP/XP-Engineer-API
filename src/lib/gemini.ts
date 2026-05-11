@@ -26,12 +26,16 @@ const GeminiResponseSchema = z.object({
 					title: z.string(),
 					description: z.string(),
 					latex: z.string().nullish(),
+					code: z.string().nullish(),
+					code_language: z.string().nullish(),
 				}),
 			),
 			concept_examples: z.array(
 				z.object({
 					label: z.string(),
 					latex: z.string(),
+					code: z.string().nullish(),
+					code_language: z.string().nullish(),
 				}),
 			),
 			application_items: z.array(
@@ -39,6 +43,8 @@ const GeminiResponseSchema = z.object({
 					title: z.string(),
 					description: z.string(),
 					latex: z.string().nullish(),
+					code: z.string().nullish(),
+					code_language: z.string().nullish(),
 				}),
 			),
 		}),
@@ -112,6 +118,7 @@ Regras obrigatórias:
 - Crie entre 5 e 10 quiz_questions de múltipla escolha para o módulo inteiro
 - Cada quiz_question deve ter exatamente 4 opções e exatamente 1 com is_correct=true
 - Use LaTeX para expressões matemáticas; omita o campo "latex" (ou use null) se não houver matemática
+- Para disciplinas de programação, inclua "code" (snippet) e "code_language" (ex: "python", "javascript", "sql") quando relevante; omita ou use null se não for código
 - Todos os textos devem estar em português`;
 
 export async function analyzePdf(buffer: Buffer): Promise<GeminiImportData> {

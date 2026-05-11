@@ -5,6 +5,8 @@ export const ConceptExampleSchema = z.object({
 	lesson_id: z.number().int(),
 	label: z.string().max(200),
 	latex: z.string(),
+	code: z.string().nullable(),
+	code_language: z.string().nullable(),
 	order_index: z.number().int(),
 });
 
@@ -12,6 +14,8 @@ export const ConceptExampleResponseSchema = z.object({
 	id: z.string(),
 	label: z.string(),
 	latex: z.string(),
+	code: z.string().optional(),
+	code_language: z.string().optional(),
 });
 
 export const ConceptItemSchema = z.object({
@@ -20,6 +24,8 @@ export const ConceptItemSchema = z.object({
 	title: z.string().max(200),
 	description: z.string(),
 	latex: z.string().nullable(),
+	code: z.string().nullable(),
+	code_language: z.string().nullable(),
 	order_index: z.number().int(),
 });
 
@@ -28,6 +34,8 @@ export const ConceptItemResponseSchema = z.object({
 	title: z.string(),
 	description: z.string(),
 	latex: z.string().optional(),
+	code: z.string().optional(),
+	code_language: z.string().optional(),
 });
 
 export type ConceptExample = z.infer<typeof ConceptExampleSchema>;

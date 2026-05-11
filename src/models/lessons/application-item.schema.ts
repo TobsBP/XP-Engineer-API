@@ -6,6 +6,8 @@ export const ApplicationItemSchema = z.object({
 	title: z.string().max(200),
 	description: z.string(),
 	latex: z.string().nullable(),
+	code: z.string().nullable(),
+	code_language: z.string().nullable(),
 	order_index: z.number().int(),
 });
 
@@ -14,6 +16,8 @@ export const ApplicationItemResponseSchema = z.object({
 	title: z.string(),
 	description: z.string(),
 	latex: z.string().optional(),
+	code: z.string().optional(),
+	code_language: z.string().optional(),
 });
 
 export type ApplicationItem = z.infer<typeof ApplicationItemSchema>;

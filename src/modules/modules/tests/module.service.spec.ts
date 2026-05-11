@@ -39,7 +39,7 @@ describe('ModuleService', () => {
 
 			const result = await moduleService.listModules(1);
 
-			expect(moduleRepositoryMock.findAll).toHaveBeenCalledWith(1);
+			expect(moduleRepositoryMock.findAll).toHaveBeenCalledWith(1, { subjects: undefined, includeHidden: false });
 			expect(result).toHaveLength(1);
 			expect(result[0].id).toBe('mod-1');
 			expect(result[0].link).toBe('/module/mod-1/lesson/2');
@@ -52,7 +52,7 @@ describe('ModuleService', () => {
 
 			const result = await moduleService.getModule('mod-1', 1);
 
-			expect(moduleRepositoryMock.findById).toHaveBeenCalledWith('mod-1', 1);
+			expect(moduleRepositoryMock.findById).toHaveBeenCalledWith('mod-1', 1, false);
 			expect(result.id).toBe('mod-1');
 		});
 

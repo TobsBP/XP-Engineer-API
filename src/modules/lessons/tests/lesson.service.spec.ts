@@ -47,9 +47,13 @@ describe('LessonService', () => {
 	describe('getLesson', () => {
 		it('should return lesson content when exists (happy path)', async () => {
 			vi.mocked(lessonRepositoryMock.findByPage).mockResolvedValue(mockLessonRow);
-			vi.mocked(lessonRepositoryMock.findConceptItems).mockResolvedValue([{ id: '1', title: 'C1', description: 'D1', latex: null }]);
-			vi.mocked(lessonRepositoryMock.findConceptExamples).mockResolvedValue([{ id: '1', label: 'E1', latex: 'L1' }]);
-			vi.mocked(lessonRepositoryMock.findApplicationItems).mockResolvedValue([{ id: '1', title: 'A1', description: 'D1', latex: null }]);
+			vi.mocked(lessonRepositoryMock.findConceptItems).mockResolvedValue([
+				{ id: '1', title: 'C1', description: 'D1', latex: null, code: null, code_language: null },
+			]);
+			vi.mocked(lessonRepositoryMock.findConceptExamples).mockResolvedValue([{ id: '1', label: 'E1', latex: 'L1', code: null, code_language: null }]);
+			vi.mocked(lessonRepositoryMock.findApplicationItems).mockResolvedValue([
+				{ id: '1', title: 'A1', description: 'D1', latex: null, code: null, code_language: null },
+			]);
 
 			const result = await lessonService.getLesson('mod-1', 1);
 

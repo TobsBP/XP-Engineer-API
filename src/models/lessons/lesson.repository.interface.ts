@@ -17,12 +17,16 @@ export type ConceptItemRow = {
 	title: string;
 	description: string;
 	latex: string | null;
+	code: string | null;
+	code_language: string | null;
 };
 
 export type ConceptExampleRow = {
 	id: string;
 	label: string;
 	latex: string;
+	code: string | null;
+	code_language: string | null;
 };
 
 export type ApplicationItemRow = {
@@ -30,6 +34,8 @@ export type ApplicationItemRow = {
 	title: string;
 	description: string;
 	latex: string | null;
+	code: string | null;
+	code_language: string | null;
 };
 
 export type CreateLessonData = {
@@ -59,6 +65,8 @@ export type CreateConceptItemData = {
 	title: string;
 	description: string;
 	latex: string | null;
+	code?: string | null;
+	code_language?: string | null;
 };
 
 export type CreatedConceptItemRow = {
@@ -67,6 +75,8 @@ export type CreatedConceptItemRow = {
 	title: string;
 	description: string;
 	latex: string | null;
+	code: string | null;
+	code_language: string | null;
 	order_index: number;
 };
 
@@ -74,6 +84,8 @@ export type CreateConceptExampleData = {
 	lesson_id: number;
 	label: string;
 	latex: string;
+	code?: string | null;
+	code_language?: string | null;
 };
 
 export type CreatedConceptExampleRow = {
@@ -81,6 +93,8 @@ export type CreatedConceptExampleRow = {
 	lesson_id: number;
 	label: string;
 	latex: string;
+	code: string | null;
+	code_language: string | null;
 	order_index: number;
 };
 
@@ -89,6 +103,8 @@ export type CreateApplicationItemData = {
 	title: string;
 	description: string;
 	latex: string | null;
+	code?: string | null;
+	code_language?: string | null;
 };
 
 export type CreatedApplicationItemRow = {
@@ -97,6 +113,8 @@ export type CreatedApplicationItemRow = {
 	title: string;
 	description: string;
 	latex: string | null;
+	code: string | null;
+	code_language: string | null;
 	order_index: number;
 };
 
@@ -114,12 +132,16 @@ export type UpdateConceptItemData = {
 	title?: string;
 	description?: string;
 	latex?: string | null;
+	code?: string | null;
+	code_language?: string | null;
 	order_index?: number;
 };
 
 export type UpdateConceptExampleData = {
 	label?: string;
 	latex?: string;
+	code?: string | null;
+	code_language?: string | null;
 	order_index?: number;
 };
 
@@ -127,6 +149,8 @@ export type UpdateApplicationItemData = {
 	title?: string;
 	description?: string;
 	latex?: string | null;
+	code?: string | null;
+	code_language?: string | null;
 	order_index?: number;
 };
 

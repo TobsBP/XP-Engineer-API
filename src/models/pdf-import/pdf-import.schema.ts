@@ -16,6 +16,8 @@ export const ImportedConceptItemSchema = z.object({
 	title: z.string(),
 	description: z.string(),
 	latex: z.string().nullable(),
+	code: z.string().nullable(),
+	code_language: z.string().nullable(),
 	order_index: z.number().int(),
 });
 
@@ -24,6 +26,8 @@ export const ImportedConceptExampleSchema = z.object({
 	lesson_id: z.number().int(),
 	label: z.string(),
 	latex: z.string(),
+	code: z.string().nullable(),
+	code_language: z.string().nullable(),
 	order_index: z.number().int(),
 });
 
@@ -33,6 +37,8 @@ export const ImportedApplicationItemSchema = z.object({
 	title: z.string(),
 	description: z.string(),
 	latex: z.string().nullable(),
+	code: z.string().nullable(),
+	code_language: z.string().nullable(),
 	order_index: z.number().int(),
 });
 
