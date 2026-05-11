@@ -28,6 +28,7 @@ describe('AuthService', () => {
 		userRepositoryMock = {
 			findById: vi.fn(),
 			findByEmail: vi.fn(),
+			findAll: vi.fn(),
 			create: vi.fn(),
 			update: vi.fn(),
 			delete: vi.fn(),

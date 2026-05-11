@@ -1,5 +1,5 @@
 import type { Pool } from 'pg';
-import type { CreateUserData, IUserRepository, UpdateUserData, UserRow } from '@/models/users/user.repository.interface.js';
+import type { CreateUserData, IUserRepository, UpdateUserData, UserPagination, UserRow } from '@/models/users/user.repository.interface.js';
 
 export class UserRepository implements IUserRepository {
 	constructor(private readonly pool: Pool) {}
@@ -20,6 +20,21 @@ export class UserRepository implements IUserRepository {
 			[email],
 		);
 		return rows[0] ?? null;
+	}
+
+	async findAll({ page, pageSize }: UserPagination): Promise<{ items: UserRow[]; total: number }> {
+		const offset = (page - 1) * pageSize;
+		const [itemsResult, totalResult] = await Promise.all([
+			this.pool.query<UserRow>(
+				`SELECT id, name, email, password_hash, avatar_url, xp_total, streak_days, rank, level, specialization, role, created_at
+				FROM users
+				ORDER BY id
+				LIMIT $1 OFFSET $2`,
+				[pageSize, offset],
+			),
+			this.pool.query<{ count: string }>('SELECT COUNT(*)::text AS count FROM users'),
+		]);
+		return { items: itemsResult.rows, total: Number(totalResult.rows[0]?.count ?? 0) };
 	}
 
 	async create(data: CreateUserData): Promise<UserRow> {

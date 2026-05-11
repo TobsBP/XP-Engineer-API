@@ -1,7 +1,7 @@
 import { UserNotFoundError } from '@/models/users/user.errors.js';
-import type { CreateUserData, IUserRepository, UpdateUserData, UserRow } from '@/models/users/user.repository.interface.js';
+import type { CreateUserData, IUserRepository, UpdateUserData, UserPagination, UserRow } from '@/models/users/user.repository.interface.js';
 import type { UserResponse } from '@/models/users/user.schema.js';
-import type { IUserService } from '@/models/users/user.service.interface.js';
+import type { IUserService, ListUsersResult } from '@/models/users/user.service.interface.js';
 
 export class UserService implements IUserService {
 	constructor(private readonly userRepository: IUserRepository) {}
@@ -10,6 +10,16 @@ export class UserService implements IUserService {
 		const row = await this.userRepository.findById(id);
 		if (!row) throw new UserNotFoundError(id);
 		return this.toResponse(row);
+	}
+
+	async listUsers(pagination: UserPagination): Promise<ListUsersResult> {
+		const { items, total } = await this.userRepository.findAll(pagination);
+		return {
+			items: items.map((row) => this.toResponse(row)),
+			total,
+			page: pagination.page,
+			pageSize: pagination.pageSize,
+		};
 	}
 
 	async createUser(data: CreateUserData): Promise<UserResponse> {

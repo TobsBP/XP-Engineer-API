@@ -1,6 +1,23 @@
 import { z } from 'zod';
 import { UserResponseSchema } from '@/models/users/user.schema.js';
 
+export const listUsersSchema = {
+	tags: ['Users'],
+	description: 'Lista usuários com paginação. Restrito a administradores.',
+	querystring: z.object({
+		page: z.coerce.number().int().positive().default(1),
+		pageSize: z.coerce.number().int().positive().max(100).default(20),
+	}),
+	response: {
+		200: z.object({
+			items: z.array(UserResponseSchema),
+			total: z.number().int(),
+			page: z.number().int(),
+			pageSize: z.number().int(),
+		}),
+	},
+};
+
 export const getUserSchema = {
 	tags: ['Users'],
 	description: 'Retorna o perfil de um usuário pelo ID.',
@@ -56,6 +73,10 @@ export const deleteUserSchema = {
 	response: {
 		204: z.null(),
 	},
+};
+
+export type ListUsersRequest = {
+	Querystring: z.infer<typeof listUsersSchema.querystring>;
 };
 
 export type GetUserRequest = {

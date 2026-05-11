@@ -1,9 +1,14 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { CreateUserRequest, DeleteUserRequest, GetUserRequest, PatchUserRequest } from '@/models/users/user.routes.js';
+import type { CreateUserRequest, DeleteUserRequest, GetUserRequest, ListUsersRequest, PatchUserRequest } from '@/models/users/user.routes.js';
 import type { IUserService } from '@/models/users/user.service.interface.js';
 
 export class UserController {
 	constructor(private readonly userService: IUserService) {}
+
+	list = async (req: FastifyRequest<ListUsersRequest>, reply: FastifyReply): Promise<void> => {
+		const result = await this.userService.listUsers({ page: req.query.page, pageSize: req.query.pageSize });
+		reply.status(200).send(result);
+	};
 
 	get = async (req: FastifyRequest<GetUserRequest>, reply: FastifyReply): Promise<void> => {
 		const user = await this.userService.getUser(req.params.id);

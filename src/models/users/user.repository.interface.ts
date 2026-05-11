@@ -36,9 +36,15 @@ export type UpdateUserData = {
 	role?: UserRole;
 };
 
+export type UserPagination = {
+	page: number;
+	pageSize: number;
+};
+
 export interface IUserRepository {
 	findById(id: number): Promise<UserRow | null>;
 	findByEmail(email: string): Promise<UserRow | null>;
+	findAll(pagination: UserPagination): Promise<{ items: UserRow[]; total: number }>;
 	create(data: CreateUserData): Promise<UserRow>;
 	update(id: number, data: UpdateUserData): Promise<UserRow | null>;
 	delete(id: number): Promise<boolean>;
